@@ -230,3 +230,91 @@ test('returns deliberations for admin', async () => {
   assert.equal(response.status, 200);
   assert.ok(Array.isArray(result));
 });
+
+test('allows admin to create and update academic catalog', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+
+  const faculty = await fetch(`${baseUrl}/faculties`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    },
+    body: JSON.stringify({ code: 'FLSH', name: 'Lettres et Sciences Humaines' })
+  });
+  assert.equal(faculty.status, 201);
+  const facultyData = await faculty.json();
+
+  const program = await fetch(`${baseUrl}/programs`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    },
+    body: JSON.stringify({ facultyId: facultyData.id, code: 'LIC-LSH', title: 'Licence Lettres', level: 'licence', durationMonths: 36 })
+  });
+  assert.equal(program.status, 201);
+
+  const updated = await fetch(`${baseUrl}/faculties/${facultyData.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    },
+    body: JSON.stringify({ description: 'Nouvelle description' })
+  });
+  assert.equal(updated.status, 200);
+  const updatedData = await updated.json();
+  assert.equal(updatedData.description, 'Nouvelle description');
+});
+
+test('allows admin to create enrollment and grade', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const enrollment = await fetch(`${baseUrl}/enrollments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    },
+    body: JSON.stringify({ studentEmail: 'student@example.test', studentName: 'Test Student', matricule: 'IUM/2025/0099', programId: 1, academicYear: 2025 })
+  });
+  assert.equal(enrollment.status, 201);
+  const enrollmentData = await enrollment.json();
+
+  const grade = await fetch(`${baseUrl}/enrollments/${enrollmentData.id}/grades`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    },
+    body: JSON.stringify({ courseCode: 'SINT101', courseTitle: 'Algorithmique', credits: 6, score: 16 })
+  });
+  assert.equal(grade.status, 201);
+});
+
+test('allows admin to deliberate and compute weighted average', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const deliberation = await fetch(`${baseUrl}/enrollments/1/deliberation`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+  assert.equal(deliberation.status, 201);
+  const deliberationData = await deliberation.json();
+  assert.ok(['validated', 'rejected'].includes(deliberationData.decision));
+  assert.ok(typeof deliberationData.weightedAverage === 'number');
+});
+
+test('returns course stats for authenticated user', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/courses/1/stats`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(result.course);
+  assert.ok(typeof result.average === 'number');
+});
