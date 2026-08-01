@@ -1844,3 +1844,340 @@ Cette architecture doit permettre une première version légère, puis une mont�
 Fin de la Partie III.
 
 
+PARTIE IV — ARCHITECTURE TECHNIQUE ET DÉVELOPPEMENT LOGICIEL (15 CHAPITRES)
+
+Objectif général de la partie
+
+Définir les bases techniques permettant de construire un portail universitaire moderne, sécurisé, maintenable et évolutif.
+
+Le développement devra commencer avec une infrastructure gratuite basée sur GitHub, puis évoluer vers une infrastructure professionnelle avec domaine officiel .CD et hébergement dédié.
+
+---
+
+CHAPITRE 1 — Choix technologiques
+
+Objectif
+
+Sélectionner une architecture fiable et durable.
+
+Exigences :
+
+- technologies modernes ;
+- solutions maintenues ;
+- documentation disponible ;
+- facilité de maintenance.
+
+Principes :
+
+- éviter les technologies obsolètes ;
+- privilégier les solutions ouvertes ;
+- permettre l’évolution future.
+
+---
+
+CHAPITRE 2 — Architecture Frontend
+
+Objectif
+
+Créer une interface utilisateur performante.
+
+Exigences :
+
+- interface responsive ;
+- composants réutilisables ;
+- chargement rapide ;
+- compatibilité mobile.
+
+Fonctions :
+
+- affichage des contenus ;
+- navigation ;
+- formulaires ;
+- interactions utilisateurs.
+
+---
+
+CHAPITRE 3 — Architecture Backend
+
+Objectif
+
+Gérer la logique métier du portail.
+
+Responsabilités :
+
+- gestion utilisateurs ;
+- gestion contenus ;
+- authentification ;
+- traitement des formulaires ;
+- communication avec la base de données.
+
+Exigences :
+
+- sécurité ;
+- stabilité ;
+- évolutivité.
+
+---
+
+CHAPITRE 4 — Base de données
+
+Objectif
+
+Stocker efficacement les informations.
+
+Données prévues :
+
+- utilisateurs ;
+- facultés ;
+- formations ;
+- articles ;
+- documents ;
+- candidatures ;
+- configurations.
+
+Exigences :
+
+- intégrité des données ;
+- sauvegardes ;
+- optimisation des performances.
+
+---
+
+CHAPITRE 5 — API et intégrations
+
+Objectif
+
+Permettre la communication entre les différents services.
+
+Prévoir :
+
+- API internes ;
+- intégration future avec applications mobiles ;
+- services externes ;
+- systèmes universitaires.
+
+Principe :
+
+Architecture prête pour l’interconnexion.
+
+---
+
+CHAPITRE 6 — Développement avec GitHub
+
+Objectif
+
+Organiser le développement professionnellement.
+
+Utilisation :
+
+- dépôt GitHub ;
+- gestion des versions ;
+- suivi des modifications ;
+- collaboration développeurs.
+
+Organisation :
+
+- branches développement ;
+- tests ;
+- version stable.
+
+---
+
+CHAPITRE 7 — Environnement de développement gratuit
+
+Objectif
+
+Réduire les coûts initiaux.
+
+Phase initiale :
+
+Développement sur :
+
+- GitHub ;
+- outils gratuits ;
+- environnements de test.
+
+Avantages :
+
+- collaboration ;
+- historique ;
+- contrôle du projet.
+
+---
+
+CHAPITRE 8 — Migration vers l’environnement de production
+
+Objectif
+
+Passer du prototype validé au site officiel.
+
+Étapes :
+
+- achat domaine .CD ;
+- configuration DNS ;
+- hébergement professionnel ;
+- migration données ;
+- activation HTTPS.
+
+---
+
+CHAPITRE 9 — Domaine officiel et hébergement
+
+Objectif
+
+Construire une identité numérique durable.
+
+Domaine :
+
+Extension officielle :
+
+.CD
+
+Exemples :
+
+universitemorave.cd
+
+ium.cd (selon disponibilité)
+
+Hébergement :
+
+Prévoir :
+
+- haute disponibilité ;
+- sauvegardes ;
+- sécurité ;
+- évolutivité.
+
+---
+
+CHAPITRE 10 — Sécurité informatique
+
+Objectif
+
+Protéger la plateforme.
+
+Mesures :
+
+- HTTPS ;
+- protection comptes ;
+- contrôle accès ;
+- sauvegardes ;
+- surveillance sécurité.
+
+Prévoir :
+
+- gestion des permissions ;
+- journalisation ;
+- prévention des attaques.
+
+---
+
+CHAPITRE 11 — Performance et optimisation
+
+Objectif
+
+Garantir un accès rapide.
+
+Optimisations :
+
+- compression fichiers ;
+- optimisation images ;
+- cache ;
+- code propre ;
+- chargement progressif.
+
+Cible :
+
+Fonctionnement correct même avec connexion limitée.
+
+---
+
+CHAPITRE 12 — Sauvegarde et récupération
+
+Objectif
+
+Éviter la perte de données.
+
+Prévoir :
+
+- sauvegardes automatiques ;
+- copies externes ;
+- restauration rapide ;
+- procédure de récupération.
+
+---
+
+CHAPITRE 13 — Tests logiciels
+
+Objectif
+
+Garantir la qualité avant publication.
+
+Tests :
+
+- fonctionnalités ;
+- sécurité ;
+- compatibilité mobile ;
+- performance ;
+- expérience utilisateur.
+
+Validation :
+
+Avant chaque mise en production.
+
+---
+
+CHAPITRE 14 — Déploiement continu
+
+Objectif
+
+Automatiser les mises à jour.
+
+Prévoir :
+
+- intégration GitHub ;
+- déploiement contrôlé ;
+- environnement test ;
+- environnement production.
+
+Avantage :
+
+Réduction des erreurs humaines.
+
+---
+
+CHAPITRE 15 — Documentation technique
+
+Objectif
+
+Garantir la continuité du projet.
+
+Documentation obligatoire :
+
+- architecture ;
+- installation ;
+- configuration ;
+- maintenance ;
+- procédures administrateur.
+
+Résultat :
+
+Une nouvelle équipe technique pourra reprendre le projet facilement.
+
+---
+
+Résultat attendu de la Partie IV
+
+’une vision technique claire :
+
+- développement initial gratuit sur GitHub ;
+- architecture professionnelle ;
+- migration progressive vers production ;
+- domaine officiel .CD ;
+- sécurité et évolutivité intégrées dès le départ.
+
+Le portail devra être construit comme une application universitaire évolutive, pas comme un simple site web.
+
+Fin de la Partie IV.
+
+

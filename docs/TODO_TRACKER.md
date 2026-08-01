@@ -120,6 +120,25 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 
 > Traduire ces items en issues GitHub pour assignation, estimation et planification.
 
+## Partie IV — Architecture technique & développement (15 chapitres)
+- [ ] Choix technologiques (principes, éviter obsolescence, préférer open source).
+- [ ] Architecture frontend (responsive, composants réutilisables, performance).
+- [ ] Architecture backend (gestion utilisateurs, contenus, formulaires, sécurité).
+- [ ] Base de données (modèle: users, faculties, programs, articles, documents, applications).
+- [ ] API & intégrations (REST/GraphQL, interconnexion mobile et services externes).
+- [ ] Développement avec GitHub (branches, PR, tests, releases).
+- [ ] Environnement de développement gratuit (GitHub, outils gratuits, environnements de test).
+- [ ] Migration vers production (DNS, hébergement, HTTPS, migration données).
+- [ ] Domaine officiel et hébergement (.CD acquisition, HA, backups, sécurité).
+- [ ] Sécurité informatique (HTTPS, gestion permissions, journalisation, prevention attaques).
+- [ ] Performance & optimisation (compression, cache, images optimisées, lazy loading).
+- [ ] Sauvegarde & récupération (backups automatiques, procédures de restauration).
+- [ ] Tests logiciels (unit, integration, e2e, sécurité, performance).
+- [ ] Déploiement continu (GitHub Actions, staging/prod, rollbacks).
+- [ ] Documentation technique (architecture, installation, maintenance).
+
+> Traduire ces items en issues GitHub pour assignation, estimation et planification.
+
 ## Identité visuelle & Design System (Partie II)
 - [ ] Rédiger la charte graphique (logo, couleurs, règles d'usage) et créer docs/IDENTITE_VISUELLE.md.
 - [ ] Créer le Design System (components, tokens, UI kit) et ajouter docs/DESIGN_SYSTEM.md.
