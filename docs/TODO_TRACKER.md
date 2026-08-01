@@ -78,6 +78,7 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 - [ ] Analyse détaillée des besoins (interviews, recueils des attentes des acteurs, priorisation des services).
 - [ ] Vérifier l’infrastructure CI et la connectivité de la base Supabase avant le développement fonctionnel.
 - [x] Traduire les actions d’initialisation en issues GitHub : infra, CI, modèle de données, roadmap.
+- [x] Créer et documenter le plan de sprint dans `docs/SPRINT_PLAN.md`.
 
 ### Backlog initial créé
 - [x] Milestone MVP v0.1
