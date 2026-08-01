@@ -9,7 +9,8 @@ CREATE TABLE users (
   password_hash TEXT,
   metadata JSONB,
   created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE faculties (
@@ -18,18 +19,22 @@ CREATE TABLE faculties (
   name TEXT NOT NULL,
   description TEXT,
   created_at TIMESTAMP DEFAULT now(),
-  updated_at TIMESTAMP DEFAULT now()
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE programs (
   id SERIAL PRIMARY KEY,
   faculty_id INTEGER REFERENCES faculties(id) ON DELETE SET NULL,
-  code TEXT,
+  code TEXT UNIQUE,
   title TEXT NOT NULL,
   level TEXT,
   duration_months INTEGER,
   description TEXT,
-  admission_conditions TEXT
+  admission_conditions TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE tracks (
@@ -37,17 +42,24 @@ CREATE TABLE tracks (
   program_id INTEGER REFERENCES programs(id) ON DELETE CASCADE,
   code TEXT,
   title TEXT,
-  description TEXT
+  description TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE courses (
   id SERIAL PRIMARY KEY,
   track_id INTEGER REFERENCES tracks(id) ON DELETE SET NULL,
   code TEXT,
-  title TEXT,
-  credits INTEGER,
+  title TEXT NOT NULL,
+  credits INTEGER NOT NULL,
   semester INTEGER,
-  description TEXT
+  description TEXT,
+  teacher_email TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE enrollments (
@@ -55,30 +67,49 @@ CREATE TABLE enrollments (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   program_id INTEGER REFERENCES programs(id),
   track_id INTEGER REFERENCES tracks(id),
-  year INTEGER,
-  status TEXT
+  year INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'active',
+  matricule TEXT UNIQUE,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE documents (
   id SERIAL PRIMARY KEY,
-  owner_type TEXT,
-  owner_id INTEGER,
-  title TEXT,
-  file_path TEXT,
+  owner_type TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  file_path TEXT NOT NULL,
   mime TEXT,
-  visibility TEXT,
-  created_by INTEGER,
-  created_at TIMESTAMP DEFAULT now()
+  visibility TEXT NOT NULL DEFAULT 'private',
+  created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE grades (
+  id SERIAL PRIMARY KEY,
+  enrollment_id INTEGER REFERENCES enrollments(id) ON DELETE CASCADE,
+  course_id INTEGER REFERENCES courses(id) ON DELETE SET NULL,
+  score NUMERIC(4,2) NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE diplomas (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   program_id INTEGER REFERENCES programs(id),
-  diploma_number TEXT UNIQUE,
+  diploma_number TEXT UNIQUE NOT NULL,
   issued_date DATE,
-  status TEXT,
-  verification_code_hash TEXT
+  status TEXT NOT NULL DEFAULT 'issued',
+  verification_code_hash TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
 );
 
 CREATE TABLE diploma_verifications (
@@ -90,13 +121,65 @@ CREATE TABLE diploma_verifications (
   notes TEXT
 );
 
--- Audit log table
 CREATE TABLE audit_logs (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER,
-  action TEXT,
-  resource TEXT,
+  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  action TEXT NOT NULL,
+  resource TEXT NOT NULL,
   resource_id INTEGER,
   metadata JSONB,
   created_at TIMESTAMP DEFAULT now()
 );
+
+CREATE TABLE calendar_events (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT,
+  starts_at TIMESTAMP NOT NULL,
+  ends_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE news (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  summary TEXT,
+  content TEXT,
+  category TEXT,
+  published_at TIMESTAMP DEFAULT now(),
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE deliberations (
+  id SERIAL PRIMARY KEY,
+  enrollment_id INTEGER REFERENCES enrollments(id) ON DELETE CASCADE,
+  decision TEXT NOT NULL,
+  finalized_by TEXT,
+  finalized_at TIMESTAMP DEFAULT now(),
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE email_notifications (
+  id SERIAL PRIMARY KEY,
+  recipient TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  category TEXT,
+  delivery JSONB,
+  sent_at TIMESTAMP DEFAULT now(),
+  created_at TIMESTAMP DEFAULT now()
+);
+
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_enrollments_user_id ON enrollments(user_id);
+CREATE INDEX idx_enrollments_program_id ON enrollments(program_id);
+CREATE INDEX idx_grades_enrollment_id ON grades(enrollment_id);
+CREATE INDEX idx_diplomas_number ON diplomas(diploma_number);
+CREATE INDEX idx_documents_visibility ON documents(visibility);
