@@ -59,25 +59,26 @@ gantt
 
 ### SPRINT 1 : DEMARRAGE DU DEVELOPPEMENT
 - [x] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
-- [ ] Spécifier le modèle utilisateur et la sécurité d’accès.
-- [x] Construire le module `services/auth-service` pour auth et RBAC (squelette initial créé).
-- [x] Préparer le socle API core pour les données académiques (squelette initial créé).
-- [ ] Documenter les conventions de service et les endpoints initiaux.
+- [x] Spécifier le modèle utilisateur et la sécurité d’accès initiale.
+- [x] Construire le module `services/auth-service` pour auth et RBAC.
+- [x] Préparer le socle API core pour les données académiques.
+- [x] Documenter les conventions de service et les endpoints initiaux.
 
 ### SPRINT 2 : MVP PUBLIC ET ESPACE UTILISATEUR
-- [ ] Développer le portail public basique (`apps/web-portal`) avec pages institutionnelles.
+- [x] Développer le portail public basique (`apps/web`) avec pages institutionnelles.
 - [ ] Créer l’espace utilisateur étudiant/enseignant minimal.
-- [ ] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
-- [ ] Connecter les premiers flux frontaux au backend API core.
-- [ ] Ajouter un système de courriel professionnel pour les notifications et communications officielles.
-- [ ] Concevoir le générateur sécurisé de relevés de notes conforme aux normes congolaises.
+- [x] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
+- [x] Connecter les premiers flux frontaux au backend API core.
+- [x] Ajouter un système de courriel professionnel avec aperçu de développement.
+- [x] Concevoir le générateur sécurisé de relevés de notes ; validation institutionnelle requise avant production.
 
 ### SPRINT 3 : MODULES ACADÉMIQUES & ADMINISTRATION
-- [ ] Implémenter la gestion des facultés, des programmes et des parcours.
-- [ ] Ajouter le module de gestion des inscriptions et des délibérations.
-- [ ] Construire les premières fonctions d’administration et de reporting.
-- [ ] Préparer l’intégration du workflow de notes et des documents académiques.
-- [ ] Garantir la sécurisation des relevés de notes et des diplômes numériques.
+- [x] Implémenter la gestion MVP des facultés, des programmes et des parcours.
+- [x] Ajouter les opérations MVP de gestion des inscriptions et des délibérations.
+- [x] Construire les premières fonctions d’administration, d'audit et de reporting.
+- [x] Préparer le workflow MVP de notes et documents académiques.
+- [x] Garantir l’intégrité cryptographique des relevés MVP et la vérification publique.
+- [ ] Connecter les données MVP à Supabase avant tout usage réel.
 
 ---
 

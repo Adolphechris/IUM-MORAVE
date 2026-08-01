@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 
+const ROLES = new Set(['student', 'teacher', 'admin', 'finance']);
+
 const users = [
   {
     id: 1,
@@ -24,6 +26,9 @@ function createUser({ email, password, role = 'student', firstName = '', lastNam
   if (existing) {
     throw new Error('User already exists');
   }
+  if (!ROLES.has(role)) {
+    throw new Error('Invalid role');
+  }
 
   const id = users.length + 1;
   const passwordHash = bcrypt.hashSync(password, 10);
@@ -43,6 +48,7 @@ function safeUser(user) {
 }
 
 module.exports = {
+  ROLES,
   findUserByEmail,
   findUserById,
   createUser,

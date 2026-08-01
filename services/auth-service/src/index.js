@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { findUserByEmail, createUser, validatePassword, safeUser } = require('./user-store');
 const { signToken, verifyToken } = require('./token');
 
 const PORT = process.env.PORT || 4001;
 const app = express();
 
+app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
 
 app.get('/health', (req, res) => {
@@ -14,13 +16,23 @@ app.get('/health', (req, res) => {
 
 app.post('/auth/register', (req, res) => {
   try {
-    const { email, password, role, firstName, lastName } = req.body;
+    const { email, password, firstName, lastName } = req.body;
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
+    if (password.length < 12) {
+      return res.status(400).json({ error: 'Password must contain at least 12 characters' });
+    }
 
-    const user = createUser({ email, password, role, firstName, lastName });
-    const token = signToken({ sub: user.id, email: user.email, role: user.role });
+    // Public registration never accepts a privileged role.
+    const user = createUser({ email, password, role: 'student', firstName, lastName });
+    const token = signToken({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName
+    });
 
     res.status(201).json({ user: safeUser(user), token });
   } catch (error) {
@@ -39,7 +51,13 @@ app.post('/auth/login', (req, res) => {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
-  const token = signToken({ sub: user.id, email: user.email, role: user.role });
+  const token = signToken({
+    sub: user.id,
+    email: user.email,
+    role: user.role,
+    firstName: user.firstName,
+    lastName: user.lastName
+  });
   res.json({ user: safeUser(user), token });
 });
 

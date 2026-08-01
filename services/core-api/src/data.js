@@ -42,4 +42,25 @@ const tracks = [
   }
 ];
 
-module.exports = { faculties, programs, tracks };
+const enrollments = [
+  {
+    id: 1,
+    studentEmail: 'jean.kabamba@ium-morave.edu',
+    studentName: 'Jean Kabamba',
+    matricule: 'IUM/2026/0001',
+    programId: 1,
+    trackId: 1,
+    academicYear: '2025-2026',
+    status: 'active'
+  }
+];
+
+const grades = [
+  { enrollmentId: 1, courseCode: 'INF101', courseTitle: 'Algorithmique', credits: 6, score: 15, status: 'validated' },
+  { enrollmentId: 1, courseCode: 'INF102', courseTitle: 'Programmation', credits: 6, score: 14, status: 'validated' },
+  { enrollmentId: 1, courseCode: 'MAT101', courseTitle: 'Mathématiques discrètes', credits: 4, score: 13, status: 'validated' }
+];
+
+const deliberations = [];
+
+module.exports = { faculties, programs, tracks, enrollments, grades, deliberations };

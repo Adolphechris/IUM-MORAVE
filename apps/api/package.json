@@ -7,12 +7,12 @@
     "start": "node index.js",
     "build": "echo \"No build step for API\"",
     "lint": "eslint --ext .js . || true",
-    "test": "node -e \"require('./index') && console.log('api-load-ok')\" || true"
+    "test": "node --check index.js"
   },
   "devDependencies": {
     "eslint": "8.x"
   },
   "dependencies": {
-    "express": "4.18.2"
+    "express": "4.22.2"
   }
 }

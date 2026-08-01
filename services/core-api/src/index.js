@@ -1,12 +1,29 @@
 require('dotenv').config();
 const express = require('express');
-const { faculties, programs, tracks } = require('./data');
+const cors = require('cors');
+const { faculties, programs, tracks, enrollments, grades, deliberations } = require('./data');
 const { authenticate, requireRole } = require('./auth');
+const { createInstitutionalEmail, sendInstitutionalEmail } = require('./email-service');
+const { buildTranscript } = require('./transcript-service');
 
 const PORT = process.env.PORT || 4002;
 const app = express();
+const transcriptRegistry = new Map();
+const auditLogs = [];
 
+app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
+
+function audit(req, action, resource, resourceId) {
+  auditLogs.push({
+    id: auditLogs.length + 1,
+    actor: req.user ? req.user.email : 'anonymous',
+    action,
+    resource,
+    resourceId,
+    createdAt: new Date().toISOString()
+  });
+}
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'core-api' });
@@ -34,6 +51,7 @@ app.post('/faculties', authenticate, requireRole('admin'), (req, res) => {
     description: description || ''
   };
   faculties.push(newFaculty);
+  audit(req, 'create', 'faculty', newFaculty.id);
   res.status(201).json(newFaculty);
 });
 
@@ -74,6 +92,142 @@ app.get('/documents', (req, res) => {
     { id: 1, title: 'Règlement intérieur', filePath: '/docs/reglement.pdf' },
     { id: 2, title: 'Guide de l’étudiant', filePath: '/docs/guide-etudiant.pdf' }
   ]);
+});
+
+app.post('/enrollments', authenticate, requireRole('admin'), (req, res) => {
+  const { studentEmail, studentName, matricule, programId, trackId, academicYear } = req.body;
+  if (!studentEmail || !studentName || !matricule || !programId || !academicYear) {
+    return res.status(400).json({ error: 'studentEmail, studentName, matricule, programId and academicYear are required' });
+  }
+
+  if (!programs.some((program) => program.id === Number(programId))) {
+    return res.status(400).json({ error: 'Program not found' });
+  }
+
+  const enrollment = {
+    id: enrollments.length + 1,
+    studentEmail,
+    studentName,
+    matricule,
+    programId: Number(programId),
+    trackId: trackId ? Number(trackId) : null,
+    academicYear,
+    status: 'active'
+  };
+  enrollments.push(enrollment);
+  audit(req, 'create', 'enrollment', enrollment.id);
+  res.status(201).json(enrollment);
+});
+
+app.post('/enrollments/:id/grades', authenticate, requireRole('admin', 'teacher'), (req, res) => {
+  const enrollmentId = Number(req.params.id);
+  const { courseCode, courseTitle, credits, score } = req.body;
+  if (!courseCode || !courseTitle || !Number.isFinite(credits) || !Number.isFinite(score)) {
+    return res.status(400).json({ error: 'courseCode, courseTitle, credits and score are required' });
+  }
+  if (!enrollments.some((enrollment) => enrollment.id === enrollmentId)) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  if (credits <= 0 || score < 0 || score > 20) {
+    return res.status(400).json({ error: 'credits must be positive and score must be between 0 and 20' });
+  }
+
+  const grade = { enrollmentId, courseCode, courseTitle, credits, score, status: 'pending' };
+  grades.push(grade);
+  audit(req, 'create', 'grade', `${enrollmentId}:${courseCode}`);
+  res.status(201).json(grade);
+});
+
+app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
+  const enrollmentId = Number(req.params.id);
+  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
+  if (!enrollments.some((enrollment) => enrollment.id === enrollmentId)) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  if (enrollmentGrades.length === 0) {
+    return res.status(400).json({ error: 'No grades available for deliberation' });
+  }
+
+  enrollmentGrades.forEach((grade) => {
+    grade.status = 'validated';
+  });
+  const deliberation = {
+    id: deliberations.length + 1,
+    enrollmentId,
+    decision: 'validated',
+    finalizedBy: req.user.email,
+    finalizedAt: new Date().toISOString()
+  };
+  deliberations.push(deliberation);
+  audit(req, 'validate', 'deliberation', deliberation.id);
+  res.status(201).json(deliberation);
+});
+
+function createTranscriptForEnrollment(enrollment) {
+  const program = programs.find((item) => item.id === enrollment.programId);
+  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollment.id);
+  const transcript = buildTranscript({ enrollment, program, grades: enrollmentGrades });
+  transcriptRegistry.set(transcript.verificationCode, transcript);
+  return transcript;
+}
+
+app.get('/transcripts/me', authenticate, requireRole('student'), (req, res) => {
+  if (!Number.isInteger(req.user.enrollmentId)) {
+    return res.status(403).json({ error: 'Academic enrollment is not linked to this account' });
+  }
+
+  const enrollment = enrollments.find((item) => (
+    item.id === req.user.enrollmentId
+    && item.studentEmail.toLowerCase() === req.user.email.toLowerCase()
+  ));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'No enrollment found for this student' });
+  }
+
+  const transcript = createTranscriptForEnrollment(enrollment);
+  audit(req, 'issue', 'transcript', enrollment.id);
+  res.json(transcript);
+});
+
+app.get('/transcripts/enrollments/:id', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  const transcript = createTranscriptForEnrollment(enrollment);
+  audit(req, 'issue', 'transcript', enrollment.id);
+  res.json(transcript);
+});
+
+app.post('/verification/transcript', (req, res) => {
+  const { verificationCode, integrityHash } = req.body;
+  if (!verificationCode || !integrityHash) {
+    return res.status(400).json({ error: 'verificationCode and integrityHash are required' });
+  }
+
+  const transcript = transcriptRegistry.get(verificationCode);
+  const verified = Boolean(transcript && transcript.integrityHash === integrityHash);
+  res.json({
+    verified,
+    institution: 'Institut Universitaire Morave',
+    verifiedAt: new Date().toISOString()
+  });
+});
+
+app.post('/notifications/preview', authenticate, requireRole('admin'), (req, res) => {
+  try {
+    const message = createInstitutionalEmail(req.body);
+    const delivered = sendInstitutionalEmail(message);
+    audit(req, 'preview', 'institutional-email', delivered.id);
+    res.status(201).json(delivered);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/admin/audit-logs', authenticate, requireRole('admin'), (req, res) => {
+  res.json(auditLogs);
 });
 
 app.post('/verification/diploma', (req, res) => {

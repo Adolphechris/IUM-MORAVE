@@ -21,8 +21,8 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 ## Ce qui reste à faire
 - Confirmer l'application du schéma et des seeds sur Supabase depuis le dashboard ou une machine avec connectivité IPv6.
 - Attendre le résultat du check `build` sur la PR `ci/run-migrations`.
-- Créer les premières issues GitHub pour le développement : architecture monorepo, auth/RBAC, API core.
-- Commencer le développement séquentiel après la validation de l'infrastructure.
+- Remplacer les stockages en mémoire du MVP par les accès Supabase persistants.
+- Faire valider institutionnellement le modèle de relevé de notes avant toute émission officielle.
 
 ## Sprint 0 — Préparation & Vérification
 - [x] Corriger le workflow de migration Supabase.
@@ -32,15 +32,22 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [ ] Documenter les étapes à suivre pour l’accès Supabase et la base de données.
 
 ## Sprint 1 — Démarrage du développement
-- [ ] Définir et créer l'architecture Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
-- [ ] Définir le modèle utilisateur et le plan de sécurité.
-- [ ] Créer le module `services/auth-service` et le socle `services/core-api`.
+- [x] Définir et créer l'architecture Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
+- [x] Définir le modèle utilisateur et le plan de sécurité initial.
+- [x] Créer le module `services/auth-service` et le socle `services/core-api`.
 - [x] Lancer les premières issues GitHub pour les epics prioritaires.
 
 ## Sprint 2 — MVP public et services essentiels
-- [ ] Construire le portail public basique et l'espace utilisateur minimal.
-- [ ] Ajouter un système de messagerie professionnelle pour notifications officielles.
-- [ ] Concevoir un générateur sécurisé de relevés de notes conforme aux normes congolaises.
+- [x] Construire le portail public basique.
+- [ ] Construire l'espace utilisateur étudiant/enseignant minimal.
+- [x] Ajouter une abstraction de messagerie professionnelle avec aperçu de développement.
+- [x] Concevoir un générateur sécurisé de relevés de notes ; validation institutionnelle requise avant production.
+
+## Sprint 3 — Modules académiques et administration
+- [x] Implémenter les opérations MVP pour facultés, programmes et parcours.
+- [x] Ajouter les opérations MVP pour inscriptions, notes et délibérations.
+- [x] Ajouter les journaux d'audit administratifs et la vérification de relevé.
+- [ ] Persister les modules académiques, les documents et les journaux dans Supabase.
 
 ## Progression actuelle
 - [x] `services/auth-service` skeleton created and ready for auth/RBAC development.
@@ -48,6 +55,44 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [x] `services/*` workspace added to root `package.json`.
 - [x] `auth-service` now expose `POST /auth/register`, `POST /auth/login`, and protected `GET /auth/profile`.
 - [x] `core-api` now expose `GET /faculties`, `GET /programs`, `GET /tracks`, `GET /faculty/:id`, `GET /news`, `GET /documents`, and `POST /verification/diploma`.
+- [x] Auth, core API and transcript issuance are covered by five automated Node tests.
+- [x] The Next.js public portal compiles successfully.
+
+## Livraison Sprint 1 à Sprint 3 (MVP technique)
+
+### Réalisé
+
+- Authentification : inscription publique limitée au rôle étudiant, mots de
+  passe hachés, JWT, profil protégé et contrôle de rôles.
+- API académique : facultés, programmes, parcours, inscriptions, notes,
+  délibérations et journaux d'audit en mémoire pour le MVP.
+- Portail : page publique Next.js connectée à l'API et espace de connexion
+  pour les rôles institutionnels.
+- Communication : aperçu d'email institutionnel côté administration ; aucun
+  email réel n'est envoyé sans fournisseur configuré.
+- Relevés : émission d'un relevé JSON signé, code unique et endpoint de
+  vérification de l'intégrité.
+- Qualité : cinq tests automatisés couvrent l'auth, le RBAC, l'API académique
+  et la vérification de relevé ; le build Next.js est validé.
+- Dépendances : Next.js est passé à la dernière version stable disponible
+  compatible avec le portail, Express est mis à jour et Node 22 est utilisé
+  dans la CI.
+
+### À ne pas confondre avec une livraison production
+
+- Les données restent en mémoire et disparaissent au redémarrage tant que
+  Supabase n'est pas confirmé et connecté.
+- Le relevé numérique ne doit pas être présenté comme document officiel avant
+  la validation du format, des signatures, des cachets et du circuit de
+  délibération par l'IUM-MORAVE et les autorités académiques compétentes en
+  RDC.
+- Le fournisseur de courriel, les DNS SPF/DKIM/DMARC, les sauvegardes, les
+  journaux persistants et le stockage des documents doivent être configurés
+  avant production.
+- L'audit de dépendances conserve trois alertes élevées transitives de la
+  version stable actuelle de Next.js (`next`, `postcss`, `sharp`). Aucune
+  correction compatible n'est proposée par npm à ce jour ; ce point reste
+  tracé et doit être revérifié avant chaque déploiement.
 - [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
 - [ ] Build CI is still in progress; waiting for completion.
 
