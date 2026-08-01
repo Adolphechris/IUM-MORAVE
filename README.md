@@ -46,3 +46,12 @@ IUM-MORAVE/
 - **[Tracker master & TODO](TODO.md)**
 - **[Plan de sprint](docs/SPRINT_PLAN.md)**
 - **[Rapport de développement](docs/DEVELOPMENT_REPORT.md)**
+
+## 🔧 DÉMARRER LES SERVICES
+- `npm install` pour installer les dépendances du monorepo
+- `npm run start:auth` pour démarrer le service d'authentification
+- `npm run start:core-api` pour démarrer le service API académique
+
+Les services sont exposés par défaut sur :
+- http://localhost:4001 pour `auth-service`
+- http://localhost:4002 pour `core-api`
