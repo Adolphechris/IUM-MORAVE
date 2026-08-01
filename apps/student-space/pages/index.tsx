@@ -43,6 +43,13 @@ type GradesResponse = {
   totalCredits: number
 }
 
+type StudentDocument = {
+  id: number
+  title: string
+  filePath: string
+  mime: string
+}
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
 
@@ -53,6 +60,7 @@ export default function StudentSpace() {
   const [transcript, setTranscript] = useState<Transcript | null>(null)
   const [schedule, setSchedule] = useState<ScheduleItem[] | null>(null)
   const [grades, setGrades] = useState<GradesResponse | null>(null)
+  const [studentDocuments, setStudentDocuments] = useState<StudentDocument[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -124,6 +132,21 @@ export default function StudentSpace() {
     }
   }
 
+  async function loadStudentDocuments() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/students/me/documents`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Documents indisponibles.')
+      setStudentDocuments(result)
+    } catch (documentsError) {
+      setError(documentsError instanceof Error ? documentsError.message : 'Documents indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -147,9 +170,25 @@ export default function StudentSpace() {
             <p><strong>Rôle :</strong> {session.user.role}</p>
             <button type="button" onClick={loadTranscript}>Consulter mon relevé de notes</button>
             <button type="button" onClick={loadGrades}>Voir mes notes détaillées</button>
+            <button type="button" onClick={loadStudentDocuments}>Voir mes documents</button>
             <button type="button" onClick={loadSchedule}>Voir mon emploi du temps</button>
           </div>
         )}
+
+        {studentDocuments ? (
+          <article className="panel">
+            <h2>Mes documents</h2>
+            <ul>
+              {studentDocuments.map((document) => (
+                <li key={document.id}>
+                  <strong>{document.title}</strong> <span>({document.mime})</span>
+                  <br />
+                  <a href={document.filePath}>Télécharger</a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
 
         {grades ? (
           <article className="panel">

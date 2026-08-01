@@ -282,6 +282,11 @@ app.get('/students/me/grades', authenticate, requireRole('student'), (req, res) 
   });
 });
 
+app.get('/students/me/documents', authenticate, requireRole('student'), (req, res) => {
+  const visible = documents.filter((document) => document.visibility === 'public' || document.visibility === 'student');
+  res.json(visible);
+});
+
 app.get('/teachers/me', authenticate, requireRole('teacher'), (req, res) => {
   const teacher = teachers.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
   if (!teacher) {
