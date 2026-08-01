@@ -1,8 +1,8 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo
-> **Dernière mise à jour** : 01 Août 2026 18:16
-> **Prochaines actions** : connecter les données temporaires à Supabase, compléter les espaces métiers et préparer les modules finance/LMS.
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 3 en cours | Services opérationnels & Espaces métiers squelettés
+> **Dernière mise à jour** : 01 Août 2026
+> **Prochaines actions** : finaliser les espaces métiers, intégrer le design system partagé, préparer le module finance et le déploiement.
 
 ---
 
@@ -160,3 +160,6 @@ gantt
 | 2026-08-01 | Rédaction de la Constitution (`CONSTITUTION.md`) | Antigravity | ✅ Terminé |
 | 2026-08-01 | Création du Tracker Master (`TODO.md`) | Antigravity | ✅ Terminé |
 | 2026-08-01 | Correction du workflow de migration et validation des checks `run-migrations` + `run-migrations-safe` | Copilot | ✅ Terminé |
+| 2026-08-01 | Fusion de la branche de développement avancée dans `main` | Kilo | ✅ Terminé |
+| 2026-08-01 | Nettoyage de la duplication `apps/api`, mise à jour de la CI et ajout des espaces métiers | Kilo | ✅ Terminé |
+| 2026-08-01 | Ajout du design system partagé et des squelettes d'apps `student-space`, `teacher-space`, `admin-dashboard` | Kilo | ✅ Terminé |
