@@ -58,10 +58,11 @@ gantt
 - Issue #184 — Générateur sécurisé de relevés de notes conforme aux normes congolaises
 
 ### SPRINT 1 : DEMARRAGE DU DEVELOPPEMENT
-- [ ] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
+- [x] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
 - [ ] Spécifier le modèle utilisateur et la sécurité d’accès.
-- [ ] Construire le module `services/auth-service` pour auth et RBAC.
-- [ ] Préparer le socle API core pour les données académiques.
+- [x] Construire le module `services/auth-service` pour auth et RBAC (squelette initial créé).
+- [x] Préparer le socle API core pour les données académiques (squelette initial créé).
+- [ ] Documenter les conventions de service et les endpoints initiaux.
 
 ### SPRINT 2 : MVP PUBLIC ET ESPACE UTILISATEUR
 - [ ] Développer le portail public basique (`apps/web-portal`) avec pages institutionnelles.

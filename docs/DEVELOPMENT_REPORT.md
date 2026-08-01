@@ -42,6 +42,13 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [ ] Ajouter un système de messagerie professionnelle pour notifications officielles.
 - [ ] Concevoir un générateur sécurisé de relevés de notes conforme aux normes congolaises.
 
+## Progression actuelle
+- [x] `services/auth-service` skeleton created and ready for auth/RBAC development.
+- [x] `services/core-api` skeleton created and ready for academic API development.
+- [x] `services/*` workspace added to root `package.json`.
+- [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
+- [ ] Build CI is still in progress; waiting for completion.
+
 ## Backlog initial GitHub
 - [x] Milestone créé : [MVP v0.1](https://github.com/Adolphechris/IUM-MORAVE/milestone/2)
 - [x] Issue #179 — [Infra & base de données: valider l'accès Supabase et définir le schéma initial](https://github.com/Adolphechris/IUM-MORAVE/issues/179)

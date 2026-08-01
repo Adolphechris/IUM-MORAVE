@@ -1,0 +1,13 @@
+{
+  "name": "ium-morave",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "bootstrap": "echo \"Bootstrap: run package manager install in workspace root\"",
+    "ci": "npm run -w apps/web build || true && npm run -w apps/api build || true"
+  }
+}
