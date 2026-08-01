@@ -4,13 +4,18 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "services/*"
+    "services/*",
+    "shared/*"
   ],
   "scripts": {
-    "bootstrap": "echo \"Bootstrap: run package manager install in workspace root\"",
-    "ci": "npm run -w apps/web build || true && npm run -w apps/api build || true",
+    "bootstrap": "npm install",
+    "ci": "npm run -w apps/web build || true && npm run test:services || true",
     "start:auth": "npm run --workspace services/auth-service start",
     "start:core-api": "npm run --workspace services/core-api start",
+    "start:web": "npm run --workspace apps/web dev",
+    "start:student": "npm run --workspace apps/student-space dev",
+    "start:teacher": "npm run --workspace apps/teacher-space dev",
+    "start:admin": "npm run --workspace apps/admin-dashboard dev",
     "test:services": "npm run --workspace services/auth-service test && npm run --workspace services/core-api test"
   }
 }
