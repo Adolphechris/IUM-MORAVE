@@ -18,45 +18,48 @@ IUM-MORAVE/
 ├── CONSTITUTION.md          # Charte fondamentale du projet
 ├── TODO.md                  # Tracker master des tâches
 ├── README.md                # Documentation principale
+├── package.json             # Workspaces npm (apps, packages, services)
 ├── docs/                    # Spécifications & Schémas d'architecture
 ├── apps/                    # Applications Frontend
-│   ├── web-portal/          # Portail d'information public
+│   ├── web/                 # Portail public MVP (Next.js)
 │   ├── student-space/       # Espace Étudiants (Notes, Relevés, EDT)
 │   ├── teacher-space/       # Espace Enseignants (Saisie des notes, Cours)
 │   └── admin-dashboard/     # Espace Direction & Scolarité
 ├── services/                # Backend API Services
-│   ├── core-api/            # API Académique & Gestion LMD
 │   ├── auth-service/        # Authentification & Rôles (RBAC)
-│   └── finance-service/     # Gestion Financière & Frais
+│   └── core-api/            # API Académique & Gestion LMD
 └── shared/                  # UI Design System & Typages partagés
 ```
 
 ---
 
 ## 🚀 DÉMARRAGE RAPIDE
-*Instructions d'installation et de lancement à mesure du déploiement des modules.*
+
+```bash
+# Installation des dépendances du monorepo
+npm install
+
+# Services backend
+npm run start:auth      # http://localhost:4001
+npm run start:core-api  # http://localhost:4002
+
+# Frontend portail
+cd apps/web && npm run dev   # http://localhost:3000
+
+# Espaces métiers
+cd apps/student-space && npm run dev   # http://localhost:3001
+cd apps/teacher-space && npm run dev   # http://localhost:3002
+cd apps/admin-dashboard && npm run dev # http://localhost:3003
+```
 
 ## 🔧 ÉTAT ACTUEL DU CHANTIER
-- Phase en cours : **Sprint 0 — Préparation et validation**
-- Workflow migration Supabase réparé et check `run-migrations` validé
-- Backlog initial créé avec les issues GitHub #179 à #184
-- Prochaine étape : validation du build CI et confirmation du schéma Supabase
+- Phase en cours : **Développement des espaces métiers et intégration frontend**
+- Services backend opérationnels : `auth-service` (4001) et `core-api` (4002)
+- Portail public MVP développé (`apps/web`)
+- Tests unitaires des services en place
+- Prochaine étape : développement des espaces dédiés et intégration Supabase (déploiement)
 
 ## 📌 DOCUMENTS CLÉS
 - **[Tracker master & TODO](TODO.md)**
 - **[Plan de sprint](docs/SPRINT_PLAN.md)**
 - **[Rapport de développement](docs/DEVELOPMENT_REPORT.md)**
-
-## 🔧 DÉMARRER LES SERVICES
-- `npm install` pour installer les dépendances du monorepo
-- `npm run start:auth` pour démarrer le service d'authentification
-- `npm run start:core-api` pour démarrer le service API académique
-- `npm run test:services` pour lancer les tests de sécurité et d'API
-
-Les services sont exposés par défaut sur :
-- http://localhost:4001 pour `auth-service`
-- http://localhost:4002 pour `core-api`
-
-Pour le développement intégré, configurez le même `JWT_SECRET` dans les deux
-services. En production, fournissez aussi `TRANSCRIPT_SIGNING_SECRET` et un
-fournisseur de courriel approuvé ; ne copiez jamais de secrets dans le dépôt.
