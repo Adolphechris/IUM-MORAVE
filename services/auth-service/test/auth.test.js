@@ -98,3 +98,62 @@ test('lets an administrator provision a teacher account', async () => {
   assert.equal(response.status, 201);
   assert.equal(result.user.role, 'teacher');
 });
+
+test('revokes access after logout and rejects blacklisted token', async () => {
+  const login = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'admin@ium-morave.edu', password: 'ChangeMe123!' })
+  });
+  const session = await login.json();
+
+  const logout = await fetch(`${baseUrl}/auth/logout`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${session.token}` }
+  });
+  assert.equal(logout.status, 200);
+
+  const profile = await fetch(`${baseUrl}/auth/profile`, {
+    headers: { Authorization: `Bearer ${session.token}` }
+  });
+  assert.equal(profile.status, 401);
+});
+
+test('resets password via forgot and reset flow', async () => {
+  const forgot = await fetch(`${baseUrl}/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'admin@ium-morave.edu' })
+  });
+  assert.equal(forgot.status, 200);
+  const forgotResult = await forgot.json();
+  assert.ok(forgotResult.resetToken);
+
+  const reset = await fetch(`${baseUrl}/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: forgotResult.resetToken, password: 'NewStrongPass123!' })
+  });
+  assert.equal(reset.status, 200);
+
+  const login = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'admin@ium-morave.edu', password: 'NewStrongPass123!' })
+  });
+  assert.equal(login.status, 200);
+});
+
+test('rejects non-admin access to admin-only user list', async () => {
+  const studentLogin = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'student@example.test', password: 'A-strong-password-2026' })
+  });
+  const studentSession = await studentLogin.json();
+
+  const users = await fetch(`${baseUrl}/auth/users`, {
+    headers: { Authorization: `Bearer ${studentSession.token}` }
+  });
+  assert.equal(users.status, 403);
+});
