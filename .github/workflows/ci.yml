@@ -32,7 +32,7 @@ jobs:
       - name: Lint and test API
         run: |
           if [ -f apps/api/package.json ]; then
-            cd apps/api && npm install --silent && npm run lint || true && npm test || true
+            cd apps/api && npm install --silent && npm run lint && npm test
           else
             echo "no api"
           fi

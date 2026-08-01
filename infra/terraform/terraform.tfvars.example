@@ -1,0 +1,7 @@
+aws_region = "us-east-1"
+aws_access_key = "YOUR_AWS_ACCESS_KEY"
+aws_secret_key = "YOUR_AWS_SECRET_KEY"
+assets_bucket_name = "ium-morave-assets-staging"
+db_name = "iumdb"
+db_user = "iumadmin"
+db_password = "CHANGE_ME"
