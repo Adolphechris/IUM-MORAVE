@@ -1,0 +1,45 @@
+name: Run DB Migrations
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - 'ci/run-migrations'
+
+jobs:
+  run-migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup psql
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Run migrations (requires DB_URL secret)
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+        run: |
+          if [ -z "$DB_URL" ]; then
+            echo "DB_URL secret not set — skipping migrations. Please set DB_URL in repo secrets (postgres://user:pass@host:port/dbname).";
+            exit 0;
+          fi
+          echo "Running SQL migrations from db/migrations"
+          for f in db/migrations/*.sql; do
+            echo "-- running $f";
+            PGPASSWORD=$(echo "$DB_URL" | sed -n 's/.*:\/\/.*:\(.*\)@.*/\1/p') || true
+            # Use psql to execute; expects DB_URL in form postgres://user:password@host:port/db
+            psql "$DB_URL" -f "$f" || exit 1;
+          done
+
+      - name: Run seeds (requires DB_URL)
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+        run: |
+          if [ -z "$DB_URL" ]; then
+            echo "DB_URL secret not set — skipping seeds.";
+            exit 0;
+          fi
+          for f in db/seeds/*.sql; do
+            echo "-- seeding $f";
+            psql "$DB_URL" -f "$f" || exit 1;
+          done
