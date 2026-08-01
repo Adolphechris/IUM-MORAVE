@@ -1,6 +1,6 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo  
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 Terminée | Phase 2 — Authentification & Core API En cours  
 > **Dernière mise à jour** : 01 Août 2026
 
 ---
@@ -12,15 +12,13 @@ gantt
     title Feuille de Route IUM-MORAVE
     dateFormat  YYYY-MM-DD
     section Phase 1
-    Fondations, Constitution & Monorepo     :active, 2026-08-01, 3d
+    Fondations, Spécifications & Architecture Monorepo :done, 2026-08-01, 1d
+    section Audit & Fusion
+    Audit Approfondi & Fusion de Branche             :done, 2026-08-01, 1d
     section Phase 2
-    Securite, Auth & Matrice RBAC          : 2026-08-04, 4d
+    Securite, Auth & Matrice RBAC                   :active, 2026-08-01, 4d
     section Phase 3
-    Core API Academic & Systeme LMD         : 2026-08-08, 7d
-    section Phase 4
-    Portails Utilisateurs (Apps)            : 2026-08-15, 10d
-    section Phase 5
-    Finance, LMS & Finalisation             : 2026-08-25, 7d
+    Core API Academic & Systeme LMD                 : 2026-08-05, 7d
 ```
 
 ---
@@ -30,9 +28,9 @@ gantt
 ### PHASE 1 : FONDATIONS & STRUCTURATION MONOREPO
 - [x] **Liaison GitHub** : Connecter le dossier local au dépôt GitHub `Adolphechris/IUM-MORAVE`.
 - [x] **Gouvernance** : Rédiger et promulguer la [CONSTITUTION.md](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md).
+- [x] **Spécifications & Architecture** : Cahier des charges (4200+ l.), Modèle de données LMD, OpenAPI spec.
+- [x] **Audit & Fusion** : Fusion de la branche de développement dans `main` (63 fichiers / +7600 lignes).
 - [x] **Master Tracker** : Mettre en place le fichier [TODO.md](file:///home/adolphe/IUM-MORAVE/TODO.md).
-- [ ] **Architecture Dossier** : Créer l'arborescence physique Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
-- [ ] **Documentation globale** : Mettre à jour le [README.md](file:///home/adolphe/IUM-MORAVE/README.md) avec le plan complet.
 
 ---
 
