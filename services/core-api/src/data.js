@@ -1,9 +1,9 @@
 const faculties = [
   {
     id: 1,
-    code: 'FST',
-    name: 'Faculté des Sciences et Technologies',
-    description: 'Informatique, Mathématiques, Physique'
+    code: 'FSINT',
+    name: 'Faculté des Sciences Informatiques et Nouvelles Technologies',
+    description: 'Formation en informatique, systèmes numériques et technologies innovantes.'
   },
   {
     id: 2,
@@ -17,18 +17,18 @@ const programs = [
   {
     id: 1,
     facultyId: 1,
-    code: 'LIC-INF',
-    title: 'Licence Informatique',
+    code: 'LIC-SINT',
+    title: 'Licence en Sciences Informatiques et Nouvelles Technologies',
     level: 'licence',
     durationMonths: 36
   },
   {
     id: 2,
-    facultyId: 1,
-    code: 'MST-IA',
-    title: 'Master Intelligence Artificielle',
-    level: 'master',
-    durationMonths: 24
+    facultyId: 2,
+    code: 'LIC-SEG',
+    title: 'Licence en Sciences Économiques et de Gestion',
+    level: 'licence',
+    durationMonths: 36
   }
 ];
 
@@ -36,9 +36,30 @@ const tracks = [
   {
     id: 1,
     programId: 1,
-    code: 'LIC-INF-AI',
-    title: 'Parcours Intelligence Artificielle',
-    description: 'Option IA pour la licence informatique.'
+    code: 'SINT-DEV',
+    title: 'Développement logiciel et applications',
+    description: 'Spécialité orientée conception, programmation et applications numériques.'
+  },
+  {
+    id: 2,
+    programId: 1,
+    code: 'SINT-RC',
+    title: 'Réseaux, systèmes et cybersécurité',
+    description: 'Spécialité orientée infrastructures, réseaux et protection des systèmes.'
+  },
+  {
+    id: 3,
+    programId: 2,
+    code: 'SEG-FC',
+    title: 'Finance et comptabilité',
+    description: 'Spécialité orientée gestion financière et comptabilité.'
+  },
+  {
+    id: 4,
+    programId: 2,
+    code: 'SEG-MO',
+    title: 'Management des organisations',
+    description: 'Spécialité orientée pilotage, gestion et entrepreneuriat.'
   }
 ];
 

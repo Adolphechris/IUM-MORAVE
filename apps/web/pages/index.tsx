@@ -22,29 +22,54 @@ type NewsItem = {
   publishedAt: string;
 };
 
+type Track = {
+  id: number;
+  programId: number;
+  code: string;
+  title: string;
+  description: string;
+};
+
+const illustrationSlots = [
+  'Étudiants sur le campus',
+  'Étudiants dans un auditoire',
+  'Bâtiment principal de l’université',
+  'Travaux pratiques en informatique',
+  'Bibliothèque et recherche',
+  'Enseignement et échanges pédagogiques',
+  'Vie associative étudiante',
+  'Salle de cours numérique',
+  'Espaces administratifs',
+  'Événement académique',
+  'Vue générale des bâtiments'
+];
+
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
 export default function Home() {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadPortalData() {
       try {
-        const [facultyResponse, programResponse, newsResponse] = await Promise.all([
+        const [facultyResponse, programResponse, trackResponse, newsResponse] = await Promise.all([
           fetch(`${apiUrl}/faculties`),
           fetch(`${apiUrl}/programs`),
+          fetch(`${apiUrl}/tracks`),
           fetch(`${apiUrl}/news`)
         ]);
 
-        if (!facultyResponse.ok || !programResponse.ok || !newsResponse.ok) {
+        if (!facultyResponse.ok || !programResponse.ok || !trackResponse.ok || !newsResponse.ok) {
           throw new Error('Le portail ne peut pas charger les informations académiques pour le moment.');
         }
 
         setFaculties(await facultyResponse.json());
         setPrograms(await programResponse.json());
+        setTracks(await trackResponse.json());
         setNews(await newsResponse.json());
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Erreur de chargement du portail.');
@@ -58,11 +83,13 @@ export default function Home() {
     <main>
       <header>
         <a className="brand" href="#accueil" aria-label="Accueil IUM-MORAVE">
-          IUM-MORAVE
+          <span className="logo-slot" aria-label="Emplacement réservé au logo officiel">LOGO</span>
+          <span>IUM-MORAVE</span>
         </a>
         <nav aria-label="Navigation principale">
           <a href="#formations">Formations</a>
           <a href="#actualites">Actualités</a>
+          <a href="#galerie">Campus</a>
           <a href="#espaces">Espaces</a>
         </nav>
       </header>
@@ -78,6 +105,7 @@ export default function Home() {
           <a className="button primary" href="#formations">Voir les formations</a>
           <a className="button secondary" href="/espace">Accéder aux espaces</a>
         </div>
+        <p className="logo-note">Emplacement réservé au logo officiel de l&apos;IUM-MORAVE.</p>
       </section>
 
       {error ? (
@@ -104,6 +132,16 @@ export default function Home() {
               <p className="code">{program.code}</p>
               <h3>{program.title}</h3>
               <p>{program.level} · {program.durationMonths} mois</p>
+              <ul className="specialties" aria-label={`Spécialités de ${program.title}`}>
+                {tracks
+                  .filter((track) => track.programId === program.id)
+                  .map((track) => (
+                    <li key={track.id}>
+                      <strong>{track.title}</strong>
+                      <span>{track.description}</span>
+                    </li>
+                  ))}
+              </ul>
             </article>
           ))}
         </div>
@@ -145,6 +183,25 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="galerie" aria-labelledby="galerie-title">
+        <p className="eyebrow">Campus en images</p>
+        <h2 id="galerie-title">Galerie institutionnelle</h2>
+        <p className="gallery-intro">
+          Onze emplacements sont réservés aux photographies officielles. Ils seront remplacés
+          par les visuels validés par l&apos;institution, avec leur texte alternatif.
+        </p>
+        <div className="gallery">
+          {illustrationSlots.map((label, index) => (
+            <figure className="photo-slot" key={label}>
+              <div className="photo-placeholder" role="img" aria-label={`Emplacement photo ${index + 1} : ${label}`}>
+                Photo {index + 1}
+              </div>
+              <figcaption>{label}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
       <footer>
         <p>© {new Date().getFullYear()} Institut Universitaire Morave · Portail MVP</p>
       </footer>
@@ -170,10 +227,25 @@ export default function Home() {
         }
         .brand {
           color: #0a4f82;
+          display: inline-flex;
+          align-items: center;
+          gap: .6rem;
           font-size: 1.2rem;
           font-weight: 800;
           letter-spacing: .06em;
           text-decoration: none;
+        }
+        .logo-slot {
+          align-items: center;
+          background: #0a4f82;
+          border-radius: 50%;
+          color: #fff;
+          display: inline-flex;
+          font-size: .6rem;
+          height: 2.25rem;
+          justify-content: center;
+          letter-spacing: .03em;
+          width: 2.25rem;
         }
         nav { display: flex; gap: 1.25rem; }
         nav a { color: #25425e; text-decoration: none; font-weight: 600; }
@@ -190,6 +262,7 @@ export default function Home() {
         section { padding-top: 4.5rem; }
         .eyebrow, .code { color: #0a689f; font-size: .82rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
         .hero .eyebrow { color: #bde6ff; }
+        .logo-note { color: #d7ecf9; font-size: .9rem; margin-top: 1.25rem; }
         .actions { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2rem; }
         .button { border-radius: .45rem; padding: .8rem 1rem; font-weight: 700; text-decoration: none; }
         .primary { background: #f3b930; color: #152335; }
@@ -198,8 +271,16 @@ export default function Home() {
         .program-grid { margin-top: 1rem; }
         .card { background: white; border: 1px solid #dce5ed; border-radius: .7rem; box-shadow: 0 5px 18px rgba(20, 49, 78, .06); padding: 1.35rem; }
         .program { border-top: 4px solid #f3b930; }
+        .specialties { display: grid; gap: .6rem; list-style: none; margin: 1.2rem 0 0; padding: 0; }
+        .specialties li { border-left: 3px solid #71b4db; display: grid; gap: .2rem; padding-left: .65rem; }
+        .specialties span { color: #52677c; font-size: .9rem; }
         .space-link { color: #07588e; font-weight: 700; }
         .alert { max-width: 1072px; margin: 1.5rem auto 0; padding: 1rem 1.5rem; background: #fff1f1; border-left: 4px solid #bd3030; color: #751b1b; }
+        .gallery-intro { max-width: 720px; }
+        .gallery { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+        .photo-slot { margin: 0; }
+        .photo-placeholder { align-items: center; aspect-ratio: 4 / 3; background: linear-gradient(135deg, #b9dced, #e9c46a); border-radius: .7rem; color: #163b57; display: flex; font-size: 1.1rem; font-weight: 800; justify-content: center; }
+        figcaption { color: #52677c; font-size: .9rem; margin-top: .45rem; }
         footer { padding-top: 4rem; padding-bottom: 2rem; color: #52677c; }
         @media (max-width: 600px) {
           header { flex-direction: column; gap: .85rem; padding-top: 1rem; padding-bottom: 1rem; }

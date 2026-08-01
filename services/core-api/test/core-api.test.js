@@ -48,12 +48,13 @@ test.after(async () => {
 });
 
 test('returns public academic data and filters programs by level', async () => {
-  const response = await fetch(`${baseUrl}/programs?level=master`);
+  const response = await fetch(`${baseUrl}/programs?level=licence`);
   const programs = await response.json();
 
   assert.equal(response.status, 200);
-  assert.equal(programs.length, 1);
-  assert.equal(programs[0].code, 'MST-IA');
+  assert.equal(programs.length, 2);
+  assert.equal(programs[0].code, 'LIC-SINT');
+  assert.equal(programs.some((program) => program.code === 'MST-IA'), false);
 });
 
 test('requires an admin token to create a faculty', async () => {

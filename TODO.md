@@ -80,6 +80,13 @@ gantt
 - [x] Garantir l’intégrité cryptographique des relevés MVP et la vérification publique.
 - [ ] Connecter les données MVP à Supabase avant tout usage réel.
 
+### IDENTITE ACADEMIQUE ET MEDIAS
+- [x] Renommer la faculté informatique en « Faculté des Sciences Informatiques et Nouvelles Technologies ».
+- [x] Retirer le programme « Master Intelligence Artificielle ».
+- [x] Ajouter des spécialités par filière dans le catalogue MVP.
+- [x] Prévoir un emplacement pour le logo officiel et onze emplacements photo dans le portail.
+- [ ] Recevoir, optimiser et publier le logo officiel et les onze photos institutionnelles validées.
+
 ---
 
 ### PHASE 2 : AUTHENTIFICATION, SÉCURITÉ & ROLES (RBAC)

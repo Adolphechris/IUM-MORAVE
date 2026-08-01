@@ -93,6 +93,18 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
   version stable actuelle de Next.js (`next`, `postcss`, `sharp`). Aucune
   correction compatible n'est proposée par npm à ce jour ; ce point reste
   tracé et doit être revérifié avant chaque déploiement.
+
+## Mise à jour du catalogue et des médias institutionnels
+
+- La faculté informatique est désormais nommée **Faculté des Sciences
+  Informatiques et Nouvelles Technologies**.
+- Le programme « Master Intelligence Artificielle » est retiré du catalogue.
+- Des spécialités sont prévues pour chaque filière : développement logiciel,
+  réseaux/systèmes/cybersécurité, finance/comptabilité et management des
+  organisations.
+- Le portail contient un emplacement distinct pour le logo officiel et onze
+  emplacements pour des photographies institutionnelles. Les fichiers réels
+  doivent être fournis/validés par l'IUM-MORAVE avant publication.
 - [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
 - [ ] Build CI is still in progress; waiting for completion.
 
