@@ -1,32 +1,40 @@
-const http = require('http');
+require('dotenv').config();
+const express = require('express');
+const { faculties, programs, tracks } = require('./data');
 
 const PORT = process.env.PORT || 4002;
+const app = express();
 
-const data = {
-  faculties: [
-    { id: 1, code: 'FST', name: 'Faculté des Sciences et Technologies' }
-  ]
-};
+app.use(express.json());
 
-const requestHandler = (req, res) => {
-  if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', service: 'core-api' }));
-    return;
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', service: 'core-api' });
+});
+
+app.get('/faculties', (req, res) => {
+  res.json(faculties);
+});
+
+app.get('/programs', (req, res) => {
+  res.json(programs);
+});
+
+app.get('/tracks', (req, res) => {
+  res.json(tracks);
+});
+
+app.get('/faculty/:id', (req, res) => {
+  const faculty = faculties.find((item) => item.id === Number(req.params.id));
+  if (!faculty) {
+    return res.status(404).json({ error: 'Faculty not found' });
   }
+  res.json(faculty);
+});
 
-  if (req.url === '/faculties' && req.method === 'GET') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(data.faculties));
-    return;
-  }
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
 
-  res.writeHead(404, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ error: 'not found' }));
-};
-
-const server = http.createServer(requestHandler);
-
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`core-api listening on http://localhost:${PORT}`);
 });
