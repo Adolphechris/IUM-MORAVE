@@ -35,3 +35,28 @@ IUM-MORAVE/
 
 ## 🚀 DÉMARRAGE RAPIDE
 *Instructions d'installation et de lancement à mesure du déploiement des modules.*
+
+## 🔧 ÉTAT ACTUEL DU CHANTIER
+- Phase en cours : **Sprint 0 — Préparation et validation**
+- Workflow migration Supabase réparé et check `run-migrations` validé
+- Backlog initial créé avec les issues GitHub #179 à #184
+- Prochaine étape : validation du build CI et confirmation du schéma Supabase
+
+## 📌 DOCUMENTS CLÉS
+- **[Tracker master & TODO](TODO.md)**
+- **[Plan de sprint](docs/SPRINT_PLAN.md)**
+- **[Rapport de développement](docs/DEVELOPMENT_REPORT.md)**
+
+## 🔧 DÉMARRER LES SERVICES
+- `npm install` pour installer les dépendances du monorepo
+- `npm run start:auth` pour démarrer le service d'authentification
+- `npm run start:core-api` pour démarrer le service API académique
+- `npm run test:services` pour lancer les tests de sécurité et d'API
+
+Les services sont exposés par défaut sur :
+- http://localhost:4001 pour `auth-service`
+- http://localhost:4002 pour `core-api`
+
+Pour le développement intégré, configurez le même `JWT_SECRET` dans les deux
+services. En production, fournissez aussi `TRANSCRIPT_SIGNING_SECRET` et un
+fournisseur de courriel approuvé ; ne copiez jamais de secrets dans le dépôt.

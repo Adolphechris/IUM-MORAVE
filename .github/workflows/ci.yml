@@ -12,7 +12,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
       - name: Debug Node/npm
         run: |
           node -v
@@ -45,6 +45,8 @@ jobs:
           else
             echo "no frontend"
           fi
+      - name: Test backend services
+        run: npm run test:services
       - name: Lint and test API
         run: |
           if [ -f apps/api/package.json ]; then

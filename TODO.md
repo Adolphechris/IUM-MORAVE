@@ -1,7 +1,8 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 Terminée | Base de Données Supabase Active 🟢 | Phase 2 — Authentification & Core API En cours  
-> **Dernière mise à jour** : 01 Août 2026
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo
+> **Dernière mise à jour** : 01 Août 2026 18:16
+> **Prochaines actions** : connecter les données temporaires à Supabase, compléter les espaces métiers et préparer les modules finance/LMS.
 
 ---
 
@@ -12,13 +13,15 @@ gantt
     title Feuille de Route IUM-MORAVE
     dateFormat  YYYY-MM-DD
     section Phase 1
-    Fondations, Spécifications & Monorepo             :done, 2026-08-01, 1d
-    section Base de Données
-    Migration SQL & Seeds Supabase (RLS Actif)        :done, 2026-08-01, 1d
+    Fondations, Constitution & Monorepo     :active, 2026-08-01, 3d
     section Phase 2
-    Securite, Auth & Matrice RBAC (JWT/Express)       :active, 2026-08-01, 4d
+    Securite, Auth & Matrice RBAC          : 2026-08-04, 4d
     section Phase 3
-    Core API Academic & Systeme LMD                   : 2026-08-05, 7d
+    Core API Academic & Systeme LMD         : 2026-08-08, 7d
+    section Phase 4
+    Portails Utilisateurs (Apps)            : 2026-08-15, 10d
+    section Phase 5
+    Finance, LMS & Finalisation             : 2026-08-25, 7d
 ```
 
 ---
@@ -28,10 +31,67 @@ gantt
 ### PHASE 1 : FONDATIONS & STRUCTURATION MONOREPO
 - [x] **Liaison GitHub** : Connecter le dossier local au dépôt GitHub `Adolphechris/IUM-MORAVE`.
 - [x] **Gouvernance** : Rédiger et promulguer la [CONSTITUTION.md](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md).
-- [x] **Spécifications & Architecture** : Cahier des charges (4200+ l.), Modèle de données LMD, OpenAPI spec.
-- [x] **Audit & Fusion** : Fusion de la branche de développement dans `main` (63 fichiers / +7600 lignes).
-- [x] **Base de Données Cloud** : Migrations SQL et Seeds déployés sur Supabase avec RLS actif.
 - [x] **Master Tracker** : Mettre en place le fichier [TODO.md](file:///home/adolphe/IUM-MORAVE/TODO.md).
+- [x] **Migration CI** : Réparer le workflow `run-migrations` et valider les checks `run-migrations` + `run-migrations-safe`.
+- [ ] **Confirmation Supabase** : Vérifier que le schéma et les seeds sont bien appliqués sur Supabase.
+- [ ] **Build CI** : Attendre le résultat du check `build` avant fusionner.
+- [ ] **Architecture Dossier** : Créer l'arborescence physique Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
+- [ ] **Documentation globale** : Mettre à jour le [README.md](file:///home/adolphe/IUM-MORAVE/README.md) avec le plan complet.
+
+---
+
+### SPRINT 0 : PREPARATION ET VERIFICATION
+- [x] Vérifier et corriger la liaison GitHub + PR.
+- [x] Réparer le workflow de migration Supabase (`run-migrations`).
+- [x] Valider `run-migrations` et `run-migrations-safe` sur CI.
+- [ ] Confirmer l’application du schéma Supabase dans le dashboard ou via un runner IPv6.
+- [ ] Finaliser l’état de la base de données avant le développement fonctionnel.
+- [x] Créer les premières issues GitHub pour les epics prioritaires.
+- [x] Créer le plan de sprint et la documentation de suivi (`docs/SPRINT_PLAN.md`).
+
+#### Backlog initial GitHub
+- Issue #179 — Infra & base de données: valider l’accès Supabase et définir le schéma initial
+- Issue #180 — Architecture monorepo: créer l’arborescence apps/services/shared/docs
+- Issue #181 — Authentification & RBAC: définir le modèle utilisateur et le premier flux d’auth
+- Issue #182 — API académique core: définir les entités de base facultés/programmes/parcours
+- Issue #183 — Système mail professionnel: notifications et communication officielle
+- Issue #184 — Générateur sécurisé de relevés de notes conforme aux normes congolaises
+
+### SPRINT 1 : DEMARRAGE DU DEVELOPPEMENT
+- [x] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
+- [x] Spécifier le modèle utilisateur et la sécurité d’accès initiale.
+- [x] Construire le module `services/auth-service` pour auth et RBAC.
+- [x] Préparer le socle API core pour les données académiques.
+- [x] Documenter les conventions de service et les endpoints initiaux.
+
+### SPRINT 2 : MVP PUBLIC ET ESPACE UTILISATEUR
+- [x] Développer le portail public basique (`apps/web`) avec pages institutionnelles.
+- [x] Créer l’espace utilisateur étudiant/enseignant minimal.
+- [x] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
+- [x] Connecter les premiers flux frontaux au backend API core.
+- [x] Ajouter un système de courriel professionnel avec aperçu de développement.
+- [x] Concevoir le générateur sécurisé de relevés de notes ; validation institutionnelle requise avant production.
+
+### SPRINT 3 : MODULES ACADÉMIQUES & ADMINISTRATION
+- [x] Implémenter la gestion MVP des facultés, des programmes et des parcours.
+- [x] Ajouter les opérations MVP de gestion des inscriptions et des délibérations.
+- [x] Construire les premières fonctions d’administration, d'audit et de reporting.
+- [x] Préparer le workflow MVP de notes et documents académiques.
+- [x] Garantir l’intégrité cryptographique des relevés MVP et la vérification publique.
+- [ ] Connecter les données MVP à Supabase avant tout usage réel.
+
+### IDENTITE ACADEMIQUE ET MEDIAS
+- [x] Renommer la faculté informatique en « Faculté des Sciences Informatiques et Nouvelles Technologies ».
+- [x] Retirer le programme « Master Intelligence Artificielle ».
+- [x] Ajouter des spécialités par filière dans le catalogue MVP.
+- [x] Prévoir un emplacement pour le logo officiel et onze emplacements photo dans le portail.
+- [ ] Recevoir, optimiser et publier le logo officiel et les onze photos institutionnelles validées.
+
+### LOT LIVRÉ : PORTAIL PUBLIC DÉTAILLÉ
+- [x] Ajouter les pages détaillées pour facultés, formations et actualités.
+- [x] Ajouter la recherche de documents publics.
+- [x] Ajouter le formulaire de contact public avec validation, champ piège et limite de cinq demandes par heure et par IP.
+- [ ] Rendre persistants les demandes de contact et les documents avec Supabase avant toute ouverture réelle.
 
 ---
 
@@ -74,6 +134,13 @@ gantt
   - [ ] Validation des délibérations et clôture des semestres.
   - [ ] Audit & Journal des actions système.
 
+#### LOT ACTIF : ESPACES METIERS ET ADMINISTRATION
+- [x] API initiale des profils étudiant, enseignant, cours, calendrier et documents.
+- [x] Tableau de bord administratif initial avec indicateurs et échéances.
+- [x] Provisionnement initial de comptes par un administrateur.
+- [ ] Pages dédiées complètes pour étudiant, enseignant et administration.
+- [ ] Persistance Supabase, stockage documentaire et contrôle d'accès durable.
+
 ---
 
 ### PHASE 5 : COMPTABILITÉ, LMS & DÉPLOIEMENT
@@ -92,3 +159,4 @@ gantt
 | 2026-08-01 | Initialisation du projet et liaison GitHub | Antigravity | ✅ Terminé |
 | 2026-08-01 | Rédaction de la Constitution (`CONSTITUTION.md`) | Antigravity | ✅ Terminé |
 | 2026-08-01 | Création du Tracker Master (`TODO.md`) | Antigravity | ✅ Terminé |
+| 2026-08-01 | Correction du workflow de migration et validation des checks `run-migrations` + `run-migrations-safe` | Copilot | ✅ Terminé |
