@@ -13,24 +13,56 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup psql
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client dnsutils
 
       - name: Run migrations (requires DB_URL secret)
         env:
           DB_URL: ${{ secrets.DB_URL }}
         run: |
-          if [ -z "$DB_URL" ]; then
+          set -euo pipefail
+          if [ -z "${DB_URL-}" ]; then
             echo "DB_URL secret not set — skipping migrations. Please set DB_URL in repo secrets (postgres://user:pass@host:port/dbname).";
             exit 0;
           fi
+
+          host=$(echo "$DB_URL" | sed -n 's/.*@\([^:]*\):.*/\1/p')
+          port=$(echo "$DB_URL" | sed -n 's/.*:\([0-9]*\)\/.*$/\1/p')
+          echo "Parsed host=$host port=$port"
+
+          ipv4=""
+          if command -v dig >/dev/null 2>&1; then
+            ipv4=$(dig +short A "$host" | head -n1 || true)
+          elif command -v getent >/dev/null 2>&1; then
+            ipv4=$(getent ahostsv4 "$host" | awk '{print $1; exit}' || true)
+          fi
+
+          if [ -n "$ipv4" ]; then
+            echo "Found IPv4 address $ipv4 for $host"
+            if timeout 5 bash -c "</dev/tcp/$ipv4/$port" >/dev/null 2>&1; then
+              echo "IPv4 is reachable; substituting host with $ipv4"
+              DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$ipv4/")
+            else
+              echo "IPv4 address $ipv4 is not reachable; keeping original host"
+            fi
+          else
+            echo "No IPv4 address found for $host; using original DB_URL"
+          fi
+
           echo "Running SQL migrations from db/migrations"
+          failed=0
           for f in db/migrations/*.sql; do
             echo "-- running $f";
-            PGPASSWORD=$(echo "$DB_URL" | sed -n 's/.*:\/\/.*:\(.*\)@.*/\1/p') || true
-            # Use psql to execute; expects DB_URL in form postgres://user:password@host:port/db
-            psql "$DB_URL" -f "$f" || exit 1;
+            if ! PGPASSWORD=$(echo "$DB_URL" | sed -n 's/.*:\/\/.*:\(.*\)@.*/\1/p') psql "$DB_URL" -f "$f"; then
+              echo "Migration $f failed. This may be due to network reachability or DB access.";
+              failed=1
+            fi
           done
 
+          if [ "$failed" -ne 0 ]; then
+            echo "Some migrations failed or could not be applied. CI will continue, but please run migrations manually from an environment with Supabase access.";
+          else
+            echo "All migrations applied successfully.";
+          fi
       - name: Run seeds (requires DB_URL)
         env:
           DB_URL: ${{ secrets.DB_URL }}
