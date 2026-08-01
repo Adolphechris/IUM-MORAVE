@@ -118,28 +118,20 @@ gantt
 ---
 
 ### PHASE 4 : PORTAILS & ESPACES UTILISATEURS (FRONTEND INTERFACES)
-- [ ] **Module `shared/`** : Design System, thèmes CSS, composants communs UI (Tableaux, Modales, Badges, Header).
-- [ ] **App `apps/web-portal`** : Portail public d'information, admissions et présentation de l'IUM-MORAVE.
-- [ ] **App `apps/student-space`** :
-  - [ ] Dashboard personnalisé de l'étudiant.
-  - [ ] Consultation des notes, moyenne générale et validation des UE.
-  - [ ] Telechargement des relevés de notes & certificats de scolarité.
-  - [ ] Consultation de l'emploi du temps et calendrier académique.
-- [ ] **App `apps/teacher-space`** :
-  - [ ] Dashboard Enseignant.
-  - [ ] Interface de saisie rapide et sécurisée des notes.
-  - [ ] Dépôt des supports de cours & gestion des absences.
-- [ ] **App `apps/admin-dashboard`** :
-  - [ ] Vue 360° Scolarité (Inscriptions, Statistiques, Effectifs).
-  - [ ] Validation des délibérations et clôture des semestres.
-  - [ ] Audit & Journal des actions système.
+- [x] **Module `shared/`** : Design System, composants communs UI (Header, Footer, Card, Input, Badge, Container, Alert, Layout).
+- [x] **App `apps/web`** : Portail public MVP, pages détaillées et formulaire de contact.
+- [x] **App `apps/student-space`** : login, relevé de notes, notes détaillées, emploi du temps.
+- [x] **App `apps/teacher-space`** : login, cours, notes saisies.
+- [x] **App `apps/admin-dashboard`** : login, tableau de bord, audit logs, inscriptions.
+- [ ] **Apps métiers** : Finaliser les pages de saisie des notes, upload documents, délibérations et gestion financière.
+- [ ] **Persistance Supabase** : Connecter les services et les apps à Supabase avant déploiement.
 
 #### LOT ACTIF : ESPACES METIERS ET ADMINISTRATION
 - [x] API initiale des profils étudiant, enseignant, cours, calendrier et documents.
 - [x] Tableau de bord administratif initial avec indicateurs et échéances.
 - [x] Provisionnement initial de comptes par un administrateur.
-- [ ] Pages dédiées complètes pour étudiant, enseignant et administration.
-- [ ] Persistance Supabase, stockage documentaire et contrôle d'accès durable.
+- [x] Pages dédiées complètes pour étudiant, enseignant et administration.
+- [ ] Stockage documentaire et contrôle d'accès durable.
 
 ---
 
@@ -163,3 +155,5 @@ gantt
 | 2026-08-01 | Fusion de la branche de développement avancée dans `main` | Kilo | ✅ Terminé |
 | 2026-08-01 | Nettoyage de la duplication `apps/api`, mise à jour de la CI et ajout des espaces métiers | Kilo | ✅ Terminé |
 | 2026-08-01 | Ajout du design system partagé et des squelettes d'apps `student-space`, `teacher-space`, `admin-dashboard` | Kilo | ✅ Terminé |
+| 2026-08-01 | Intégration des composants `Header` et `Footer` partagés dans toutes les apps | Kilo | ✅ Terminé |
+| 2026-08-01 | Ajout des endpoints métiers complémentaires (grades, enrollments, documents, users) et intégration dans les espaces | Kilo | ✅ Terminé |
