@@ -30,6 +30,17 @@ Template rapide de backlog
 - [ ] Epic: Frontend base
 - [ ] Epic: CI/CD & Infra
 
+### Epics dérivés du Cahier des charges (IUM)
+- [ ] Epic: Interface publique (site vitrine, pages facultés, actualités, calendriers académiques)
+- [ ] Epic: Espaces privés & authentification (étudiants, enseignants, admins)
+- [ ] Epic: CMS & gestion des contenus institutionnels
+- [ ] Epic: Modules administratifs (inscriptions, gestion académique, communiqués)
+- [ ] Epic: Infrastructure, CI/CD et déploiement (workflows, environnements de test)
+- [ ] Epic: Accessibilité, performance et sécurité
+- [ ] Epic: Gouvernance & documentation (constitution, décisions, tracker)
+
+> Voir docs/CAHIER_DES_CHARGES.md pour le cahier des charges complet.
+
 ## Milestones
 - MVP v0.1 - date cible: YYYY-MM-DD
   - Epics inclus: Auth & Users, API core, Frontend base
