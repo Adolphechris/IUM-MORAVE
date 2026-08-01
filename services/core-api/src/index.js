@@ -1,7 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { faculties, programs, tracks, enrollments, grades, deliberations } = require('./data');
+const {
+  faculties,
+  programs,
+  tracks,
+  courses,
+  enrollments,
+  students,
+  teachers,
+  calendarEvents,
+  documents,
+  grades,
+  deliberations
+} = require('./data');
 const { authenticate, requireRole } = require('./auth');
 const { createInstitutionalEmail, sendInstitutionalEmail } = require('./email-service');
 const { buildTranscript } = require('./transcript-service');
@@ -70,7 +82,8 @@ app.get('/programs/:id', (req, res) => {
 });
 
 app.get('/tracks', (req, res) => {
-  res.json(tracks);
+  const programId = Number(req.query.programId);
+  res.json(programId ? tracks.filter((track) => track.programId === programId) : tracks);
 });
 
 app.get('/faculty/:id', (req, res) => {
@@ -87,11 +100,18 @@ app.get('/news', (req, res) => {
   ]);
 });
 
+app.get('/courses', (req, res) => {
+  const trackId = Number(req.query.trackId);
+  res.json(trackId ? courses.filter((course) => course.trackId === trackId) : courses);
+});
+
+app.get('/calendar', (req, res) => {
+  res.json(calendarEvents);
+});
+
 app.get('/documents', (req, res) => {
-  res.json([
-    { id: 1, title: 'Règlement intérieur', filePath: '/docs/reglement.pdf' },
-    { id: 2, title: 'Guide de l’étudiant', filePath: '/docs/guide-etudiant.pdf' }
-  ]);
+  const isAuthenticated = Boolean(req.headers.authorization);
+  res.json(documents.filter((document) => document.visibility === 'public' || isAuthenticated));
 });
 
 app.post('/enrollments', authenticate, requireRole('admin'), (req, res) => {
@@ -136,6 +156,48 @@ app.post('/enrollments/:id/grades', authenticate, requireRole('admin', 'teacher'
   grades.push(grade);
   audit(req, 'create', 'grade', `${enrollmentId}:${courseCode}`);
   res.status(201).json(grade);
+});
+
+app.get('/students/me', authenticate, requireRole('student'), (req, res) => {
+  const student = students.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
+  if (!student) {
+    return res.status(404).json({ error: 'Student profile not found' });
+  }
+
+  const enrollment = enrollments.find((item) => item.id === student.enrollmentId);
+  const program = programs.find((item) => item.id === enrollment.programId);
+  const track = tracks.find((item) => item.id === enrollment.trackId);
+  res.json({ student, enrollment, program, track });
+});
+
+app.get('/students/me/schedule', authenticate, requireRole('student'), (req, res) => {
+  const student = students.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
+  if (!student) {
+    return res.status(404).json({ error: 'Student profile not found' });
+  }
+
+  const enrollment = enrollments.find((item) => item.id === student.enrollmentId);
+  const schedule = courses
+    .filter((course) => course.trackId === enrollment.trackId)
+    .map((course, index) => ({
+      course,
+      day: ['Lundi', 'Mercredi', 'Vendredi'][index % 3],
+      time: ['08:00 - 10:00', '10:30 - 12:30', '14:00 - 16:00'][index % 3],
+      room: `Auditoire ${index + 1}`
+    }));
+  res.json(schedule);
+});
+
+app.get('/teachers/me', authenticate, requireRole('teacher'), (req, res) => {
+  const teacher = teachers.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
+  if (!teacher) {
+    return res.status(404).json({ error: 'Teacher profile not found' });
+  }
+  res.json(teacher);
+});
+
+app.get('/teachers/me/courses', authenticate, requireRole('teacher'), (req, res) => {
+  res.json(courses.filter((course) => course.teacherEmail.toLowerCase() === req.user.email.toLowerCase()));
 });
 
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
@@ -228,6 +290,23 @@ app.post('/notifications/preview', authenticate, requireRole('admin'), (req, res
 
 app.get('/admin/audit-logs', authenticate, requireRole('admin'), (req, res) => {
   res.json(auditLogs);
+});
+
+app.get('/admin/dashboard', authenticate, requireRole('admin'), (req, res) => {
+  res.json({
+    totals: {
+      faculties: faculties.length,
+      programs: programs.length,
+      tracks: tracks.length,
+      courses: courses.length,
+      students: students.length,
+      teachers: teachers.length,
+      documents: documents.length,
+      pendingDeliberations: grades.filter((grade) => grade.status === 'pending').length
+    },
+    recentAuditEvents: auditLogs.slice(-10).reverse(),
+    upcomingEvents: calendarEvents.filter((event) => event.startsAt >= new Date().toISOString().slice(0, 10))
+  });
 });
 
 app.post('/verification/diploma', (req, res) => {

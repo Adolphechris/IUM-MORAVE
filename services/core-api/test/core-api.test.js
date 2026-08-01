@@ -103,3 +103,16 @@ test('issues and verifies a signed student transcript', async () => {
   const result = await verification.json();
   assert.equal(result.verified, true);
 });
+
+test('provides a protected administration dashboard', async () => {
+  const response = await fetch(`${baseUrl}/admin/dashboard`, {
+    headers: {
+      Authorization: `Bearer ${tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' })}`
+    }
+  });
+  const dashboard = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(dashboard.totals.faculties >= 2);
+  assert.equal(dashboard.totals.courses, 4);
+});

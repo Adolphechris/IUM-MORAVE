@@ -21,6 +21,10 @@ function findUserById(id) {
   return users.find((user) => user.id === id);
 }
 
+function listUsers() {
+  return users.map(safeUser);
+}
+
 function createUser({ email, password, role = 'student', firstName = '', lastName = '' }) {
   const existing = findUserByEmail(email);
   if (existing) {
@@ -51,6 +55,7 @@ module.exports = {
   ROLES,
   findUserByEmail,
   findUserById,
+  listUsers,
   createUser,
   validatePassword,
   safeUser

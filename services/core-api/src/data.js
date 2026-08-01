@@ -63,6 +63,45 @@ const tracks = [
   }
 ];
 
+const courses = [
+  {
+    id: 1,
+    trackId: 1,
+    code: 'SINT101',
+    title: 'Algorithmique et structures de données',
+    credits: 6,
+    semester: 1,
+    teacherEmail: 'professeur@ium-morave.edu'
+  },
+  {
+    id: 2,
+    trackId: 1,
+    code: 'SINT102',
+    title: 'Programmation orientée objet',
+    credits: 6,
+    semester: 1,
+    teacherEmail: 'professeur@ium-morave.edu'
+  },
+  {
+    id: 3,
+    trackId: 2,
+    code: 'SINT103',
+    title: 'Réseaux informatiques',
+    credits: 5,
+    semester: 2,
+    teacherEmail: 'professeur@ium-morave.edu'
+  },
+  {
+    id: 4,
+    trackId: 3,
+    code: 'SEG101',
+    title: 'Comptabilité générale',
+    credits: 5,
+    semester: 1,
+    teacherEmail: 'professeur@ium-morave.edu'
+  }
+];
+
 const enrollments = [
   {
     id: 1,
@@ -76,6 +115,67 @@ const enrollments = [
   }
 ];
 
+const students = [
+  {
+    id: 1,
+    enrollmentId: 1,
+    email: 'jean.kabamba@ium-morave.edu',
+    name: 'Jean Kabamba',
+    phone: '+243 000 000 000',
+    status: 'active'
+  }
+];
+
+const teachers = [
+  {
+    id: 1,
+    email: 'professeur@ium-morave.edu',
+    name: 'Professeur IUM',
+    department: 'Sciences Informatiques et Nouvelles Technologies'
+  }
+];
+
+const calendarEvents = [
+  {
+    id: 1,
+    title: 'Rentrée académique',
+    category: 'academic',
+    startsAt: '2026-09-01',
+    endsAt: '2026-09-01'
+  },
+  {
+    id: 2,
+    title: 'Session des examens',
+    category: 'examination',
+    startsAt: '2026-12-07',
+    endsAt: '2026-12-19'
+  },
+  {
+    id: 3,
+    title: 'Délibérations du premier semestre',
+    category: 'administration',
+    startsAt: '2026-12-22',
+    endsAt: '2026-12-23'
+  }
+];
+
+const documents = [
+  {
+    id: 1,
+    title: 'Règlement intérieur',
+    filePath: '/documents/reglement-interieur.pdf',
+    mime: 'application/pdf',
+    visibility: 'public'
+  },
+  {
+    id: 2,
+    title: 'Guide de l’étudiant',
+    filePath: '/documents/guide-etudiant.pdf',
+    mime: 'application/pdf',
+    visibility: 'student'
+  }
+];
+
 const grades = [
   { enrollmentId: 1, courseCode: 'INF101', courseTitle: 'Algorithmique', credits: 6, score: 15, status: 'validated' },
   { enrollmentId: 1, courseCode: 'INF102', courseTitle: 'Programmation', credits: 6, score: 14, status: 'validated' },
@@ -84,4 +184,16 @@ const grades = [
 
 const deliberations = [];
 
-module.exports = { faculties, programs, tracks, enrollments, grades, deliberations };
+module.exports = {
+  faculties,
+  programs,
+  tracks,
+  courses,
+  enrollments,
+  students,
+  teachers,
+  calendarEvents,
+  documents,
+  grades,
+  deliberations
+};

@@ -70,3 +70,31 @@ test('authenticates the bootstrap administrator and protects the profile route',
   assert.equal(profile.status, 200);
   assert.equal(result.user.email, 'admin@ium-morave.edu');
 });
+
+test('lets an administrator provision a teacher account', async () => {
+  const login = await fetch(`${baseUrl}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'admin@ium-morave.edu', password: 'ChangeMe123!' })
+  });
+  const session = await login.json();
+
+  const response = await fetch(`${baseUrl}/auth/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.token}`
+    },
+    body: JSON.stringify({
+      email: 'teacher@example.test',
+      password: 'A-strong-password-2026',
+      role: 'teacher',
+      firstName: 'Teacher',
+      lastName: 'Test'
+    })
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 201);
+  assert.equal(result.user.role, 'teacher');
+});

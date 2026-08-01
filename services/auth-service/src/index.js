@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { findUserByEmail, createUser, validatePassword, safeUser } = require('./user-store');
+const { findUserByEmail, createUser, listUsers, validatePassword, safeUser } = require('./user-store');
 const { signToken, verifyToken } = require('./token');
 
 const PORT = process.env.PORT || 4001;
@@ -80,6 +80,34 @@ function authenticate(req, res, next) {
 app.get('/auth/profile', authenticate, (req, res) => {
   const user = findUserByEmail(req.user.email);
   res.json({ user: safeUser(user) });
+});
+
+function requireAdmin(req, res, next) {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Administrator role required' });
+  }
+  next();
+}
+
+app.get('/auth/users', authenticate, requireAdmin, (req, res) => {
+  res.json(listUsers());
+});
+
+app.post('/auth/users', authenticate, requireAdmin, (req, res) => {
+  try {
+    const { email, password, role, firstName, lastName } = req.body;
+    if (!email || !password || !role) {
+      return res.status(400).json({ error: 'Email, password and role are required' });
+    }
+    if (password.length < 12) {
+      return res.status(400).json({ error: 'Password must contain at least 12 characters' });
+    }
+
+    const user = createUser({ email, password, role, firstName, lastName });
+    res.status(201).json({ user: safeUser(user) });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
 
 app.use((req, res) => {

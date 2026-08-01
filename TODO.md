@@ -128,6 +128,13 @@ gantt
   - [ ] Validation des délibérations et clôture des semestres.
   - [ ] Audit & Journal des actions système.
 
+#### LOT ACTIF : ESPACES METIERS ET ADMINISTRATION
+- [x] API initiale des profils étudiant, enseignant, cours, calendrier et documents.
+- [x] Tableau de bord administratif initial avec indicateurs et échéances.
+- [x] Provisionnement initial de comptes par un administrateur.
+- [ ] Pages dédiées complètes pour étudiant, enseignant et administration.
+- [ ] Persistance Supabase, stockage documentaire et contrôle d'accès durable.
+
 ---
 
 ### PHASE 5 : COMPTABILITÉ, LMS & DÉPLOIEMENT

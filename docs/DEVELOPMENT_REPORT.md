@@ -105,6 +105,21 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - Le portail contient un emplacement distinct pour le logo officiel et onze
   emplacements pour des photographies institutionnelles. Les fichiers réels
   doivent être fournis/validés par l'IUM-MORAVE avant publication.
+
+## Lot de construction complet — espaces métiers
+
+Le chantier complet est poursuivi par lots fonctionnels vérifiables. Le lot en
+cours couvre :
+
+- profils, horaires et documents de l'espace étudiant ;
+- profil enseignant et liste de cours attribués ;
+- tableau de bord d'administration avec statistiques et échéances ;
+- gestion initiale des comptes par un administrateur ;
+- catalogue de cours, calendrier universitaire et documents avec visibilité.
+
+Ces services sont fonctionnels pour le prototype en mémoire. Leur prochaine
+étape obligatoire est la persistance Supabase, avant toute ouverture réelle aux
+utilisateurs.
 - [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
 - [ ] Build CI is still in progress; waiting for completion.
 

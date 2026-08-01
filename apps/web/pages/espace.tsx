@@ -19,6 +19,11 @@ type Transcript = {
   verificationCode: string;
 };
 
+type Dashboard = {
+  totals: Record<string, number>;
+  upcomingEvents: Array<{ id: number; title: string; startsAt: string }>;
+};
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
@@ -27,6 +32,8 @@ export default function Espace() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [transcript, setTranscript] = useState<Transcript | null>(null);
+  const [dashboard, setDashboard] = useState<Dashboard | null>(null);
+  const [courses, setCourses] = useState<Array<{ id: number; code: string; title: string; credits: number }> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -65,9 +72,37 @@ export default function Espace() {
       if (!response.ok) {
         throw new Error(result.error || 'Le relevé est indisponible.');
       }
+
       setTranscript(result);
     } catch (transcriptError) {
       setError(transcriptError instanceof Error ? transcriptError.message : 'Le relevé est indisponible.');
+    }
+  }
+
+  async function loadRoleWorkspace() {
+    if (!session) return;
+    setError(null);
+    try {
+      if (session.user.role === 'admin') {
+        const response = await fetch(`${coreApiUrl}/admin/dashboard`, {
+          headers: { Authorization: `Bearer ${session.token}` }
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Tableau de bord indisponible.');
+        setDashboard(result);
+        return;
+      }
+
+      if (session.user.role === 'teacher') {
+        const response = await fetch(`${coreApiUrl}/teachers/me/courses`, {
+          headers: { Authorization: `Bearer ${session.token}` }
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Cours indisponibles.');
+        setCourses(result);
+      }
+    } catch (workspaceError) {
+      setError(workspaceError instanceof Error ? workspaceError.message : 'Espace indisponible.');
     }
   }
 
@@ -95,10 +130,43 @@ export default function Espace() {
             {session.user.role === 'student' ? (
               <button type="button" onClick={loadTranscript}>Consulter mon relevé de notes</button>
             ) : (
-              <p>Votre espace métier est prêt à recevoir les fonctionnalités de votre rôle.</p>
+              <>
+                <p>Votre espace métier donne accès aux fonctionnalités de votre rôle.</p>
+                <button type="button" onClick={loadRoleWorkspace}>
+                  {session.user.role === 'admin' ? 'Ouvrir le tableau de bord' : 'Voir mes cours'}
+                </button>
+              </>
             )}
           </div>
         )}
+
+        {dashboard ? (
+          <article className="panel">
+            <h2>Tableau de bord administration</h2>
+            <div className="metrics">
+              {Object.entries(dashboard.totals).map(([label, value]) => (
+                <p key={label}><strong>{value}</strong><span>{label.replace(/([A-Z])/g, ' $1')}</span></p>
+              ))}
+            </div>
+            <h3>Échéances à venir</h3>
+            <ul>
+              {dashboard.upcomingEvents.map((event) => (
+                <li key={event.id}>{event.startsAt} — {event.title}</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
+
+        {courses ? (
+          <article className="panel">
+            <h2>Mes cours</h2>
+            <ul>
+              {courses.map((course) => (
+                <li key={course.id}><strong>{course.code}</strong> — {course.title} ({course.credits} crédits)</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
 
         {transcript ? (
           <article className="panel">
@@ -127,6 +195,10 @@ export default function Espace() {
         button:disabled { opacity: .6; cursor: wait; }
         .alert { color: #751b1b; margin-top: 1rem; }
         .verification { color: #52677c; font-size: .9rem; }
+        .metrics { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+        .metrics p { background: #edf6fb; border-radius: .35rem; display: grid; gap: .2rem; margin: 0; padding: .75rem; }
+        .metrics strong { color: #07588e; font-size: 1.5rem; }
+        .metrics span { color: #52677c; font-size: .8rem; text-transform: capitalize; }
       `}</style>
     </main>
   );
