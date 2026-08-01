@@ -28,6 +28,21 @@ type ScheduleItem = {
   room: string
 }
 
+type Grade = {
+  courseCode: string
+  courseTitle: string
+  credits: number
+  score: number
+  status: string
+  course?: { code: string; title: string; credits: number }
+}
+
+type GradesResponse = {
+  grades: Grade[]
+  weightedAverage: number
+  totalCredits: number
+}
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
 
@@ -37,6 +52,7 @@ export default function StudentSpace() {
   const [password, setPassword] = useState('')
   const [transcript, setTranscript] = useState<Transcript | null>(null)
   const [schedule, setSchedule] = useState<ScheduleItem[] | null>(null)
+  const [grades, setGrades] = useState<GradesResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -93,6 +109,21 @@ export default function StudentSpace() {
     }
   }
 
+  async function loadGrades() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/students/me/grades`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Notes indisponibles.')
+      setGrades(result)
+    } catch (gradesError) {
+      setError(gradesError instanceof Error ? gradesError.message : 'Notes indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -115,9 +146,22 @@ export default function StudentSpace() {
           <div className="panel">
             <p><strong>Rôle :</strong> {session.user.role}</p>
             <button type="button" onClick={loadTranscript}>Consulter mon relevé de notes</button>
+            <button type="button" onClick={loadGrades}>Voir mes notes détaillées</button>
             <button type="button" onClick={loadSchedule}>Voir mon emploi du temps</button>
           </div>
         )}
+
+        {grades ? (
+          <article className="panel">
+            <h2>Mes notes</h2>
+            <p><strong>Moyenne pondérée :</strong> {grades.weightedAverage}/20 · <strong>Crédits totalisés :</strong> {grades.totalCredits}</p>
+            <ul>
+              {grades.grades.map((grade, index) => (
+                <li key={index}><strong>{grade.courseTitle} ({grade.courseCode})</strong> — {grade.score}/20 · {grade.credits} crédits</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
 
         {schedule ? (
           <article className="panel">

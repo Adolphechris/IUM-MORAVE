@@ -257,6 +257,31 @@ app.get('/students/me/schedule', authenticate, requireRole('student'), (req, res
   res.json(schedule);
 });
 
+app.get('/students/me/grades', authenticate, requireRole('student'), (req, res) => {
+  const student = students.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
+  if (!student) {
+    return res.status(404).json({ error: 'Student profile not found' });
+  }
+
+  const enrollment = enrollments.find((item) => item.id === student.enrollmentId);
+  const studentGrades = grades
+    .filter((grade) => grade.enrollmentId === enrollment.id)
+    .map((grade) => {
+      const course = courses.find((item) => item.code === grade.courseCode);
+      return { ...grade, course };
+    });
+
+  const totalCredits = studentGrades.reduce((sum, grade) => sum + grade.credits, 0);
+  const weightedSum = studentGrades.reduce((sum, grade) => sum + grade.score * grade.credits, 0);
+  const weightedAverage = totalCredits > 0 ? weightedSum / totalCredits : 0;
+
+  res.json({
+    grades: studentGrades,
+    weightedAverage: Number(weightedAverage.toFixed(2)),
+    totalCredits
+  });
+});
+
 app.get('/teachers/me', authenticate, requireRole('teacher'), (req, res) => {
   const teacher = teachers.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
   if (!teacher) {
