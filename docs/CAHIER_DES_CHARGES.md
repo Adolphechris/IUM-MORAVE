@@ -1473,3 +1473,374 @@ Résultat attendu de la Partie II
 Fin de la Partie II.
 
 
+PARTIE III — ARCHITECTURE FONCTIONNELLE COMPLÈTE DU PORTAIL (18 CHAPITRES)
+
+Objectif général de la partie
+
+Définir toutes les fonctionnalités du portail universitaire afin de transformer le site en une plateforme numérique dynamique, et non en une simple vitrine.
+
+Le portail devra évoluer progressivement vers un véritable environnement universitaire numérique.
+
+---
+
+CHAPITRE 1 — Architecture fonctionnelle globale
+
+Objectif
+
+Définir l’organisation générale des fonctionnalités.
+
+Modules principaux :
+
+- portail public ;
+- espace étudiant ;
+- espace enseignant ;
+- espace administration ;
+- gestion documentaire ;
+- services académiques ;
+- communication.
+
+Principe :
+
+Chaque module doit être indépendant, évolutif et sécurisé.
+
+---
+
+CHAPITRE 2 — Page d’accueil dynamique
+
+Objectif
+
+Créer une vitrine institutionnelle moderne.
+
+Fonctionnalités :
+
+- présentation rapide ;
+- actualités ;
+- événements ;
+- formations populaires ;
+- chiffres clés ;
+- messages des autorités ;
+- liens rapides ;
+- formulaire de contact.
+
+Administration :
+
+Gestion facile des contenus depuis un tableau de bord.
+
+---
+
+CHAPITRE 3 — Présentation institutionnelle
+
+Objectif
+
+Présenter officiellement l’université.
+
+Contenus :
+
+- historique ;
+- mission ;
+- vision ;
+- valeurs ;
+- gouvernance ;
+- reconnaissance ESU ;
+- partenaires.
+
+Fonctionnalités :
+
+pages administrables ;
+
+- documents officiels téléchargeables.
+
+---
+
+CHAPITRE 4 — Gestion des facultés
+
+Objectif
+
+Présenter l’offre académique.
+
+Facultés prévues :
+
+- Droit ;
+- Sciences Politiques ;
+- Sciences Administratives et Management ;
+- Sciences Économiques et de Gestion ;
+- Santé Publique ;
+- Sciences Sociales ;
+- Informatique.
+
+Chaque faculté doit avoir :
+
+- présentation ;
+- programmes ;
+- responsables ;
+- actualités ;
+- contacts.
+
+---
+
+CHAPITRE 5 — Gestion des programmes académiques
+
+Objectif
+
+Présenter clairement les formations.
+
+Informations :
+
+- intitulé ;
+- niveau ;
+- durée ;
+- conditions d’accès ;
+- débouchés ;
+- organisation des cours.
+
+Évolution future :
+
+Connexion avec un système académique complet.
+
+---
+
+CHAPITRE 6 — Module admissions et inscriptions
+
+Objectif
+
+Digitaliser progressivement l’accès à l’université.
+
+Fonctionnalités :
+
+- conditions d’admission ;
+- formulaire en ligne ;
+- dépôt de candidature ;
+- suivi du dossier ;
+- notifications.
+
+Évolution :
+
+Inscription totalement numérique.
+
+---
+
+CHAPITRE 7 — Actualités et événements
+
+Objectif
+
+Créer un canal officiel de communication.
+
+Fonctionnalités :
+
+- publication d’articles ;
+- catégories ;
+- calendrier ;
+- événements ;
+- archives ;
+- partage réseaux sociaux.
+
+---
+
+CHAPITRE 8 — Vie universitaire
+
+Objectif
+
+Valoriser la communauté universitaire.
+
+Contenus :
+
+- activités étudiantes ;
+- associations ;
+- cérémonies ;
+- conférences ;
+- galerie multimédia.
+
+---
+
+CHAPITRE 9 — Recherche scientifique
+
+Objectif
+
+Valoriser la production académique.
+
+Fonctionnalités :
+
+- publications ;
+- chercheurs ;
+- projets ;
+- conférences ;
+- partenariats scientifiques.
+
+---
+
+CHAPITRE 10 — Bibliothèque numérique
+
+Objectif
+
+Créer un accès centralisé aux ressources.
+
+Fonctionnalités futures :
+
+- catalogue numérique ;
+- documents pédagogiques ;
+- recherche documentaire ;
+- téléchargement sécurisé.
+
+---
+
+CHAPITRE 11 — Gestion documentaire institutionnelle
+
+Objectif
+
+Centraliser les documents officiels.
+
+Documents :
+
+- règlements ;
+- formulaires ;
+- brochures ;
+- calendriers ;
+- communiqués.
+
+Fonctionnalités :
+
+- classement ;
+- recherche ;
+- téléchargement.
+
+---
+
+CHAPITRE 12 — Portail étudiant
+
+Objectif
+
+Créer un espace personnel sécurisé.
+
+Fonctionnalités futures :
+
+- profil étudiant ;
+- inscription ;
+- documents personnels ;
+- horaires ;
+- notifications ;
+- résultats académiques.
+
+---
+
+CHAPITRE 13 — Portail enseignant
+
+Objectif
+
+Créer un espace professionnel pour les enseignants.
+
+Fonctionnalités :
+
+- profil enseignant ;
+- publications ;
+- documents pédagogiques ;
+- communication académique ;
+- gestion des cours.
+
+---
+
+CHAPITRE 14 — Espace administration
+
+Objectif
+
+Permettre la gestion interne du portail.
+
+Fonctionnalités :
+
+- tableau de bord ;
+- gestion utilisateurs ;
+- publication contenus ;
+- statistiques ;
+- configuration.
+
+---
+
+CHAPITRE 15 — Vérification numérique des diplômes
+
+Objectif
+
+Renforcer la confiance institutionnelle.
+
+Fonctionnalités futures :
+
+- recherche par numéro de diplôme ;
+- QR Code ;
+- confirmation officielle ;
+- historique de validation.
+
+Utilité :
+
+Faciliter les vérifications nationales et internationales.
+
+---
+
+CHAPITRE 16 — Gestion des demandes en ligne
+
+Objectif
+
+Créer une interaction numérique avec l’université.
+
+Formulaires :
+
+- demande d’information ;
+- admission ;
+- partenariat ;
+- contact administratif.
+
+Fonctionnalités :
+
+- suivi des demandes ;
+- notifications ;
+- historique.
+
+---
+
+CHAPITRE 17 — Moteur de recherche interne
+
+Objectif
+
+Permettre un accès rapide à l’information.
+
+Recherche sur :
+
+- pages ;
+- formations ;
+- facultés ;
+- documents ;
+- actualités.
+
+Exigences :
+
+- rapide ;
+- précis ;
+- compatible mobile.
+
+---
+
+CHAPITRE 18 — Évolution vers un système universitaire complet
+
+Objectif
+
+Préparer l’avenir numérique de l’établissement.
+
+Évolutions possibles :
+
+- ERP universitaire ;
+- LMS ;
+- application mobile ;
+- paiement électronique ;
+- intelligence artificielle d’assistance ;
+- automatisation administrative.
+
+---
+
+Résultat attendu de la Partie III
+
+le projet n’est pas un simple site internet mais :
+
+un portail universitaire évolutif servant de fondation numérique à l’Institut Universitaire Morave de Mwene-Ditu.
+
+Cette architecture doit permettre une première version légère, puis une montée progressive vers une plateforme universitaire complète.
+
+Fin de la Partie III.
+
+

@@ -98,6 +98,28 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 
 > Traduire ces items en issues GitHub (architecture, arborescence, UX/UI, accessibilité, performance) pour assignation et planification.
 
+## Partie III — Architecture fonctionnelle (18 chapitres)
+- [ ] Architecture fonctionnelle globale (modules: public, étudiant, enseignant, admin, docs, services académiques, communication).
+- [ ] Page d'accueil dynamique (contenus administrables: actualités, événements, formations, messages officiels, contact).
+- [ ] Présentation institutionnelle (pages administrables, documents officiels téléchargeables).
+- [ ] Gestion des facultés (pages facultés, programmes, responsables, actualités, contacts).
+- [ ] Gestion des programmes académiques (fiches formation: intitulé, niveau, durée, conditions, débouchés).
+- [ ] Module admissions et inscriptions (formulaires en ligne, dépôt candidature, suivi, notifications).
+- [ ] Actualités et événements (publication, calendrier, archives, partage social).
+- [ ] Vie universitaire (activités, associations, galerie multimédia).
+- [ ] Recherche scientifique (publications, chercheurs, projets, partenariats).
+- [ ] Bibliothèque numérique (catalogue, documents pédagogiques, recherche documentaire).
+- [ ] Gestion documentaire institutionnelle (classement, recherche, téléchargement sécurisé).
+- [ ] Portail étudiant (profil, inscriptions, documents, horaires, résultats) — espace sécurisé.
+- [ ] Portail enseignant (profil, publications, gestion de cours, communication académique).
+- [ ] Espace administration (tableau de bord, gestion utilisateurs, statistiques, configuration).
+- [ ] Vérification numérique des diplômes (recherche par numéro, QR, confirmation officielle) — futur.
+- [ ] Gestion des demandes en ligne (formulaires, suivi, notifications, historique).
+- [ ] Moteur de recherche interne (recherche sur pages, formations, documents, actualités).
+- [ ] Évolution vers un système universitaire complet (ERP, LMS, mobile, paiements, IA, automatisation).
+
+> Traduire ces items en issues GitHub pour assignation, estimation et planification.
+
 ## Identité visuelle & Design System (Partie II)
 - [ ] Rédiger la charte graphique (logo, couleurs, règles d'usage) et créer docs/IDENTITE_VISUELLE.md.
 - [ ] Créer le Design System (components, tokens, UI kit) et ajouter docs/DESIGN_SYSTEM.md.
