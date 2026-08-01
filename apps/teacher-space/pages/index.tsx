@@ -19,6 +19,15 @@ type Course = {
   credits: number
 }
 
+type TeacherGrade = {
+  courseCode: string
+  courseTitle: string
+  credits: number
+  score: number
+  status: string
+  student?: { name: string; email: string }
+}
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
 
@@ -27,6 +36,7 @@ export default function TeacherSpace() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [courses, setCourses] = useState<Course[] | null>(null)
+  const [teacherGrades, setTeacherGrades] = useState<TeacherGrade[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -67,6 +77,21 @@ export default function TeacherSpace() {
     }
   }
 
+  async function loadTeacherGrades() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/teachers/me/grades`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Notes indisponibles.')
+      setTeacherGrades(result)
+    } catch (gradesError) {
+      setError(gradesError instanceof Error ? gradesError.message : 'Notes indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -89,6 +114,7 @@ export default function TeacherSpace() {
           <div className="panel">
             <p><strong>Rôle :</strong> {session.user.role}</p>
             <button type="button" onClick={loadCourses}>Voir mes cours</button>
+            <button type="button" onClick={loadTeacherGrades}>Voir les notes saisies</button>
           </div>
         )}
 
@@ -98,6 +124,17 @@ export default function TeacherSpace() {
             <ul>
               {courses.map((course) => (
                 <li key={course.id}><strong>{course.code}</strong> — {course.title} ({course.credits} crédits)</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
+
+        {teacherGrades ? (
+          <article className="panel">
+            <h2>Notes saisies</h2>
+            <ul>
+              {teacherGrades.map((grade, index) => (
+                <li key={index}><strong>{grade.courseTitle} ({grade.courseCode})</strong> — {grade.student?.name || grade.student?.email} : {grade.score}/20</li>
               ))}
             </ul>
           </article>

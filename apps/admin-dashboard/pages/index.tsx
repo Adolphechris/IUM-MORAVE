@@ -27,6 +27,19 @@ type AuditLog = {
   createdAt: string
 }
 
+type Enrollment = {
+  id: number
+  studentEmail: string
+  studentName: string
+  matricule: string
+  programId: number
+  trackId: number | null
+  academicYear: string
+  status: string
+  program?: { title: string }
+  track?: { title: string }
+}
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
 
@@ -36,6 +49,7 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState('')
   const [dashboard, setDashboard] = useState<Dashboard | null>(null)
   const [logs, setLogs] = useState<AuditLog[] | null>(null)
+  const [enrollments, setEnrollments] = useState<Enrollment[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -92,6 +106,21 @@ export default function AdminDashboard() {
     }
   }
 
+  async function loadEnrollments() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/enrollments`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Inscriptions indisponibles.')
+      setEnrollments(result)
+    } catch (enrollmentsError) {
+      setError(enrollmentsError instanceof Error ? enrollmentsError.message : 'Inscriptions indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -115,6 +144,7 @@ export default function AdminDashboard() {
             <p><strong>Rôle :</strong> {session.user.role}</p>
             <button type="button" onClick={loadDashboard}>Ouvrir le tableau de bord</button>
             <button type="button" onClick={loadAuditLogs}>Voir le journal d&apos;audit</button>
+            <button type="button" onClick={loadEnrollments}>Voir les inscriptions</button>
           </div>
         )}
 
@@ -141,6 +171,20 @@ export default function AdminDashboard() {
             <ul>
               {logs.slice(-20).reverse().map((log) => (
                 <li key={log.id}>{log.createdAt} — {log.actor} : {log.action} sur {log.resource}</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
+
+        {enrollments ? (
+          <article className="panel">
+            <h2>Inscriptions</h2>
+            <ul>
+              {enrollments.map((enrollment) => (
+                <li key={enrollment.id}>
+                  <strong>{enrollment.studentName} ({enrollment.matricule})</strong><br />
+                  <span>{enrollment.program?.title} · {enrollment.track?.title} · {enrollment.academicYear}</span>
+                </li>
               ))}
             </ul>
           </article>

@@ -294,6 +294,29 @@ app.get('/teachers/me/courses', authenticate, requireRole('teacher'), (req, res)
   res.json(courses.filter((course) => course.teacherEmail.toLowerCase() === req.user.email.toLowerCase()));
 });
 
+app.get('/teachers/me/grades', authenticate, requireRole('teacher'), (req, res) => {
+  const teacherCourses = courses.filter((course) => course.teacherEmail.toLowerCase() === req.user.email.toLowerCase());
+  const teacherCourseIds = teacherCourses.map((course) => course.id);
+  const teacherGrades = grades.filter((grade) => teacherCourses.some((course) => course.code === grade.courseCode));
+
+  const enriched = teacherGrades.map((grade) => {
+    const course = teacherCourses.find((item) => item.code === grade.courseCode);
+    const enrollment = enrollments.find((item) => item.id === grade.enrollmentId);
+    return { ...grade, course, student: enrollment ? { name: enrollment.studentName, email: enrollment.studentEmail } : null };
+  });
+
+  res.json(enriched);
+});
+
+app.get('/admin/enrollments', authenticate, requireRole('admin'), (req, res) => {
+  const enriched = enrollments.map((enrollment) => {
+    const program = programs.find((item) => item.id === enrollment.programId);
+    const track = tracks.find((item) => item.id === enrollment.trackId);
+    return { ...enrollment, program, track };
+  });
+  res.json(enriched);
+});
+
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
   const enrollmentId = Number(req.params.id);
   const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
