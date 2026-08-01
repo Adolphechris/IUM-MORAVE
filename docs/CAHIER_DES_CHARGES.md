@@ -844,3 +844,353 @@ Le site devra rester utilisable avec une connexion Internet limitée.
 
 Fin des chapitres 7 à 9
 
+---
+
+PARTIE I
+
+CHAPITRE 10
+
+Architecture éditoriale et gestion des contenus
+
+10.1 Objectif de l'architecture éditoriale
+
+Le portail de l'Institut Universitaire Morave de Mwene-Ditu devra être conçu pour permettre une gestion professionnelle de l'information institutionnelle.
+
+Le contenu publié devra être :
+
+- fiable ;
+- officiel ;
+- régulièrement mis à jour ;
+- organisé de manière logique ;
+- facilement accessible.
+
+Le site ne devra pas dépendre uniquement d'un développeur pour chaque modification. L'administration universitaire devra pouvoir gérer une grande partie des contenus grâce à une interface d'administration.
+
+---
+
+10.2 Gouvernance des contenus
+
+Une organisation éditoriale devra être mise en place.
+
+Les responsables pourront être répartis comme suit :
+
+Administrateur principal
+
+Responsabilités :
+
+- gestion globale du portail ;
+- gestion des comptes ;
+- validation des contenus ;
+- configuration technique.
+
+---
+
+Service communication
+
+Responsabilités :
+
+- publication des actualités ;
+- gestion des événements ;
+- mise à jour des annonces ;
+- gestion des médias.
+
+---
+
+Secrétariat académique
+
+Responsabilités :
+
+- publication des informations académiques ;
+- mise à jour des formations ;
+- documents administratifs ;
+- calendriers universitaires.
+
+---
+
+Responsables des facultés
+
+Responsabilités :
+
+- présentation de leurs facultés ;
+- publication d'informations spécifiques ;
+- actualisation des programmes.
+
+---
+
+10.3 Système de gestion de contenu (CMS)
+
+Le portail devra intégrer un système permettant :
+
+- création de pages ;
+- modification de textes ;
+- ajout d'images ;
+- publication de documents ;
+- gestion des menus ;
+- gestion des actualités.
+
+Le système devra permettre une évolution future vers une plateforme plus avancée.
+
+---
+
+10.4 Types de contenus
+
+Le portail devra supporter différents types de contenus.
+
+Pages institutionnelles
+
+Exemples :
+
+- histoire ;
+- mission ;
+- vision ;
+- gouvernance.
+
+---
+
+Pages académiques
+
+Exemples :
+
+- facultés ;
+- départements ;
+- programmes ;
+- conditions d'admission.
+
+---
+
+Actualités
+
+Gestion :
+
+- titres ;
+- images ;
+- catégories ;
+- dates ;
+- auteurs ;
+- archives.
+
+---
+
+Documents
+
+Formats :
+
+- PDF ;
+- images ;
+- documents administratifs.
+
+---
+
+Multimédia
+
+Gestion :
+
+- photos ;
+- vidéos ;
+- conférences ;
+- interviews.
+
+---
+
+10.5 Multilinguisme
+
+Le portail devra être conçu pour permettre une évolution multilingue.
+
+Langues prévues :
+
+Phase initiale :
+
+- Français.
+
+Évolution future :
+
+- Anglais.
+
+Cette capacité renforcera la visibilité internationale de l'établissement.
+
+---
+
+CHAPITRE 11
+
+Stratégie de visibilité numérique et référencement
+
+11.1 Objectif SEO
+
+Le portail devra être conçu pour apparaître facilement dans les moteurs de recherche.
+
+Objectif :
+
+Permettre aux utilisateurs de trouver rapidement les informations officielles concernant :
+
+- Institut Universitaire Morave de Mwene-Ditu ;
+- formations ;
+- facultés ;
+- admissions ;
+- contacts.
+
+---
+
+11.2 Optimisation technique
+
+Le site devra intégrer :
+
+- structure HTML propre ;
+- URLs optimisées ;
+- titres de pages ;
+- descriptions ;
+- balises adaptées ;
+- plan du site XML ;
+- données structurées.
+
+---
+
+11.3 Référencement institutionnel
+
+Les pages principales devront être optimisées autour des recherches :
+
+- Université Morave Mwene-Ditu ;
+- Institut Universitaire Morave ;
+- Université Lomami ;
+- formations universitaires RDC ;
+- études supérieures RDC.
+
+---
+
+11.4 Présence internationale
+
+Le portail devra faciliter la découverte de l'université par :
+
+- étudiants africains ;
+- diaspora ;
+- partenaires étrangers ;
+- organismes académiques.
+
+Prévoir :
+
+- pages institutionnelles détaillées ;
+- informations de reconnaissance ;
+- contacts officiels ;
+- présentation claire des diplômes.
+
+---
+
+11.5 Réseaux sociaux
+
+Le site devra pouvoir être connecté aux réseaux officiels :
+
+- Facebook ;
+- LinkedIn ;
+- YouTube ;
+- autres plateformes institutionnelles.
+
+Les publications pourront être relayées automatiquement ou manuellement.
+
+---
+
+CHAPITRE 12
+
+Feuille de route stratégique du projet
+
+12.1 Approche générale
+
+Le développement devra suivre une approche progressive.
+
+Le projet sera construit par étapes afin de garantir :
+
+- maîtrise des coûts ;
+- qualité ;
+- stabilité ;
+- validation progressive.
+
+---
+
+Phase 1 : Fondation numérique
+
+Objectifs :
+
+Créer la première version professionnelle du portail.
+
+Fonctionnalités :
+
+- accueil ;
+- présentation institutionnelle ;
+- facultés ;
+- formations ;
+- actualités ;
+- contacts ;
+- documents.
+
+Infrastructure :
+
+- dépôt GitHub ;
+- environnement de développement gratuit ;
+- tests.
+
+---
+
+Phase 2 : Déploiement officiel
+
+Après validation :
+
+- achat du domaine .CD ;
+- hébergement professionnel ;
+- certificat SSL ;
+- ouverture publique.
+
+---
+
+Phase 3 : Services numériques
+
+Ajout progressif :
+
+- inscriptions en ligne ;
+- espace étudiant ;
+- espace enseignant ;
+- bibliothèque numérique ;
+- formulaires avancés.
+
+---
+
+Phase 4 : Transformation numérique universitaire
+
+Objectif :
+
+Faire évoluer le portail vers un véritable système universitaire numérique.
+
+Possibilités :
+
+- plateforme e-learning ;
+- application mobile ;
+- authentification unique ;
+- paiement numérique ;
+- gestion documentaire avancée ;
+- vérification électronique des diplômes.
+
+---
+
+12.2 Vision à long terme
+
+Le portail devra être considéré comme une infrastructure stratégique de l'université.
+
+Il devra accompagner :
+
+- la croissance des effectifs ;
+- l'ouverture internationale ;
+- les partenariats ;
+- la modernisation administrative ;
+- la transformation numérique de l'enseignement supérieur.
+
+---
+
+FIN DE LA PARTIE I
+
+La première partie établit :
+
+- la vision ;
+- les objectifs ;
+- la gouvernance ;
+- l'architecture générale ;
+- la stratégie numérique ;
+- la feuille de route.
+
+

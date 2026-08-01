@@ -98,3 +98,18 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 
 > Traduire ces items en issues GitHub (architecture, arborescence, UX/UI, accessibilité, performance) pour assignation et planification.
 
+## Contenu éditorial & SEO
+- [ ] Définir la gouvernance des contenus et créer docs/CONTENT_GOVERNANCE.md (rôles: admin, communication, secrétariat, responsables facultés).
+- [ ] Mettre en place les types de contenus (pages institutionnelles, pages académiques, actualités, documents, multimédia) et créer un guide de métadonnées.
+- [ ] Choisir et configurer le CMS (headless ou intégré) et préparer la migration du contenu existant.
+- [ ] Planifier le multilinguisme (Français initial, roadmap pour l'Anglais).
+- [ ] Rédiger et implémenter la stratégie SEO initiale (docs/SEO_STRATEGY.md): sitemaps, meta, structured data.
+- [ ] Prévoir l'intégration des réseaux sociaux et les mécanismes de relai de publications.
+
+## Feuille de route & phases
+- [ ] Formaliser la feuille de route (Phase 1 → Phase 4) et créer docs/ROADMAP.md.
+- [ ] Définir jalons et dates cibles pour MVP, Beta et mise en production.
+- [ ] Traduire ces jalons en milestones GitHub et assigner les epics correspondants.
+
+> Traduire ces items en issues GitHub (contenu, SEO, CMS, roadmap) pour assignation et planification.
+
