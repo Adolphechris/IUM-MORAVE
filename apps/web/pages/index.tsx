@@ -154,17 +154,17 @@ export default function Home() {
           <article className="card">
             <h3>Étudiants</h3>
             <p>Consultez votre parcours, vos résultats et vos documents académiques.</p>
-            <a className="space-link" href="/espace">Ouvrir mon espace</a>
+            <a className="space-link" href="http://localhost:3001" target="_blank" rel="noreferrer">Ouvrir l&apos;espace étudiant</a>
           </article>
           <article className="card">
             <h3>Enseignants</h3>
             <p>Gérez la saisie des notes et les informations pédagogiques.</p>
-            <a className="space-link" href="/espace">Ouvrir mon espace</a>
+            <a className="space-link" href="http://localhost:3002" target="_blank" rel="noreferrer">Ouvrir l&apos;espace enseignant</a>
           </article>
           <article className="card">
             <h3>Administration</h3>
             <p>Supervisez les inscriptions, délibérations et communications officielles.</p>
-            <a className="space-link" href="/espace">Ouvrir mon espace</a>
+            <a className="space-link" href="http://localhost:3003" target="_blank" rel="noreferrer">Ouvrir le tableau de bord</a>
           </article>
         </div>
       </section>
