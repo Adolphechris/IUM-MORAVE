@@ -13,8 +13,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Debug Node/npm
+        run: |
+          node -v
+          npm -v
+          pwd
+          ls -la
       - name: Install root dependencies
-        run: npm ci --silent || npm install --silent
+        run: |
+          set -eux
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
       - name: Lint frontend
         run: |
           if [ -f apps/web/package.json ]; then
