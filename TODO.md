@@ -1,7 +1,7 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
 > **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo  
-> **Dernière mise à jour** : 01 Août 2026
+> **Dernière mise à jour** : 01 Août 2026 18:16
 > **Prochaines actions** : corriger la connexion Supabase, valider le build, puis démarrer Phase 2.
 
 ---
@@ -37,6 +37,28 @@ gantt
 - [ ] **Build CI** : Attendre le résultat du check `build` avant fusionner.
 - [ ] **Architecture Dossier** : Créer l'arborescence physique Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
 - [ ] **Documentation globale** : Mettre à jour le [README.md](file:///home/adolphe/IUM-MORAVE/README.md) avec le plan complet.
+
+---
+
+### SPRINT 0 : PREPARATION ET VERIFICATION
+- [x] Vérifier et corriger la liaison GitHub + PR.
+- [x] Réparer le workflow de migration Supabase (`run-migrations`).
+- [x] Valider `run-migrations` et `run-migrations-safe` sur CI.
+- [ ] Confirmer l’application du schéma Supabase dans le dashboard ou via un runner IPv6.
+- [ ] Finaliser l’état de la base de données avant le développement fonctionnel.
+- [x] Créer les premières issues GitHub pour les epics prioritaires.
+
+#### Backlog initial GitHub
+- Issue #179 — Infra & base de données: valider l’accès Supabase et définir le schéma initial
+- Issue #180 — Architecture monorepo: créer l’arborescence apps/services/shared/docs
+- Issue #181 — Authentification & RBAC: définir le modèle utilisateur et le premier flux d’auth
+- Issue #182 — API académique core: définir les entités de base facultés/programmes/parcours
+
+### SPRINT 1 : DEMARRAGE DU DEVELOPPEMENT
+- [ ] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
+- [ ] Spécifier le modèle utilisateur et la sécurité d’accès.
+- [ ] Construire le module `services/auth-service` pour auth et RBAC.
+- [ ] Préparer le socle API core pour les données académiques.
 
 ---
 

@@ -76,6 +76,15 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 ## Actions immédiates recommandées (Sprint 0)
 - [ ] Constitution du comité de pilotage et attribution des rôles (chef de projet, responsable tech, responsable contenu).
 - [ ] Analyse détaillée des besoins (interviews, recueils des attentes des acteurs, priorisation des services).
+- [ ] Vérifier l’infrastructure CI et la connectivité de la base Supabase avant le développement fonctionnel.
+- [x] Traduire les actions d’initialisation en issues GitHub : infra, CI, modèle de données, roadmap.
+
+### Backlog initial créé
+- [x] Milestone MVP v0.1
+- [x] Issue #179 — infra & base de données
+- [x] Issue #180 — architecture monorepo
+- [x] Issue #181 — auth & RBAC
+- [x] Issue #182 — API académique core
 - [ ] Benchmark et inspirations graphiques (collecte d'exemples, design intentionnel).
 - [ ] Choix du stack technique et définition de l'architecture initiale (frontend, backend, base de données, CMS si applicable).
 - [ ] Création du milestone "MVP v0.1" et définition des epics prioritaires.
