@@ -22,10 +22,14 @@ jobs:
       - name: Install root dependencies
         run: |
           set -eux
-          if [ -f package-lock.json ]; then
-            npm ci
+          if [ -f package.json ]; then
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
           else
-            npm install
+            echo "No root package.json found — skipping root install"
           fi
       - name: Lint frontend
         run: |
