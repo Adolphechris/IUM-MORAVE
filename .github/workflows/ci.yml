@@ -47,16 +47,9 @@ jobs:
           fi
       - name: Test backend services
         run: npm run test:services
-      - name: Lint and test API
-        run: |
-          if [ -f apps/api/package.json ]; then
-            cd apps/api && npm install --silent && npm run lint && npm test
-          else
-            echo "no api"
-          fi
       - name: Fail if build artifacts missing
         run: |
-          if [ -d apps/web/.next ] || [ -f apps/api/index.js ]; then
+          if [ -d apps/web/.next ] || [ -f services/core-api/src/index.js ]; then
             echo "Artifacts present"
           else
             echo "Build artifacts missing" && exit 1
