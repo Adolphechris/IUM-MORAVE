@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
 import React, { FormEvent, useState } from 'react'
 
@@ -162,6 +163,7 @@ export default function StudentSpace() {
         ul { display: grid; gap: .75rem; list-style: none; padding: 0; }
         li { background: #fff; border: 1px solid #dce5ed; border-radius: .5rem; padding: 1rem; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   )
 }

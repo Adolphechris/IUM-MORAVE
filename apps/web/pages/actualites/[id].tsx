@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
 import Header from '../../shared/src/Header';
 import React, { useEffect, useState } from 'react';
@@ -37,6 +38,7 @@ export default function NewsDetailPage() {
         a { color: #07588e; font-weight: 700; text-decoration: none; } article { background: #fff; border: 1px solid #dce5ed; border-radius: .6rem; margin-top: 3rem; }
         .code { color: #0a689f; font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }.summary { font-size: 1.2rem; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }

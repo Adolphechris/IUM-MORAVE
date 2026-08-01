@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
 import React, { FormEvent, useEffect, useState } from 'react';
 
@@ -71,6 +72,7 @@ export default function DocumentsPage() {
         li span { color: #52677c; font-size: .85rem; }
         .error { color: #8e2020; font-weight: 700; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }

@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import React, { FormEvent, useState } from 'react';
 import Header from '../../shared/src/Header';
 
@@ -79,6 +80,7 @@ export default function ContactPage() {
         .success { color: #15623c; font-weight: 700; }
         .error { color: #8e2020; font-weight: 700; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }

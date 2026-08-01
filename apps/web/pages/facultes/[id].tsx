@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
 import Header from '../../shared/src/Header';
 import React, { useEffect, useState } from 'react';
@@ -59,6 +60,7 @@ export default function FacultyDetailPage() {
         .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
         article { background: #fff; border: 1px solid #dce5ed; border-radius: .6rem; padding: 1rem; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }

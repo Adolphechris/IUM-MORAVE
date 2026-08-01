@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import React, { useEffect, useState } from 'react';
 import Header from '../../shared/src/Header';
 
@@ -287,6 +288,7 @@ export default function Home() {
           nav { gap: .75rem; font-size: .9rem; }
         }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }

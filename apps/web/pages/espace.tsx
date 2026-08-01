@@ -1,3 +1,4 @@
+import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
 import React, { FormEvent, useState } from 'react';
 import Header from '../../shared/src/Header';
@@ -199,6 +200,7 @@ export default function Espace() {
         .metrics strong { color: #07588e; font-size: 1.5rem; }
         .metrics span { color: #52677c; font-size: .8rem; text-transform: capitalize; }
       `}</style>
-    </main>
+    <Footer />
+      </main>
   );
 }
