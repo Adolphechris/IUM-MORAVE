@@ -60,6 +60,18 @@ gantt
 - [ ] Construire le module `services/auth-service` pour auth et RBAC.
 - [ ] Préparer le socle API core pour les données académiques.
 
+### SPRINT 2 : MVP PUBLIC ET ESPACE UTILISATEUR
+- [ ] Développer le portail public basique (`apps/web-portal`) avec pages institutionnelles.
+- [ ] Créer l’espace utilisateur étudiant/enseignant minimal.
+- [ ] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
+- [ ] Connecter les premiers flux frontaux au backend API core.
+
+### SPRINT 3 : MODULES ACADÉMIQUES & ADMINISTRATION
+- [ ] Implémenter la gestion des facultés, des programmes et des parcours.
+- [ ] Ajouter le module de gestion des inscriptions et des délibérations.
+- [ ] Construire les premières fonctions d’administration et de reporting.
+- [ ] Préparer l’intégration du workflow de notes et des documents académiques.
+
 ---
 
 ### PHASE 2 : AUTHENTIFICATION, SÉCURITÉ & ROLES (RBAC)
