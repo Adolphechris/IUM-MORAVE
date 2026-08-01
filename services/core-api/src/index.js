@@ -80,6 +80,292 @@ app.post('/faculties', authenticate, requireRole('admin'), (req, res) => {
   res.status(201).json(newFaculty);
 });
 
+app.patch('/faculties/:id', authenticate, requireRole('admin'), (req, res) => {
+  const faculty = faculties.find((item) => item.id === Number(req.params.id));
+  if (!faculty) {
+    return res.status(404).json({ error: 'Faculty not found' });
+  }
+  const { code, name, description } = req.body;
+  if (code && code !== faculty.code && faculties.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Faculty code already exists' });
+  }
+  if (code) faculty.code = code;
+  if (name) faculty.name = name;
+  if (description !== undefined) faculty.description = description;
+  audit(req, 'update', 'faculty', faculty.id);
+  res.json(faculty);
+});
+
+app.delete('/faculties/:id', authenticate, requireRole('admin'), (req, res) => {
+  const index = faculties.findIndex((item) => item.id === Number(req.params.id));
+  if (index === -1) {
+    return res.status(404).json({ error: 'Faculty not found' });
+  }
+  faculties.splice(index, 1);
+  audit(req, 'delete', 'faculty', Number(req.params.id));
+  res.status(204).send();
+});
+
+app.post('/programs', authenticate, requireRole('admin'), (req, res) => {
+  const { facultyId, code, title, level, durationMonths, description, admissionConditions } = req.body;
+  if (!facultyId || !code || !title) {
+    return res.status(400).json({ error: 'facultyId, code and title are required' });
+  }
+  if (!faculties.some((item) => item.id === Number(facultyId))) {
+    return res.status(400).json({ error: 'Faculty not found' });
+  }
+  if (programs.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Program code already exists' });
+  }
+
+  const program = {
+    id: programs.length + 1,
+    facultyId: Number(facultyId),
+    code,
+    title,
+    level,
+    durationMonths: Number(durationMonths) || 0,
+    description: description || '',
+    admission_conditions: admissionConditions || ''
+  };
+  programs.push(program);
+  audit(req, 'create', 'program', program.id);
+  res.status(201).json(program);
+});
+
+app.patch('/programs/:id', authenticate, requireRole('admin'), (req, res) => {
+  const program = programs.find((item) => item.id === Number(req.params.id));
+  if (!program) {
+    return res.status(404).json({ error: 'Program not found' });
+  }
+  const { facultyId, code, title, level, durationMonths, description, admissionConditions } = req.body;
+  if (code && code !== program.code && programs.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Program code already exists' });
+  }
+  if (facultyId && !faculties.some((item) => item.id === Number(facultyId))) {
+    return res.status(400).json({ error: 'Faculty not found' });
+  }
+  if (facultyId) program.facultyId = Number(facultyId);
+  if (code) program.code = code;
+  if (title) program.title = title;
+  if (level) program.level = level;
+  if (durationMonths) program.duration_months = Number(durationMonths);
+  if (description !== undefined) program.description = description;
+  if (admissionConditions !== undefined) program.admission_conditions = admissionConditions;
+  audit(req, 'update', 'program', program.id);
+  res.json(program);
+});
+
+app.delete('/programs/:id', authenticate, requireRole('admin'), (req, res) => {
+  const index = programs.findIndex((item) => item.id === Number(req.params.id));
+  if (index === -1) {
+    return res.status(404).json({ error: 'Program not found' });
+  }
+  programs.splice(index, 1);
+  audit(req, 'delete', 'program', Number(req.params.id));
+  res.status(204).send();
+});
+
+app.post('/tracks', authenticate, requireRole('admin'), (req, res) => {
+  const { programId, code, title, description } = req.body;
+  if (!programId || !code || !title) {
+    return res.status(400).json({ error: 'programId, code and title are required' });
+  }
+  if (!programs.some((item) => item.id === Number(programId))) {
+    return res.status(400).json({ error: 'Program not found' });
+  }
+  if (tracks.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Track code already exists' });
+  }
+
+  const track = {
+    id: tracks.length + 1,
+    programId: Number(programId),
+    code,
+    title,
+    description: description || ''
+  };
+  tracks.push(track);
+  audit(req, 'create', 'track', track.id);
+  res.status(201).json(track);
+});
+
+app.patch('/tracks/:id', authenticate, requireRole('admin'), (req, res) => {
+  const track = tracks.find((item) => item.id === Number(req.params.id));
+  if (!track) {
+    return res.status(404).json({ error: 'Track not found' });
+  }
+  const { programId, code, title, description } = req.body;
+  if (code && code !== track.code && tracks.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Track code already exists' });
+  }
+  if (programId && !programs.some((item) => item.id === Number(programId))) {
+    return res.status(400).json({ error: 'Program not found' });
+  }
+  if (programId) track.programId = Number(programId);
+  if (code) track.code = code;
+  if (title) track.title = title;
+  if (description !== undefined) track.description = description;
+  audit(req, 'update', 'track', track.id);
+  res.json(track);
+});
+
+app.delete('/tracks/:id', authenticate, requireRole('admin'), (req, res) => {
+  const index = tracks.findIndex((item) => item.id === Number(req.params.id));
+  if (index === -1) {
+    return res.status(404).json({ error: 'Track not found' });
+  }
+  tracks.splice(index, 1);
+  audit(req, 'delete', 'track', Number(req.params.id));
+  res.status(204).send();
+});
+
+app.post('/courses', authenticate, requireRole('admin'), (req, res) => {
+  const { trackId, code, title, credits, semester, description, teacherEmail } = req.body;
+  if (!trackId || !code || !title || !credits) {
+    return res.status(400).json({ error: 'trackId, code, title and credits are required' });
+  }
+  if (!tracks.some((item) => item.id === Number(trackId))) {
+    return res.status(400).json({ error: 'Track not found' });
+  }
+  if (courses.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Course code already exists' });
+  }
+
+  const course = {
+    id: courses.length + 1,
+    trackId: Number(trackId),
+    code,
+    title,
+    credits: Number(credits),
+    semester: semester ? Number(semester) : null,
+    description: description || '',
+    teacherEmail: teacherEmail || ''
+  };
+  courses.push(course);
+  audit(req, 'create', 'course', course.id);
+  res.status(201).json(course);
+});
+
+app.patch('/courses/:id', authenticate, requireRole('admin'), (req, res) => {
+  const course = courses.find((item) => item.id === Number(req.params.id));
+  if (!course) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+  const { trackId, code, title, credits, semester, description, teacherEmail } = req.body;
+  if (code && code !== course.code && courses.some((item) => item.code === code)) {
+    return res.status(409).json({ error: 'Course code already exists' });
+  }
+  if (trackId && !tracks.some((item) => item.id === Number(trackId))) {
+    return res.status(400).json({ error: 'Track not found' });
+  }
+  if (trackId) course.trackId = Number(trackId);
+  if (code) course.code = code;
+  if (title) course.title = title;
+  if (credits) course.credits = Number(credits);
+  if (semester !== undefined) course.semester = semester ? Number(semester) : null;
+  if (description !== undefined) course.description = description;
+  if (teacherEmail !== undefined) course.teacherEmail = teacherEmail;
+  audit(req, 'update', 'course', course.id);
+  res.json(course);
+});
+
+app.delete('/courses/:id', authenticate, requireRole('admin'), (req, res) => {
+  const index = courses.findIndex((item) => item.id === Number(req.params.id));
+  if (index === -1) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+  courses.splice(index, 1);
+  audit(req, 'delete', 'course', Number(req.params.id));
+  res.status(204).send();
+});
+
+app.get('/enrollments', authenticate, requireRole('admin'), (req, res) => {
+  const { studentEmail, programId, trackId, status } = req.query;
+  let result = enrollments;
+  if (studentEmail) result = result.filter((item) => item.studentEmail.toLowerCase() === String(studentEmail).toLowerCase());
+  if (programId) result = result.filter((item) => item.programId === Number(programId));
+  if (trackId) result = result.filter((item) => item.trackId === Number(trackId));
+  if (status) result = result.filter((item) => item.status === String(status));
+  res.json(result);
+});
+
+app.get('/enrollments/:id', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  res.json(enrollment);
+});
+
+app.patch('/enrollments/:id', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  const { status, trackId } = req.body;
+  if (status) enrollment.status = String(status);
+  if (trackId !== undefined) enrollment.trackId = Number(trackId);
+  enrollment.updatedAt = new Date().toISOString();
+  audit(req, 'update', 'enrollment', enrollment.id);
+  res.json(enrollment);
+});
+
+app.delete('/enrollments/:id', authenticate, requireRole('admin'), (req, res) => {
+  const index = enrollments.findIndex((item) => item.id === Number(req.params.id));
+  if (index === -1) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  enrollments.splice(index, 1);
+  audit(req, 'delete', 'enrollment', Number(req.params.id));
+  res.status(204).send();
+});
+
+app.post('/enrollments/:id/grades', authenticate, requireRole('admin', 'teacher'), (req, res) => {
+  const enrollmentId = Number(req.params.id);
+  const { courseCode, courseTitle, credits, score } = req.body;
+  if (!courseCode || !courseTitle || !Number.isFinite(credits) || !Number.isFinite(score)) {
+    return res.status(400).json({ error: 'courseCode, courseTitle, credits and score are required' });
+  }
+  if (!enrollments.some((enrollment) => enrollment.id === enrollmentId)) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+  if (credits <= 0 || score < 0 || score > 20) {
+    return res.status(400).json({ error: 'credits must be positive and score must be between 0 and 20' });
+  }
+
+  const grade = { enrollmentId, courseCode, courseTitle, credits, score, status: 'pending' };
+  grades.push(grade);
+  audit(req, 'create', 'grade', `${enrollmentId}:${courseCode}`);
+  res.status(201).json(grade);
+});
+
+app.patch('/grades/:enrollmentId/:courseCode', authenticate, requireRole('admin', 'teacher'), (req, res) => {
+  const enrollmentId = Number(req.params.enrollmentId);
+  const courseCode = String(req.params.courseCode);
+  const grade = grades.find((item) => item.enrollmentId === enrollmentId && item.courseCode === courseCode);
+  if (!grade) {
+    return res.status(404).json({ error: 'Grade not found' });
+  }
+  const { score, status } = req.body;
+  if (score !== undefined) grade.score = Number(score);
+  if (status) grade.status = String(status);
+  audit(req, 'update', 'grade', `${enrollmentId}:${courseCode}`);
+  res.json(grade);
+});
+
+app.delete('/grades/:enrollmentId/:courseCode', authenticate, requireRole('admin'), (req, res) => {
+  const enrollmentId = Number(req.params.enrollmentId);
+  const courseCode = String(req.params.courseCode);
+  const index = grades.findIndex((item) => item.enrollmentId === enrollmentId && item.courseCode === courseCode);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Grade not found' });
+  }
+  grades.splice(index, 1);
+  audit(req, 'delete', 'grade', `${enrollmentId}:${courseCode}`);
+  res.status(204).send();
+});
+
 app.get('/programs', (req, res) => {
   const { level } = req.query;
   const result = level ? programs.filter((program) => program.level === level) : programs;
@@ -343,20 +629,29 @@ app.get('/admin/deliberations', authenticate, requireRole('admin'), (req, res) =
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
   const enrollmentId = Number(req.params.id);
   const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
-  if (!enrollments.some((enrollment) => enrollment.id === enrollmentId)) {
+  const enrollment = enrollments.find((item) => item.id === enrollmentId);
+  if (!enrollment) {
     return res.status(404).json({ error: 'Enrollment not found' });
   }
   if (enrollmentGrades.length === 0) {
     return res.status(400).json({ error: 'No grades available for deliberation' });
   }
 
+  const totalCredits = enrollmentGrades.reduce((sum, grade) => sum + grade.credits, 0);
+  const weightedSum = enrollmentGrades.reduce((sum, grade) => sum + grade.score * grade.credits, 0);
+  const weightedAverage = totalCredits > 0 ? weightedSum / totalCredits : 0;
+  const decision = weightedAverage >= 10 ? 'validated' : 'rejected';
+
   enrollmentGrades.forEach((grade) => {
     grade.status = 'validated';
   });
+
   const deliberation = {
     id: deliberations.length + 1,
     enrollmentId,
-    decision: 'validated',
+    decision,
+    weightedAverage: Number(weightedAverage.toFixed(2)),
+    totalCredits,
     finalizedBy: req.user.email,
     finalizedAt: new Date().toISOString()
   };
@@ -447,6 +742,16 @@ app.get('/admin/dashboard', authenticate, requireRole('admin'), (req, res) => {
     recentAuditEvents: auditLogs.slice(-10).reverse(),
     upcomingEvents: calendarEvents.filter((event) => event.startsAt >= new Date().toISOString().slice(0, 10))
   });
+});
+
+app.get('/courses/:id/stats', authenticate, requireRole('admin', 'teacher'), (req, res) => {
+  const course = courses.find((item) => item.id === Number(req.params.id));
+  if (!course) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+  const courseGrades = grades.filter((grade) => grade.courseCode === course.code);
+  const average = courseGrades.length ? courseGrades.reduce((sum, grade) => sum + grade.score, 0) / courseGrades.length : 0;
+  res.json({ course, grades: courseGrades, average: Number(average.toFixed(2)), count: courseGrades.length });
 });
 
 app.post('/verification/diploma', (req, res) => {
