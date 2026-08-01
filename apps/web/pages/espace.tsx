@@ -1,4 +1,6 @@
+import Header from '../../shared/src/Header';
 import React, { FormEvent, useState } from 'react';
+import Header from '../../shared/src/Header';
 
 type Session = {
   token: string;
@@ -108,10 +110,7 @@ export default function Espace() {
 
   return (
     <main>
-      <header>
-        <a href="/">IUM-MORAVE</a>
-        <a href="/">Retour au portail</a>
-      </header>
+      <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
       <section>
         <p className="eyebrow">Espace numérique</p>
         <h1>{session ? `Bienvenue, ${session.user.firstName || session.user.email}` : 'Connexion sécurisée'}</h1>

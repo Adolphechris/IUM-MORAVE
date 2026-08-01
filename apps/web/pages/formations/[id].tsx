@@ -1,3 +1,5 @@
+import Header from '../../shared/src/Header';
+import Header from '../../shared/src/Header';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -31,7 +33,7 @@ export default function ProgramDetailPage() {
 
   return (
     <main>
-      <header><a href="/">IUM-MORAVE</a><a href="/#formations">Toutes les formations</a></header>
+      <Header title="IUM-MORAVE"><a href="/#formations">Toutes les formations</a></Header>
       <section>
         {error ? <p role="alert">{error}</p> : null}
         {!program && !error ? <p>Chargement de la formation…</p> : null}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Header from '../../shared/src/Header';
 
 type Faculty = {
   id: number;
@@ -81,20 +82,14 @@ export default function Home() {
 
   return (
     <main>
-      <header>
-        <a className="brand" href="#accueil" aria-label="Accueil IUM-MORAVE">
-          <span className="logo-slot" aria-label="Emplacement réservé au logo officiel">LOGO</span>
-          <span>IUM-MORAVE</span>
-        </a>
-        <nav aria-label="Navigation principale">
-          <a href="#formations">Formations</a>
-          <a href="#actualites">Actualités</a>
-          <a href="/documents">Documents</a>
-          <a href="/contact">Contact</a>
-          <a href="#galerie">Campus</a>
-          <a href="#espaces">Espaces</a>
-        </nav>
-      </header>
+      <Header title="IUM-MORAVE">
+        <a href="#formations">Formations</a>
+        <a href="#actualites">Actualités</a>
+        <a href="/documents">Documents</a>
+        <a href="/contact">Contact</a>
+        <a href="#galerie">Campus</a>
+        <a href="#espaces">Espaces</a>
+      </Header>
 
       <section className="hero" id="accueil">
         <p className="eyebrow">Institut Universitaire Morave</p>

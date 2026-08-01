@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import Header from '../../shared/src/Header';
 
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
@@ -39,7 +40,7 @@ export default function ContactPage() {
 
   return (
     <main>
-      <header><a href="/">IUM-MORAVE</a><a href="/">Retour au portail</a></header>
+      <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
       <section>
         <p className="eyebrow">Nous contacter</p>
         <h1>Contact institutionnel</h1>

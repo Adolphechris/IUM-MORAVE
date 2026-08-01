@@ -1,3 +1,5 @@
+import Header from '../../shared/src/Header';
+import Header from '../../shared/src/Header';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -23,7 +25,7 @@ export default function NewsDetailPage() {
 
   return (
     <main>
-      <header><a href="/">IUM-MORAVE</a><a href="/#actualites">Toutes les actualités</a></header>
+      <Header title="IUM-MORAVE"><a href="/#actualites">Toutes les actualités</a></Header>
       <article>
         {error ? <p role="alert">{error}</p> : null}
         {!news && !error ? <p>Chargement de l&apos;actualité…</p> : null}

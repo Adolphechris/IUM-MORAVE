@@ -1,3 +1,4 @@
+import Header from '../../shared/src/Header';
 import React, { FormEvent, useEffect, useState } from 'react';
 
 type DocumentItem = {
@@ -34,7 +35,7 @@ export default function DocumentsPage() {
 
   return (
     <main>
-      <header><a href="/">IUM-MORAVE</a><a href="/">Retour au portail</a></header>
+      <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
       <section>
         <p className="eyebrow">Ressources</p>
         <h1>Documents institutionnels</h1>
