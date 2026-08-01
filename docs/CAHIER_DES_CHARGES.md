@@ -425,3 +425,422 @@ Toutes les technologies retenues devront être robustes, documentées, évolutiv
 
 La documentation technique devra permettre à une nouvelle équipe de développement de reprendre facilement le projet, garantissant ainsi la continuité du service et la souveraineté numérique de l'Institut Universitaire Morave de Mwene-Ditu.
 
+---
+
+PARTIE I
+
+CHAPITRE 7
+
+Architecture générale du portail institutionnel
+
+7.1 Vision architecturale
+
+Le portail web de l'Institut Universitaire Morave de Mwene-Ditu devra être conçu comme une plateforme numérique institutionnelle complète et évolutive.
+
+L'architecture devra dépasser le modèle classique du site internet statique composé uniquement de pages d'information.
+
+Le système devra être pensé comme un écosystème numérique capable d'intégrer progressivement :
+
+- communication institutionnelle ;
+- services académiques ;
+- gestion documentaire ;
+- espaces utilisateurs ;
+- services étudiants ;
+- services enseignants ;
+- outils administratifs ;
+- services numériques futurs.
+
+L'objectif est de construire une base technologique capable d'accompagner la croissance de l'université.
+
+---
+
+7.2 Architecture en couches
+
+Le portail devra respecter une architecture moderne organisée en plusieurs niveaux.
+
+Couche présentation
+
+Elle correspond à l'interface visible par les utilisateurs.
+
+Elle devra assurer :
+
+- affichage des contenus ;
+- navigation ;
+- adaptation mobile ;
+- accessibilité ;
+- expérience utilisateur.
+
+---
+
+Couche fonctionnelle
+
+Elle regroupe les fonctionnalités métier :
+
+- gestion des actualités ;
+- gestion des facultés ;
+- admissions ;
+- formulaires ;
+- documents ;
+- comptes utilisateurs ;
+- recherches.
+
+---
+
+Couche données
+
+Elle assure la gestion :
+
+- des contenus ;
+- des utilisateurs ;
+- des documents ;
+- des configurations ;
+- des historiques.
+
+---
+
+Couche sécurité
+
+Elle devra protéger :
+
+- les comptes ;
+- les données ;
+- les documents ;
+- les accès administrateurs.
+
+---
+
+7.3 Principe de modularité
+
+Chaque fonctionnalité devra être développée comme un module indépendant afin de permettre :
+
+- l'ajout de nouvelles fonctions ;
+- la maintenance simplifiée ;
+- l'évolution progressive ;
+- la réduction des coûts futurs.
+
+---
+
+7.4 Architecture évolutive
+
+Le portail devra pouvoir évoluer vers :
+
+- un portail étudiant complet ;
+- un Learning Management System (LMS) ;
+- une bibliothèque numérique ;
+- un système d'inscription en ligne ;
+- une plateforme de paiement ;
+- un système de vérification des diplômes ;
+- une application mobile universitaire.
+
+---
+
+CHAPITRE 8
+
+Arborescence générale du site
+
+8.1 Structure principale
+
+Le site devra comporter une organisation claire comprenant les grandes sections suivantes :
+
+---
+
+ACCUEIL
+
+Page principale présentant :
+
+- identité visuelle ;
+- actualités importantes ;
+- présentation rapide ;
+- accès aux formations ;
+- événements ;
+- liens rapides ;
+- contacts.
+
+---
+
+UNIVERSITÉ
+
+Présentation générale
+
+Contenu :
+
+- historique ;
+- mission ;
+- vision ;
+- valeurs ;
+- objectifs stratégiques.
+
+---
+
+Gouvernance
+
+Pages dédiées :
+
+- Recteur ;
+- Direction générale ;
+- Conseil académique ;
+- Administration.
+
+---
+
+Reconnaissance institutionnelle
+
+Contenu :
+
+- statut juridique ;
+- agrément ESU ;
+- références administratives ;
+- documents officiels.
+
+Informations prévues :
+
+Institut Universitaire Morave de Mwene-Ditu
+
+B.P. 126
+
+Mwene-Ditu – Province de Lomami
+
+Agrément :
+
+N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 avril 2018
+
+(à publier après validation officielle)
+
+---
+
+FORMATIONS
+
+Facultés
+
+Le portail devra présenter les facultés :
+
+Faculté de Droit
+
+Informations :
+
+- présentation ;
+- programmes ;
+- débouchés ;
+- responsables.
+
+---
+
+Faculté des Sciences Politiques
+
+Informations :
+
+- programmes ;
+- domaines d'études ;
+- perspectives professionnelles.
+
+---
+
+Faculté des Sciences Administratives et Management
+
+Informations :
+
+- administration ;
+- management ;
+- gestion des organisations.
+
+---
+
+Faculté des Sciences Économiques et de Gestion
+
+Informations :
+
+- économie ;
+- gestion ;
+- entrepreneuriat ;
+- administration.
+
+---
+
+Faculté de Santé Publique
+
+Informations :
+
+- santé communautaire ;
+- prévention ;
+- gestion sanitaire.
+
+---
+
+Faculté des Sciences Sociales
+
+Informations :
+
+- programmes ;
+- recherche ;
+- développement social.
+
+---
+
+Faculté d'Informatique
+
+Informations :
+
+- formations numériques ;
+- systèmes d'information ;
+- technologies.
+
+---
+
+ADMISSIONS
+
+Cette section devra permettre :
+
+- consultation des conditions d'inscription ;
+- téléchargement des formulaires ;
+- candidature en ligne future ;
+- demandes d'information.
+
+---
+
+VIE UNIVERSITAIRE
+
+Contenu :
+
+- événements ;
+- conférences ;
+- activités étudiantes ;
+- associations ;
+- galerie photos.
+
+---
+
+RECHERCHE
+
+Contenu :
+
+- laboratoires ;
+- publications ;
+- projets ;
+- chercheurs ;
+- partenariats scientifiques.
+
+---
+
+DOCUMENTATION
+
+Contenu :
+
+- règlements ;
+- brochures ;
+- formulaires ;
+- communiqués ;
+- archives.
+
+---
+
+CONTACT
+
+Contenu :
+
+- adresse ;
+- téléphone ;
+- email ;
+- carte ;
+- réseaux sociaux.
+
+---
+
+CHAPITRE 9
+
+Exigences UX/UI et qualité visuelle
+
+9.1 Objectif du design
+
+Le design devra donner une perception immédiate :
+
+- d'une institution sérieuse ;
+- d'une université moderne ;
+- d'un établissement ouvert ;
+- d'une organisation fiable.
+
+---
+
+9.2 Inspiration graphique
+
+Le prestataire devra analyser les meilleures pratiques des grandes plateformes universitaires, notamment :
+
+- CNAM ;
+- TELUQ ;
+- universités francophones internationales.
+
+Les principes retenus devront être :
+
+- sobriété ;
+- élégance ;
+- hiérarchie claire ;
+- facilité de navigation.
+
+---
+
+9.3 Typographie
+
+Les polices devront être :
+
+- modernes ;
+- professionnelles ;
+- facilement lisibles ;
+- adaptées aux écrans mobiles.
+
+Exemples possibles :
+
+- Inter ;
+- Roboto ;
+- Open Sans ;
+- Source Sans.
+
+Le choix final devra garantir :
+
+- lisibilité ;
+- cohérence ;
+- accessibilité.
+
+---
+
+9.4 Design responsive
+
+Le site devra fonctionner parfaitement sur :
+
+- smartphones Android ;
+- tablettes ;
+- ordinateurs portables ;
+- écrans larges.
+
+La conception devra suivre une approche :
+
+"Mobile First"
+
+car une grande partie des utilisateurs accédera au portail depuis un téléphone.
+
+---
+
+9.5 Accessibilité
+
+Le portail devra respecter les bonnes pratiques internationales :
+
+- contraste suffisant ;
+- textes lisibles ;
+- navigation claire ;
+- compatibilité avec les technologies d'assistance ;
+- structure HTML correcte.
+
+---
+
+9.6 Performance
+
+Objectifs :
+
+- chargement rapide ;
+- optimisation des images ;
+- code propre ;
+- réduction des ressources inutiles.
+
+Le site devra rester utilisable avec une connexion Internet limitée.
+
+
+Fin des chapitres 7 à 9
+

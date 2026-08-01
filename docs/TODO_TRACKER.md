@@ -84,3 +84,17 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 
 > Ces tâches doivent être traduites en issues GitHub, assignées et estimées avant le démarrage effectif.
 
+## Architecture & Arborescence (priorité)
+- [ ] Définir l'architecture générale (couches présentation/fonctionnelle/données/sécurité) et documenter dans docs/ARCHITECTURE.md.
+- [ ] Détailler l'arborescence du site (ACCUEIL, UNIVERSITÉ, FORMATIONS, ADMISSIONS, VIE, RECHERCHE, DOCUMENTATION, CONTACT) et préparer les templates de page.
+- [ ] Décider du principe de modularité et définir modules prioritaires (actualités, pages facultés, CMS, authentication, inscriptions).
+
+## UX / UI / Design
+- [ ] Rédiger le cahier des charges UX/UI (principes esthétiques, typographie, palette de couleurs, responsive mobile-first).
+- [ ] Lancer un benchmark visuel et proposer 3 directions graphiques (moodboards) pour validation.
+- [ ] Choisir la typographie et livrer les recommandations (polices, tailles, interlignage).
+- [ ] Planifier une vérification d'accessibilité (WCAG) et définir un audit initial.
+- [ ] Établir un plan de performance (optimisation images, lazy loading, audits Lighthouse).
+
+> Traduire ces items en issues GitHub (architecture, arborescence, UX/UI, accessibilité, performance) pour assignation et planification.
+
