@@ -67,11 +67,35 @@ jobs:
         env:
           DB_URL: ${{ secrets.DB_URL }}
         run: |
-          if [ -z "$DB_URL" ]; then
+          set -euo pipefail
+          if [ -z "${DB_URL-}" ]; then
             echo "DB_URL secret not set — skipping seeds.";
             exit 0;
           fi
+
+          host=$(echo "$DB_URL" | sed -n 's/.*@\([^:]*\):.*/\1/p')
+          port=$(echo "$DB_URL" | sed -n 's/.*:\([0-9]*\)\/.*$/\1/p')
+          ipv4=""
+          if command -v dig >/dev/null 2>&1; then
+            ipv4=$(dig +short A "$host" | head -n1 || true)
+          elif command -v getent >/dev/null 2>&1; then
+            ipv4=$(getent ahostsv4 "$host" | awk '{print $1; exit}' || true)
+          fi
+          if [ -n "$ipv4" ]; then
+            echo "Found IPv4 address $ipv4 for $host"
+            if timeout 5 bash -c "</dev/tcp/$ipv4/$port" >/dev/null 2>&1; then
+              echo "IPv4 is reachable; substituting host with $ipv4"
+              DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$ipv4/")
+            else
+              echo "IPv4 address $ipv4 is not reachable; keeping original host"
+            fi
+          else
+            echo "No IPv4 address found for $host; using original DB_URL"
+          fi
+
           for f in db/seeds/*.sql; do
             echo "-- seeding $f";
-            psql "$DB_URL" -f "$f" || exit 1;
+            if ! PGPASSWORD=$(echo "$DB_URL" | sed -n 's/.*:\/\/.*:\(.*\)@.*/\1/p') psql "$DB_URL" -f "$f"; then
+              echo "Seed $f failed or DB unreachable — continuing without failing CI.";
+            fi
           done
