@@ -2181,3 +2181,272 @@ Le portail devra être construit comme une application universitaire évolutive,
 Fin de la Partie IV.
 
 
+PARTIE V — MODULES ACADÉMIQUES ET SYSTÈME UNIVERSITAIRE (12 CHAPITRES)
+
+Objectif général de la partie
+
+Définir les futurs modules liés à la gestion académique afin de permettre au portail d’évoluer progressivement vers un système d’information universitaire complet.
+
+La première version peut rester centrée sur l’information institutionnelle, mais l’architecture doit prévoir l’intégration future des services académiques.
+
+---
+
+CHAPITRE 1 — Gestion des étudiants
+
+Objectif
+
+Créer une base de gestion numérique des étudiants.
+
+Fonctionnalités futures :
+
+- création du dossier étudiant ;
+- profil personnel ;
+- historique académique ;
+- documents associés ;
+- statut administratif.
+
+Évolution :
+
+Connexion avec portail étudiant.
+
+---
+
+CHAPITRE 2 — Gestion des enseignants
+
+Objectif
+
+Centraliser les informations liées au corps académique.
+
+Fonctionnalités :
+
+- profils enseignants ;
+- départements ;
+- matières enseignées ;
+- publications ;
+- informations professionnelles.
+
+Évolution :
+
+Espace enseignant personnalisé.
+
+---
+
+CHAPITRE 3 — Gestion des facultés et départements
+
+Objectif
+
+Structurer l’organisation académique.
+
+Gestion :
+
+- facultés ;
+- départements ;
+- responsables ;
+- programmes ;
+- informations administratives.
+
+Avantage :
+
+Présentation claire de l’offre universitaire.
+
+---
+
+CHAPITRE 4 — Gestion des cours et enseignements
+
+Objectif
+
+Préparer la digitalisation des activités pédagogiques.
+
+Prévoir :
+
+- catalogue des cours ;
+- matières ;
+- enseignants associés ;
+- documents pédagogiques ;
+- horaires.
+
+Évolution :
+
+Connexion avec plateforme e-learning.
+
+---
+
+CHAPITRE 5 — Gestion académique documentaire
+
+Objectif
+
+Centraliser les documents liés aux études.
+
+Documents :
+
+- règlements ;
+- syllabus ;
+- programmes ;
+- supports de cours ;
+- formulaires académiques.
+
+Fonctionnalités :
+
+- classement ;
+- recherche ;
+- accès contrôlé.
+
+---
+
+CHAPITRE 6 — Calendrier universitaire
+
+Objectif
+
+Publier et gérer les événements académiques.
+
+Contenus :
+
+- rentrée académique ;
+- inscriptions ;
+- examens ;
+- vacances ;
+- conférences.
+
+Fonctionnalités :
+
+- calendrier dynamique ;
+- notifications.
+
+---
+
+CHAPITRE 7 — Gestion des notes et résultats
+
+Objectif
+
+Préparer la numérisation des résultats académiques.
+
+Fonctionnalités futures :
+
+- saisie des notes ;
+- validation ;
+- consultation sécurisée ;
+- historique.
+
+Sécurité :
+
+Accès uniquement aux utilisateurs autorisés.
+
+---
+
+CHAPITRE 8 — Relevés de notes et documents académiques
+
+Objectif
+
+Faciliter la production documentaire académique.
+
+Prévoir :
+
+- relevés ;
+- attestations ;
+- certificats ;
+- documents officiels.
+
+Évolution :
+
+Génération numérique sécurisée.
+
+---
+
+CHAPITRE 9 — Diplômes et attestations
+
+Objectif
+
+Renforcer l’authenticité des documents délivrés.
+
+Fonctionnalités futures :
+
+- registre numérique des diplômes ;
+- numéro unique ;
+- QR Code ;
+- vérification en ligne.
+
+Utilité :
+
+Faciliter les vérifications par les employeurs et organismes étrangers.
+
+---
+
+CHAPITRE 10 — Archives académiques
+
+Objectif
+
+Conserver durablement les informations universitaires.
+
+Archivage :
+
+- anciens étudiants ;
+- documents officiels ;
+- historiques académiques ;
+- publications.
+
+Exigences :
+
+- sécurité ;
+- sauvegarde ;
+- recherche rapide.
+
+---
+
+CHAPITRE 11 — Statistiques universitaires
+
+Objectif
+
+Aider la gouvernance à prendre des décisions.
+
+Indicateurs :
+
+- effectifs étudiants ;
+- inscriptions ;
+- formations ;
+- résultats ;
+- évolution annuelle.
+
+Utilisateurs :
+
+- direction ;
+- administration ;
+- responsables académiques.
+
+---
+
+CHAPITRE 12 — Évolution vers un ERP universitaire
+
+Objectif
+
+Préparer une transformation numérique complète.
+
+Évolutions possibles :
+
+- gestion académique complète ;
+- gestion financière ;
+- ressources humaines ;
+- bibliothèque ;
+- e-learning ;
+- intelligence artificielle d’assistance.
+
+Principe :
+
+Construire progressivement un écosystème numérique universitaire intégré.
+
+---
+
+Résultat attendu de la Partie V
+
+Le portail web constitue la première couche visible d’un futur système universitaire numérique complet.
+
+L’architecture devra donc anticiper :
+
+- la croissance de l’université ;
+- l’augmentation du nombre d’étudiants ;
+- la gestion académique numérique ;
+- la sécurisation des documents ;
+- l’ouverture internationale.
+
+Fin de la Partie V.
+
+
