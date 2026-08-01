@@ -98,6 +98,18 @@ Ce fichier est le guide de travail: le backlog effectif est maintenu via les iss
 
 > Traduire ces items en issues GitHub (architecture, arborescence, UX/UI, accessibilité, performance) pour assignation et planification.
 
+## Identité visuelle & Design System (Partie II)
+- [ ] Rédiger la charte graphique (logo, couleurs, règles d'usage) et créer docs/IDENTITE_VISUELLE.md.
+- [ ] Créer le Design System (components, tokens, UI kit) et ajouter docs/DESIGN_SYSTEM.md.
+- [ ] Produire 3 directions graphiques (moodboards) et prototypes basiques (mobile-first).
+- [ ] Définir la palette de couleurs et les couleurs fonctionnelles (success, alert, info).
+- [ ] Finaliser la typographie et le scale typographique (h1..p) et livrer recommandations.
+- [ ] Définir les composants réutilisables prioritaires (boutons, menus, cartes, formulaires) et créer un catalogue.
+- [ ] Créer templates de pages principales (Accueil, Faculté, Formation, Actualité, Institutionnelle) et les pousser en tant que maquettes/squelettes.
+- [ ] Mettre en place le processus de validation graphique et QA (checklist qualité graphique).
+
+> Traduire ces items en issues GitHub pour assignation, estimation et planification.
+
 ## Contenu éditorial & SEO
 - [ ] Définir la gouvernance des contenus et créer docs/CONTENT_GOVERNANCE.md (rôles: admin, communication, secrétariat, responsables facultés).
 - [ ] Mettre en place les types de contenus (pages institutionnelles, pages académiques, actualités, documents, multimédia) et créer un guide de métadonnées.

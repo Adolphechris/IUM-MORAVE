@@ -1194,3 +1194,282 @@ La première partie établit :
 - la feuille de route.
 
 
+PARTIE II — IDENTITÉ VISUELLE, DESIGN SYSTEM ET EXPÉRIENCE UTILISATEUR (UX/UI)
+
+Objectif général de la partie
+
+Définir une identité numérique professionnelle pour l’Institut Universitaire Morave de Mwene-Ditu, inspirée des grandes universités modernes (CNAM, TELUQ, universités internationales), avec une interface élégante, accessible, responsive et évolutive.
+
+Le design devra transmettre :
+
+- crédibilité académique ;
+- modernité ;
+- confiance ;
+- simplicité d’utilisation ;
+- ouverture internationale.
+
+---
+
+CHAPITRE 1 — Philosophie du design universitaire
+
+Objectif
+
+Créer une expérience numérique digne d’une institution d’enseignement supérieur.
+
+Principes :
+
+- Design sobre et professionnel.
+- Priorité à la lisibilité.
+- Hiérarchie claire des informations.
+- Navigation intuitive.
+- Éviter les effets visuels excessifs.
+- Mettre en avant le contenu académique.
+
+---
+
+CHAPITRE 2 — Benchmark et inspirations graphiques
+
+Références :
+
+S'inspirer des bonnes pratiques de :
+
+- CNAM ;
+- TELUQ ;
+- Universités francophones internationales ;
+- Grandes plateformes éducatives numériques.
+
+Éléments à reprendre :
+
+- structure claire ;
+- menus simples ;
+- pages institutionnelles riches ;
+- espaces étudiants évolutifs ;
+- design accessible sur mobile.
+
+Éléments à éviter :
+
+- sites surchargés ;
+- animations inutiles ;
+- design amateur ;
+- informations difficiles à trouver.
+
+---
+
+CHAPITRE 3 — Charte graphique institutionnelle
+
+Objectif
+
+Créer une identité visuelle numérique cohérente.
+
+Prévoir :
+
+- logo officiel ;
+- couleurs institutionnelles ;
+- règles d’utilisation des images ;
+- icônes ;
+- boutons ;
+- éléments graphiques.
+
+Résultat attendu :
+
+Une identité reconnaissable sur :
+
+- site web ;
+- documents numériques ;
+- réseaux sociaux ;
+- applications futures.
+
+---
+
+CHAPITRE 4 — Couleurs, typographie et éléments visuels
+
+Couleurs :
+
+Prévoir :
+
+- couleur principale universitaire ;
+- couleurs secondaires ;
+- couleurs fonctionnelles (succès, alerte, information).
+
+Typographie :
+
+Utiliser des polices modernes :
+
+Exemples :
+
+- Inter ;
+- Roboto ;
+- Open Sans ;
+- Source Sans.
+
+Objectifs :
+
+- excellente lisibilité ;
+- compatibilité mobile ;
+- aspect professionnel.
+
+---
+
+CHAPITRE 5 — Design System
+
+Objectif
+
+Créer une bibliothèque d’éléments réutilisables.
+
+Composants :
+
+- boutons ;
+- menus ;
+- cartes ;
+- formulaires ;
+- tableaux ;
+- fenêtres d’information ;
+- notifications ;
+- blocs facultés ;
+- blocs actualités.
+
+Avantage :
+
+Permettre une évolution rapide et cohérente du portail.
+
+---
+
+CHAPITRE 6 — Design responsive Mobile First
+
+Objectif
+
+Garantir une excellente expérience sur tous les appareils.
+
+Priorités :
+
+- smartphones Android ;
+- tablettes ;
+- ordinateurs.
+
+Exigences :
+
+- adaptation automatique ;
+- chargement rapide ;
+- menus mobiles efficaces ;
+- images optimisées.
+
+---
+
+CHAPITRE 7 — Modèles des pages principales
+
+Pages à concevoir :
+
+Page d’accueil
+
+- présentation ;
+- actualités ;
+- formations ;
+- événements ;
+- accès rapides.
+
+Page faculté
+
+- présentation ;
+- programmes ;
+- responsables ;
+- contacts.
+
+Page formation
+
+- description ;
+- admission ;
+- débouchés.
+
+Page actualité
+
+- article ;
+- médias ;
+- partage.
+
+Page institutionnelle
+
+- histoire ;
+- gouvernance ;
+- reconnaissance.
+
+---
+
+CHAPITRE 8 — Architecture de navigation UX
+
+Objectif
+
+Permettre à tout utilisateur de trouver rapidement l’information.
+
+Navigation principale :
+
+- Université ;
+- Formations ;
+- Admissions ;
+- Recherche ;
+- Vie universitaire ;
+- Actualités ;
+- Documents ;
+- Contact.
+
+Principes :
+
+- maximum 3 clics pour accéder à une information importante ;
+- moteur de recherche interne ;
+- menus simples.
+
+---
+
+CHAPITRE 9 — Accessibilité numérique
+
+Objectif
+
+Permettre l’utilisation du site par tous.
+
+Exigences :
+
+- contraste adapté ;
+- textes lisibles ;
+- navigation clavier ;
+- structure correcte des pages ;
+- compatibilité avec outils d’assistance.
+
+Référence :
+
+Respecter les bonnes pratiques internationales d’accessibilité web.
+
+---
+
+CHAPITRE 10 — Standards de qualité graphique
+
+Objectif
+
+Garantir une qualité professionnelle durable.
+
+Contrôles :
+
+- cohérence visuelle ;
+- rapidité d’affichage ;
+- compatibilité navigateurs ;
+- qualité des images ;
+- absence d’erreurs graphiques.
+
+Validation finale :
+
+Le site devra donner l’image :
+
+- d’une université sérieuse ;
+- d’une institution moderne ;
+- d’un établissement ouvert à l’international.
+
+---
+
+Résultat attendu de la Partie II
+
+- d’une vision claire du style graphique ;
+- d’un système de design complet ;
+- d’une structure UX cohérente ;
+- d’une base prête pour les maquettes et le développement frontend.
+
+Fin de la Partie II.
+
+
