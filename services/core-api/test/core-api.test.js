@@ -149,3 +149,73 @@ test('provides a protected administration dashboard', async () => {
   assert.ok(dashboard.totals.faculties >= 2);
   assert.equal(dashboard.totals.courses, 4);
 });
+
+test('returns grades and computed average for a student', async () => {
+  const studentToken = tokenFor({
+    sub: 2,
+    email: 'jean.kabamba@ium-morave.edu',
+    role: 'student',
+    enrollmentId: 1
+  });
+  const response = await fetch(`${baseUrl}/students/me/grades`, {
+    headers: { Authorization: `Bearer ${studentToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result.grades));
+  assert.ok(typeof result.weightedAverage === 'number');
+  assert.ok(result.totalCredits >= 0);
+});
+
+test('returns grades taught by the authenticated teacher', async () => {
+  const teacherToken = tokenFor({
+    sub: 1,
+    email: 'professeur@ium-morave.edu',
+    role: 'teacher'
+  });
+  const response = await fetch(`${baseUrl}/teachers/me/grades`, {
+    headers: { Authorization: `Bearer ${teacherToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result));
+  assert.ok(result.some((grade) => grade.student));
+});
+
+test('returns enrollments for admin', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/admin/enrollments`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result));
+  assert.ok(result[0].program);
+});
+
+test('returns documents for admin', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/admin/documents`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result));
+  assert.ok(result.some((document) => document.title));
+});
+
+test('returns users for admin', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/admin/users`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result));
+  assert.ok(result.some((user) => user.type === 'student' || user.type === 'teacher'));
+});
