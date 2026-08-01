@@ -37,6 +37,11 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [ ] Créer le module `services/auth-service` et le socle `services/core-api`.
 - [x] Lancer les premières issues GitHub pour les epics prioritaires.
 
+## Sprint 2 — MVP public et services essentiels
+- [ ] Construire le portail public basique et l'espace utilisateur minimal.
+- [ ] Ajouter un système de messagerie professionnelle pour notifications officielles.
+- [ ] Concevoir un générateur sécurisé de relevés de notes conforme aux normes congolaises.
+
 ## Backlog initial GitHub
 - [x] Milestone créé : [MVP v0.1](https://github.com/Adolphechris/IUM-MORAVE/milestone/2)
 - [x] Issue #179 — [Infra & base de données: valider l'accès Supabase et définir le schéma initial](https://github.com/Adolphechris/IUM-MORAVE/issues/179)

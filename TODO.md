@@ -53,6 +53,8 @@ gantt
 - Issue #180 — Architecture monorepo: créer l’arborescence apps/services/shared/docs
 - Issue #181 — Authentification & RBAC: définir le modèle utilisateur et le premier flux d’auth
 - Issue #182 — API académique core: définir les entités de base facultés/programmes/parcours
+- Issue #183 — Système mail professionnel: notifications et communication officielle
+- Issue #184 — Générateur sécurisé de relevés de notes conforme aux normes congolaises
 
 ### SPRINT 1 : DEMARRAGE DU DEVELOPPEMENT
 - [ ] Définir l’architecture Monorepo et créer l’arborescence `apps/`, `services/`, `shared/`, `docs/`.
@@ -65,12 +67,15 @@ gantt
 - [ ] Créer l’espace utilisateur étudiant/enseignant minimal.
 - [ ] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
 - [ ] Connecter les premiers flux frontaux au backend API core.
+- [ ] Ajouter un système de courriel professionnel pour les notifications et communications officielles.
+- [ ] Concevoir le générateur sécurisé de relevés de notes conforme aux normes congolaises.
 
 ### SPRINT 3 : MODULES ACADÉMIQUES & ADMINISTRATION
 - [ ] Implémenter la gestion des facultés, des programmes et des parcours.
 - [ ] Ajouter le module de gestion des inscriptions et des délibérations.
 - [ ] Construire les premières fonctions d’administration et de reporting.
 - [ ] Préparer l’intégration du workflow de notes et des documents académiques.
+- [ ] Garantir la sécurisation des relevés de notes et des diplômes numériques.
 
 ---
 
