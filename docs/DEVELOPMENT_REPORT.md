@@ -46,6 +46,8 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [x] `services/auth-service` skeleton created and ready for auth/RBAC development.
 - [x] `services/core-api` skeleton created and ready for academic API development.
 - [x] `services/*` workspace added to root `package.json`.
+- [x] `auth-service` now expose `POST /auth/register`, `POST /auth/login`, and protected `GET /auth/profile`.
+- [x] `core-api` now expose `GET /faculties`, `GET /programs`, `GET /tracks`, `GET /faculty/:id`, `GET /news`, `GET /documents`, and `POST /verification/diploma`.
 - [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
 - [ ] Build CI is still in progress; waiting for completion.
 
