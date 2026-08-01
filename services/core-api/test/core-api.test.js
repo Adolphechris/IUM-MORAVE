@@ -219,3 +219,14 @@ test('returns users for admin', async () => {
   assert.ok(Array.isArray(result));
   assert.ok(result.some((user) => user.type === 'student' || user.type === 'teacher'));
 });
+
+test('returns deliberations for admin', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/admin/deliberations`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(result));
+});
