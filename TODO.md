@@ -2,6 +2,7 @@
 
 > **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo  
 > **Dernière mise à jour** : 01 Août 2026
+> **Prochaines actions** : corriger la connexion Supabase, valider le build, puis démarrer Phase 2.
 
 ---
 
@@ -31,6 +32,9 @@ gantt
 - [x] **Liaison GitHub** : Connecter le dossier local au dépôt GitHub `Adolphechris/IUM-MORAVE`.
 - [x] **Gouvernance** : Rédiger et promulguer la [CONSTITUTION.md](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md).
 - [x] **Master Tracker** : Mettre en place le fichier [TODO.md](file:///home/adolphe/IUM-MORAVE/TODO.md).
+- [x] **Migration CI** : Réparer le workflow `run-migrations` et valider les checks `run-migrations` + `run-migrations-safe`.
+- [ ] **Confirmation Supabase** : Vérifier que le schéma et les seeds sont bien appliqués sur Supabase.
+- [ ] **Build CI** : Attendre le résultat du check `build` avant fusionner.
 - [ ] **Architecture Dossier** : Créer l'arborescence physique Monorepo (`apps/`, `services/`, `shared/`, `docs/`).
 - [ ] **Documentation globale** : Mettre à jour le [README.md](file:///home/adolphe/IUM-MORAVE/README.md) avec le plan complet.
 
@@ -93,3 +97,4 @@ gantt
 | 2026-08-01 | Initialisation du projet et liaison GitHub | Antigravity | ✅ Terminé |
 | 2026-08-01 | Rédaction de la Constitution (`CONSTITUTION.md`) | Antigravity | ✅ Terminé |
 | 2026-08-01 | Création du Tracker Master (`TODO.md`) | Antigravity | ✅ Terminé |
+| 2026-08-01 | Correction du workflow de migration et validation des checks `run-migrations` + `run-migrations-safe` | Copilot | ✅ Terminé |
