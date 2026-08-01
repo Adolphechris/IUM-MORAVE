@@ -19,3 +19,10 @@ Exemple:
 - Options considérées: monorepo, multi-repo
 - Décision finale: monorepo
 - Auteurs / approbateurs: comité de pilotage
+
+- Date: 2026-08-01
+- Décision: Verrouillage stack pour V1 et création du scaffold
+- Contexte: Préparer un scaffold minimal pour permettre le démarrage simultané du frontend et backend et établir CI basique
+- Options considérées: Next.js (React) + Node/Express API vs Next.js + NestJS vs Django
+- Décision finale: Next.js (frontend) + Node/Express API minimal pour MVP, monorepo workspaces, shared UI package. Outils: npm workspaces, GitHub Actions CI baseline.
+- Auteurs / approbateurs: Antigravity 2.0 (documented)

@@ -1,0 +1,13 @@
+{
+  "name": "ium-api",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "echo \"No build step for API\""
+  },
+  "dependencies": {
+    "express": "4.18.2"
+  }
+}
