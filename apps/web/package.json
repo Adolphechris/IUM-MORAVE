@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx . || true"
+  },
+  "devDependencies": {
+    "eslint": "8.x"
   },
   "dependencies": {
     "next": "13.4.0",

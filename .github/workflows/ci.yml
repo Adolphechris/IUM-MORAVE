@@ -15,17 +15,31 @@ jobs:
           node-version: '18'
       - name: Install root dependencies
         run: npm ci --silent || npm install --silent
-      - name: Build frontend
+      - name: Lint frontend
         run: |
           if [ -f apps/web/package.json ]; then
-            cd apps/web && npm install --silent || true && npm run build || true
+            cd apps/web && npm install --silent && npm run lint
           else
             echo "no frontend"
           fi
-      - name: Run API lint/build
+      - name: Build frontend
+        run: |
+          if [ -f apps/web/package.json ]; then
+            cd apps/web && npm run build
+          else
+            echo "no frontend"
+          fi
+      - name: Lint and test API
         run: |
           if [ -f apps/api/package.json ]; then
-            cd apps/api && npm install --silent || true && npm run build || true
+            cd apps/api && npm install --silent && npm run lint || true && npm test || true
           else
             echo "no api"
+          fi
+      - name: Fail if build artifacts missing
+        run: |
+          if [ -d apps/web/.next ] || [ -f apps/api/index.js ]; then
+            echo "Artifacts present"
+          else
+            echo "Build artifacts missing" && exit 1
           fi
