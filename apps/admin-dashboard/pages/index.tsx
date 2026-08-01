@@ -1,6 +1,7 @@
 import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
-import Table from '../../shared/src/Table';
+import Table from '../../shared/src/Table'
+import Tabs from '../../shared/src/Tabs';
 import React, { FormEvent, useState } from 'react'
 
 type Session = {
@@ -68,6 +69,8 @@ export default function AdminDashboard() {
   const [enrollments, setEnrollments] = useState<Enrollment[] | null>(null)
   const [adminDocuments, setAdminDocuments] = useState<AdminDocument[] | null>(null)
   const [adminUsers, setAdminUsers] = useState<AdminUser[] | null>(null)
+  const [deliberations, setDeliberations] = useState<Array<{ id: number; enrollmentId: number; decision: string; finalizedAt: string; enrollment?: { studentName: string; matricule: string } }> | null>(null)
+  const [activeTab, setActiveTab] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -169,6 +172,21 @@ export default function AdminDashboard() {
     }
   }
 
+  async function loadDeliberations() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/deliberations`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Délibérations indisponibles.')
+      setDeliberations(result)
+    } catch (deliberationsError) {
+      setError(deliberationsError instanceof Error ? deliberationsError.message : 'Délibérations indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -190,94 +208,132 @@ export default function AdminDashboard() {
         ) : (
           <div className="panel">
             <p><strong>Rôle :</strong> {session.user.role}</p>
-            <button type="button" onClick={loadDashboard}>Ouvrir le tableau de bord</button>
-            <button type="button" onClick={loadAuditLogs}>Voir le journal d&apos;audit</button>
-            <button type="button" onClick={loadEnrollments}>Voir les inscriptions</button>
-            <button type="button" onClick={loadDocuments}>Voir les documents</button>
-            <button type="button" onClick={loadUsers}>Voir les utilisateurs</button>
+            <div className="actions">
+              <button type="button" onClick={loadDashboard}>Tableau de bord</button>
+              <button type="button" onClick={loadAuditLogs}>Journal d&apos;audit</button>
+              <button type="button" onClick={loadEnrollments}>Inscriptions</button>
+              <button type="button" onClick={loadDocuments}>Documents</button>
+              <button type="button" onClick={loadUsers}>Utilisateurs</button>
+              <button type="button" onClick={loadDeliberations}>Délibérations</button>
+            </div>
           </div>
         )}
 
-        {dashboard ? (
-          <article className="panel">
-            <h2>Tableau de bord</h2>
-            <div className="metrics">
-              {Object.entries(dashboard.totals).map(([label, value]) => (
-                <p key={label}><strong>{value}</strong><span>{label.replace(/([A-Z])/g, ' $1')}</span></p>
-              ))}
-            </div>
-            <h3>Événements à venir</h3>
-            <ul>
-              {dashboard.upcomingEvents.map((event) => (
-                <li key={event.id}>{event.startsAt} — {event.title}</li>
-              ))}
-            </ul>
-          </article>
-        ) : null}
+        {session ? (
+          <Tabs
+            labels={['Tableau de bord', 'Journal', 'Inscriptions', 'Documents', 'Utilisateurs', 'Délibérations']}
+            active={activeTab}
+            onChange={setActiveTab}
+          >
+            {dashboard ? (
+              <article className="panel">
+                <h2>Tableau de bord</h2>
+                <div className="metrics">
+                  {Object.entries(dashboard.totals).map(([label, value]) => (
+                    <p key={label}><strong>{value}</strong><span>{label.replace(/([A-Z])/g, ' $1')}</span></p>
+                  ))}
+                </div>
+                <h3>Événements à venir</h3>
+                <ul>
+                  {dashboard.upcomingEvents.map((event) => (
+                    <li key={event.id}>{event.startsAt} — {event.title}</li>
+                  ))}
+                </ul>
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Tableau de bord&quot; pour charger.</p>
+            )}
 
-        {logs ? (
-          <article className="panel">
-            <h2>Journal d&apos;audit</h2>
-            <Table
-              columns={[
-                { key: 'createdAt', label: 'Date' },
-                { key: 'actor', label: 'Acteur' },
-                { key: 'action', label: 'Action' },
-                { key: 'resource', label: 'Ressource' }
-              ]}
-              data={logs.slice(-20).reverse()}
-              keyExtractor={(item) => item.id}
-            />
-          </article>
-        ) : null}
+            {logs ? (
+              <article className="panel">
+                <h2>Journal d&apos;audit</h2>
+                <Table
+                  columns={[
+                    { key: 'createdAt', label: 'Date' },
+                    { key: 'actor', label: 'Acteur' },
+                    { key: 'action', label: 'Action' },
+                    { key: 'resource', label: 'Ressource' }
+                  ]}
+                  data={logs.slice(-20).reverse()}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Journal&quot; pour charger.</p>
+            )}
 
-        {enrollments ? (
-          <article className="panel">
-            <h2>Inscriptions</h2>
-            <Table
-              columns={[
-                { key: 'studentName', label: 'Étudiant' },
-                { key: 'matricule', label: 'Matricule' },
-                { key: 'program', label: 'Programme', render: (value) => (value as Enrollment['program'])?.title || '' },
-                { key: 'track', label: 'Parcours', render: (value) => (value as Enrollment['track'])?.title || '' },
-                { key: 'academicYear', label: 'Année' }
-              ]}
-              data={enrollments}
-              keyExtractor={(item) => item.id}
-            />
-          </article>
-        ) : null}
+            {enrollments ? (
+              <article className="panel">
+                <h2>Inscriptions</h2>
+                <Table
+                  columns={[
+                    { key: 'studentName', label: 'Étudiant' },
+                    { key: 'matricule', label: 'Matricule' },
+                    { key: 'program', label: 'Programme', render: (value) => (value as Enrollment['program'])?.title || '' },
+                    { key: 'track', label: 'Parcours', render: (value) => (value as Enrollment['track'])?.title || '' },
+                    { key: 'academicYear', label: 'Année' }
+                  ]}
+                  data={enrollments}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Inscriptions&quot; pour charger.</p>
+            )}
 
-        {adminDocuments ? (
-          <article className="panel">
-            <h2>Documents</h2>
-            <Table
-              columns={[
-                { key: 'title', label: 'Titre' },
-                { key: 'mime', label: 'Type' },
-                { key: 'visibility', label: 'Visibilité' }
-              ]}
-              data={adminDocuments}
-              keyExtractor={(item) => item.id}
-            />
-          </article>
-        ) : null}
+            {adminDocuments ? (
+              <article className="panel">
+                <h2>Documents</h2>
+                <Table
+                  columns={[
+                    { key: 'title', label: 'Titre' },
+                    { key: 'mime', label: 'Type' },
+                    { key: 'visibility', label: 'Visibilité' }
+                  ]}
+                  data={adminDocuments}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Documents&quot; pour charger.</p>
+            )}
 
-        {adminUsers ? (
-          <article className="panel">
-            <h2>Utilisateurs</h2>
-            <Table
-              columns={[
-                { key: 'name', label: 'Nom' },
-                { key: 'email', label: 'Email' },
-                { key: 'type', label: 'Type' }
-              ]}
-              data={adminUsers}
-              keyExtractor={(item) => item.id}
-            />
-          </article>
+            {adminUsers ? (
+              <article className="panel">
+                <h2>Utilisateurs</h2>
+                <Table
+                  columns={[
+                    { key: 'name', label: 'Nom' },
+                    { key: 'email', label: 'Email' },
+                    { key: 'type', label: 'Type' }
+                  ]}
+                  data={adminUsers}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Utilisateurs&quot; pour charger.</p>
+            )}
+
+            {deliberations ? (
+              <article className="panel">
+                <h2>Délibérations</h2>
+                <Table
+                  columns={[
+                    { key: 'enrollmentId', label: 'Inscription' },
+                    { key: 'studentName', label: 'Étudiant', render: (value) => (value as { studentName?: string })?.studentName || '' },
+                    { key: 'decision', label: 'Décision' },
+                    { key: 'finalizedAt', label: 'Finalisé le' }
+                  ]}
+                  data={deliberations.map((item) => ({ ...item, studentName: item.enrollment?.studentName }))}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur &quot;Délibérations&quot; pour charger.</p>
+            )}
+          </Tabs>
         ) : null}
-        {error ? <p role="alert" className="alert">{error}</p> : null}
       </section>
       <style jsx>{`
         main { min-height: 100vh; background: #f6f8fb; color: #132238; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
@@ -291,6 +347,7 @@ export default function AdminDashboard() {
         input { border: 1px solid #9fb0bf; border-radius: .35rem; font: inherit; padding: .75rem; }
         button { width: fit-content; border: 0; border-radius: .35rem; background: #07588e; color: white; cursor: pointer; font: inherit; font-weight: 700; padding: .75rem 1rem; }
         button:disabled { opacity: .6; cursor: wait; }
+        .actions { display: flex; flex-wrap: wrap; gap: .5rem; }
         .alert { color: #751b1b; margin-top: 1rem; }
         .metrics { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
         .metrics p { background: #edf6fb; border-radius: .35rem; display: grid; gap: .2rem; margin: 0; padding: .75rem; }

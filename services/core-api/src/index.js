@@ -332,6 +332,14 @@ app.get('/admin/users', authenticate, requireRole('admin'), (req, res) => {
   res.json(enriched);
 });
 
+app.get('/admin/deliberations', authenticate, requireRole('admin'), (req, res) => {
+  const enriched = deliberations.map((deliberation) => {
+    const enrollment = enrollments.find((item) => item.id === deliberation.enrollmentId);
+    return { ...deliberation, enrollment };
+  });
+  res.json(enriched);
+});
+
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
   const enrollmentId = Number(req.params.id);
   const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
