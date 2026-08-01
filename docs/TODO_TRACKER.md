@@ -72,3 +72,15 @@ Comment ajouter une tâche
 3. Assigner un responsable si déjà connu.
 
 Ce fichier est le guide de travail: le backlog effectif est maintenu via les issues GitHub; utiliser ce document pour la structure et la répartition.
+
+## Actions immédiates recommandées (Sprint 0)
+- [ ] Constitution du comité de pilotage et attribution des rôles (chef de projet, responsable tech, responsable contenu).
+- [ ] Analyse détaillée des besoins (interviews, recueils des attentes des acteurs, priorisation des services).
+- [ ] Benchmark et inspirations graphiques (collecte d'exemples, design intentionnel).
+- [ ] Choix du stack technique et définition de l'architecture initiale (frontend, backend, base de données, CMS si applicable).
+- [ ] Création du milestone "MVP v0.1" et définition des epics prioritaires.
+- [ ] Mise en place d'un environnement de staging et d'un workflow CI minimal (build + tests).
+- [ ] Plan de migration et acquisition du nom de domaine (.cd) préparatoire.
+
+> Ces tâches doivent être traduites en issues GitHub, assignées et estimées avant le démarrage effectif.
+

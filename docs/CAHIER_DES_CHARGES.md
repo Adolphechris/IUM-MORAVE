@@ -181,3 +181,247 @@ Collaboration
 Le développement sera organisé autour d'un dépôt GitHub afin de permettre un suivi des versions, une collaboration structurée entre les développeurs, des tests continus et une traçabilité des évolutions.
 
 Dans une première phase, le projet sera développé sur une infrastructure gratuite de développement et de test.
+
+---
+
+PARTIE I
+
+CHAPITRE 4
+
+Analyse stratégique des besoins
+
+4.1 Contexte numérique
+
+L'enseignement supérieur connaît une transformation profonde sous l'effet de la numérisation des services académiques, de la mobilité des étudiants, du développement des formations hybrides et de la coopération internationale. Dans ce contexte, une université qui ne dispose pas d'une plateforme numérique moderne voit sa visibilité, sa capacité de communication et son attractivité fortement réduites.
+
+Le portail web de l'Institut Universitaire Morave de Mwene-Ditu devra répondre à cette évolution en devenant la principale interface numérique de l'établissement.
+
+Le projet ne devra jamais être considéré comme un simple site vitrine, mais comme le socle du futur système d'information universitaire.
+
+---
+
+4.2 Analyse des besoins institutionnels
+
+Le portail devra répondre aux besoins des autorités académiques en permettant notamment :
+
+- la diffusion des décisions officielles ;
+- la publication des calendriers académiques ;
+- la présentation des facultés ;
+- la valorisation des activités scientifiques ;
+- la publication des offres de formation ;
+- la communication avec les étudiants ;
+- la diffusion des résultats institutionnels ;
+- la gestion progressive de services numériques.
+
+---
+
+4.3 Analyse des besoins des étudiants
+
+Les étudiants devront pouvoir accéder rapidement aux informations suivantes :
+
+- présentation des facultés ;
+- conditions d'admission ;
+- frais académiques ;
+- calendrier universitaire ;
+- actualités ;
+- contacts administratifs ;
+- formulaires ;
+- documents téléchargeables ;
+- annonces officielles.
+
+À moyen terme, ils devront également disposer d'un espace personnel sécurisé.
+
+---
+
+4.4 Analyse des besoins des enseignants
+
+Le portail devra progressivement intégrer des services destinés aux enseignants :
+
+- diffusion des horaires ;
+- publication des supports pédagogiques ;
+- communication avec les étudiants ;
+- partage des informations administratives ;
+- consultation des actualités universitaires.
+
+---
+
+4.5 Analyse des besoins des partenaires
+
+Les partenaires nationaux et internationaux devront pouvoir identifier rapidement :
+
+- le statut juridique de l'université ;
+- ses facultés ;
+- ses domaines de formation ;
+- ses responsables académiques ;
+- ses coordonnées officielles ;
+- ses projets de coopération.
+
+---
+
+4.6 Analyse des besoins internationaux
+
+Le portail devra permettre à un organisme étranger de comprendre rapidement :
+
+- l'identité de l'université ;
+- son statut auprès de l'ESU ;
+- son organisation académique ;
+- ses facultés ;
+- ses contacts officiels.
+
+Cette transparence contribuera à renforcer la crédibilité institutionnelle.
+
+---
+
+CHAPITRE 5
+
+Étude comparative et inspiration internationale
+
+5.1 Objectif du benchmark
+
+Le développement du portail devra s'inspirer des meilleures pratiques observées dans les grandes universités sans reproduire leur identité graphique.
+
+Le but est d'atteindre un niveau comparable en matière :
+
+- d'ergonomie ;
+- d'organisation des contenus ;
+- d'accessibilité ;
+- de qualité visuelle ;
+- de performance.
+
+---
+
+5.2 Principes retenus
+
+Le portail devra adopter :
+
+- une page d'accueil élégante ;
+- une navigation claire ;
+- un menu structuré ;
+- un moteur de recherche performant ;
+- des pages institutionnelles riches ;
+- une hiérarchie visuelle cohérente.
+
+---
+
+5.3 Inspiration graphique
+
+Le design devra s'inspirer de l'élégance et de la sobriété observées sur les portails des grandes universités telles que le CNAM, la TELUQ, l'Université Laval et d'autres établissements reconnus.
+
+Le portail devra toutefois conserver une identité graphique propre à l'Institut Universitaire Morave de Mwene-Ditu.
+
+---
+
+5.4 Principes esthétiques
+
+Le portail devra privilégier :
+
+- des espaces aérés ;
+- une excellente lisibilité ;
+- des photographies de qualité ;
+- des couleurs institutionnelles harmonieuses ;
+- une typographie moderne ;
+- des animations discrètes.
+
+L'objectif est de transmettre une image de sérieux, de stabilité et d'excellence académique.
+
+---
+
+5.5 Qualité perçue
+
+L'utilisateur devra ressentir dès les premières secondes :
+
+- la crédibilité de l'établissement ;
+- son professionnalisme ;
+- sa modernité ;
+- son ouverture internationale.
+
+---
+
+CHAPITRE 6
+
+Gouvernance du projet
+
+6.1 Comité de pilotage
+
+Le projet devra être supervisé par un comité de pilotage comprenant notamment :
+
+- les autorités académiques ;
+- les responsables administratifs ;
+- le chef de projet numérique ;
+- les représentants techniques.
+
+---
+
+6.2 Organisation du développement
+
+Le développement devra suivre une organisation professionnelle.
+
+Toutes les évolutions devront être enregistrées dans un dépôt GitHub afin d'assurer :
+
+- le suivi des versions ;
+- la traçabilité des modifications ;
+- la collaboration entre développeurs ;
+- la gestion des anomalies ;
+- l'historique complet du projet.
+
+---
+
+6.3 Phases du projet
+
+Le développement comprendra les phases suivantes :
+
+1. Analyse des besoins.
+
+2. Conception.
+
+3. Validation fonctionnelle.
+
+4. Développement.
+
+5. Tests techniques.
+
+6. Tests utilisateurs.
+
+7. Validation institutionnelle.
+
+8. Déploiement.
+
+9. Formation.
+
+10. Maintenance.
+
+---
+
+6.4 Développement initial
+
+Dans une première phase, l'ensemble du projet sera développé gratuitement sur GitHub afin de bénéficier :
+
+- d'un environnement collaboratif ;
+- du contrôle de versions ;
+- d'une gestion rigoureuse du code source ;
+- d'une infrastructure adaptée au développement.
+
+Le dépôt pourra être privé pendant la phase de développement puis public ou privé selon la politique retenue par l'université.
+
+---
+
+6.5 Migration vers la production
+
+Après validation complète :
+
+- acquisition du nom de domaine officiel en .cd ;
+- mise en place d'un hébergement professionnel ;
+- installation du certificat SSL ;
+- migration sécurisée du projet ;
+- ouverture officielle au public.
+
+---
+
+6.6 Pérennité
+
+Le portail devra être conçu pour évoluer durant les dix prochaines années sans nécessiter une reconstruction complète.
+
+Toutes les technologies retenues devront être robustes, documentées, évolutives et maintenues par leurs communautés respectives.
+
+La documentation technique devra permettre à une nouvelle équipe de développement de reprendre facilement le projet, garantissant ainsi la continuité du service et la souveraineté numérique de l'Institut Universitaire Morave de Mwene-Ditu.
+
