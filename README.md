@@ -35,3 +35,14 @@ IUM-MORAVE/
 
 ## 🚀 DÉMARRAGE RAPIDE
 *Instructions d'installation et de lancement à mesure du déploiement des modules.*
+
+## 🔧 ÉTAT ACTUEL DU CHANTIER
+- Phase en cours : **Sprint 0 — Préparation et validation**
+- Workflow migration Supabase réparé et check `run-migrations` validé
+- Backlog initial créé avec les issues GitHub #179 à #184
+- Prochaine étape : validation du build CI et confirmation du schéma Supabase
+
+## 📌 DOCUMENTS CLÉS
+- **[Tracker master & TODO](TODO.md)**
+- **[Plan de sprint](docs/SPRINT_PLAN.md)**
+- **[Rapport de développement](docs/DEVELOPMENT_REPORT.md)**

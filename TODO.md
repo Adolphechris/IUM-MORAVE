@@ -47,6 +47,7 @@ gantt
 - [ ] Confirmer l’application du schéma Supabase dans le dashboard ou via un runner IPv6.
 - [ ] Finaliser l’état de la base de données avant le développement fonctionnel.
 - [x] Créer les premières issues GitHub pour les epics prioritaires.
+- [x] Créer le plan de sprint et la documentation de suivi (`docs/SPRINT_PLAN.md`).
 
 #### Backlog initial GitHub
 - Issue #179 — Infra & base de données: valider l’accès Supabase et définir le schéma initial
