@@ -1,5 +1,6 @@
 import Footer from '../../shared/src/Footer';
 import Header from '../../shared/src/Header';
+import Table from '../../shared/src/Table';
 import React, { FormEvent, useState } from 'react'
 
 type Session = {
@@ -168,25 +169,33 @@ export default function AdminDashboard() {
         {logs ? (
           <article className="panel">
             <h2>Journal d&apos;audit</h2>
-            <ul>
-              {logs.slice(-20).reverse().map((log) => (
-                <li key={log.id}>{log.createdAt} — {log.actor} : {log.action} sur {log.resource}</li>
-              ))}
-            </ul>
+            <Table
+              columns={[
+                { key: 'createdAt', label: 'Date' },
+                { key: 'actor', label: 'Acteur' },
+                { key: 'action', label: 'Action' },
+                { key: 'resource', label: 'Ressource' }
+              ]}
+              data={logs.slice(-20).reverse()}
+              keyExtractor={(item) => item.id}
+            />
           </article>
         ) : null}
 
         {enrollments ? (
           <article className="panel">
             <h2>Inscriptions</h2>
-            <ul>
-              {enrollments.map((enrollment) => (
-                <li key={enrollment.id}>
-                  <strong>{enrollment.studentName} ({enrollment.matricule})</strong><br />
-                  <span>{enrollment.program?.title} · {enrollment.track?.title} · {enrollment.academicYear}</span>
-                </li>
-              ))}
-            </ul>
+            <Table
+              columns={[
+                { key: 'studentName', label: 'Étudiant' },
+                { key: 'matricule', label: 'Matricule' },
+                { key: 'program', label: 'Programme', render: (value) => (value as Enrollment['program'])?.title || '' },
+                { key: 'track', label: 'Parcours', render: (value) => (value as Enrollment['track'])?.title || '' },
+                { key: 'academicYear', label: 'Année' }
+              ]}
+              data={enrollments}
+              keyExtractor={(item) => item.id}
+            />
           </article>
         ) : null}
         {error ? <p role="alert" className="alert">{error}</p> : null}
