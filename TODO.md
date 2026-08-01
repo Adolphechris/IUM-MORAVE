@@ -1,6 +1,6 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 Terminée | Phase 2 — Authentification & Core API En cours  
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 Terminée | Base de Données Supabase Active 🟢 | Phase 2 — Authentification & Core API En cours  
 > **Dernière mise à jour** : 01 Août 2026
 
 ---
@@ -12,13 +12,13 @@ gantt
     title Feuille de Route IUM-MORAVE
     dateFormat  YYYY-MM-DD
     section Phase 1
-    Fondations, Spécifications & Architecture Monorepo :done, 2026-08-01, 1d
-    section Audit & Fusion
-    Audit Approfondi & Fusion de Branche             :done, 2026-08-01, 1d
+    Fondations, Spécifications & Monorepo             :done, 2026-08-01, 1d
+    section Base de Données
+    Migration SQL & Seeds Supabase (RLS Actif)        :done, 2026-08-01, 1d
     section Phase 2
-    Securite, Auth & Matrice RBAC                   :active, 2026-08-01, 4d
+    Securite, Auth & Matrice RBAC (JWT/Express)       :active, 2026-08-01, 4d
     section Phase 3
-    Core API Academic & Systeme LMD                 : 2026-08-05, 7d
+    Core API Academic & Systeme LMD                   : 2026-08-05, 7d
 ```
 
 ---
@@ -30,6 +30,7 @@ gantt
 - [x] **Gouvernance** : Rédiger et promulguer la [CONSTITUTION.md](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md).
 - [x] **Spécifications & Architecture** : Cahier des charges (4200+ l.), Modèle de données LMD, OpenAPI spec.
 - [x] **Audit & Fusion** : Fusion de la branche de développement dans `main` (63 fichiers / +7600 lignes).
+- [x] **Base de Données Cloud** : Migrations SQL et Seeds déployés sur Supabase avec RLS actif.
 - [x] **Master Tracker** : Mettre en place le fichier [TODO.md](file:///home/adolphe/IUM-MORAVE/TODO.md).
 
 ---
