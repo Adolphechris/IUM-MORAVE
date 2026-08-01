@@ -41,6 +41,21 @@ type Enrollment = {
   track?: { title: string }
 }
 
+type AdminDocument = {
+  id: number
+  title: string
+  filePath: string
+  mime: string
+  visibility: string
+}
+
+type AdminUser = {
+  id: number
+  email: string
+  name: string
+  type: 'student' | 'teacher'
+}
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
 
@@ -51,6 +66,8 @@ export default function AdminDashboard() {
   const [dashboard, setDashboard] = useState<Dashboard | null>(null)
   const [logs, setLogs] = useState<AuditLog[] | null>(null)
   const [enrollments, setEnrollments] = useState<Enrollment[] | null>(null)
+  const [adminDocuments, setAdminDocuments] = useState<AdminDocument[] | null>(null)
+  const [adminUsers, setAdminUsers] = useState<AdminUser[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -122,6 +139,36 @@ export default function AdminDashboard() {
     }
   }
 
+  async function loadDocuments() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/documents`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Documents indisponibles.')
+      setAdminDocuments(result)
+    } catch (documentsError) {
+      setError(documentsError instanceof Error ? documentsError.message : 'Documents indisponibles.')
+    }
+  }
+
+  async function loadUsers() {
+    if (!session) return
+    setError(null)
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/users`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error || 'Utilisateurs indisponibles.')
+      setAdminUsers(result)
+    } catch (usersError) {
+      setError(usersError instanceof Error ? usersError.message : 'Utilisateurs indisponibles.')
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -146,6 +193,8 @@ export default function AdminDashboard() {
             <button type="button" onClick={loadDashboard}>Ouvrir le tableau de bord</button>
             <button type="button" onClick={loadAuditLogs}>Voir le journal d&apos;audit</button>
             <button type="button" onClick={loadEnrollments}>Voir les inscriptions</button>
+            <button type="button" onClick={loadDocuments}>Voir les documents</button>
+            <button type="button" onClick={loadUsers}>Voir les utilisateurs</button>
           </div>
         )}
 
@@ -194,6 +243,36 @@ export default function AdminDashboard() {
                 { key: 'academicYear', label: 'Année' }
               ]}
               data={enrollments}
+              keyExtractor={(item) => item.id}
+            />
+          </article>
+        ) : null}
+
+        {adminDocuments ? (
+          <article className="panel">
+            <h2>Documents</h2>
+            <Table
+              columns={[
+                { key: 'title', label: 'Titre' },
+                { key: 'mime', label: 'Type' },
+                { key: 'visibility', label: 'Visibilité' }
+              ]}
+              data={adminDocuments}
+              keyExtractor={(item) => item.id}
+            />
+          </article>
+        ) : null}
+
+        {adminUsers ? (
+          <article className="panel">
+            <h2>Utilisateurs</h2>
+            <Table
+              columns={[
+                { key: 'name', label: 'Nom' },
+                { key: 'email', label: 'Email' },
+                { key: 'type', label: 'Type' }
+              ]}
+              data={adminUsers}
               keyExtractor={(item) => item.id}
             />
           </article>

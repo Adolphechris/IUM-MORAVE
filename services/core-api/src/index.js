@@ -322,6 +322,16 @@ app.get('/admin/enrollments', authenticate, requireRole('admin'), (req, res) => 
   res.json(enriched);
 });
 
+app.get('/admin/documents', authenticate, requireRole('admin'), (req, res) => {
+  res.json(documents);
+});
+
+app.get('/admin/users', authenticate, requireRole('admin'), (req, res) => {
+  const enriched = students.map((student) => ({ ...student, type: 'student' }))
+    .concat(teachers.map((teacher) => ({ ...teacher, type: 'teacher' })));
+  res.json(enriched);
+});
+
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
   const enrollmentId = Number(req.params.id);
   const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
