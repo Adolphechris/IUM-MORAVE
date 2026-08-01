@@ -57,6 +57,39 @@ test('returns public academic data and filters programs by level', async () => {
   assert.equal(programs.some((program) => program.code === 'MST-IA'), false);
 });
 
+test('returns public faculty details with programs and specialties', async () => {
+  const response = await fetch(`${baseUrl}/faculties/1`);
+  const faculty = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(faculty.code, 'FSINT');
+  assert.ok(faculty.programs.length > 0);
+  assert.ok(faculty.tracks.length > 0);
+});
+
+test('accepts a valid contact request and rejects malformed requests', async () => {
+  const rejected = await fetch(`${baseUrl}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Test', email: 'invalid', subject: 'Question', message: 'Message correct' })
+  });
+  assert.equal(rejected.status, 400);
+
+  const accepted = await fetch(`${baseUrl}/contact`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Test User',
+      email: 'test@example.test',
+      subject: 'Question institutionnelle',
+      message: 'Je souhaite recevoir des informations sur les admissions.'
+    })
+  });
+  const result = await accepted.json();
+  assert.equal(accepted.status, 202);
+  assert.equal(result.status, 'received');
+});
+
 test('requires an admin token to create a faculty', async () => {
   const denied = await fetch(`${baseUrl}/faculties`, {
     method: 'POST',

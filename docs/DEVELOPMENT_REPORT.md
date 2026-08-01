@@ -55,7 +55,7 @@ Ce document trace l'état actuel du chantier et les actions réalisées pour ne 
 - [x] `services/*` workspace added to root `package.json`.
 - [x] `auth-service` now expose `POST /auth/register`, `POST /auth/login`, and protected `GET /auth/profile`.
 - [x] `core-api` now expose `GET /faculties`, `GET /programs`, `GET /tracks`, `GET /faculty/:id`, `GET /news`, `GET /documents`, and `POST /verification/diploma`.
-- [x] Auth, core API and transcript issuance are covered by five automated Node tests.
+- [x] Auth, core API, contact public et émission de relevé sont couverts par neuf tests automatisés Node.
 - [x] The Next.js public portal compiles successfully.
 
 ## Livraison Sprint 1 à Sprint 3 (MVP technique)
@@ -122,6 +122,20 @@ Ces services sont fonctionnels pour le prototype en mémoire. Leur prochaine
 utilisateurs.
 - [x] Issue #179 updated with Supabase connectivity findings (IPv6-only host).
 - [ ] Build CI is still in progress; waiting for completion.
+
+## Lot livré : contenu public détaillé
+
+- Pages publiques détaillées pour chaque faculté, formation et actualité.
+- Recherche de documents visibles publiquement.
+- Formulaire de contact avec validation du courriel et du message, champ
+  anti-robot, limite mémoire de cinq demandes par heure et par adresse IP, journal
+  d'audit et aperçu de notification institutionnelle.
+- Validation locale : les neuf tests de services et le build de production
+  Next.js passent.
+
+Les demandes de contact, comme le reste des données MVP, ne survivent pas à un
+redémarrage. Elles ne constituent donc pas une boîte de réception de production
+tant que Supabase et un fournisseur de messagerie ne sont pas configurés.
 
 ## Backlog initial GitHub
 - [x] Milestone créé : [MVP v0.1](https://github.com/Adolphechris/IUM-MORAVE/milestone/2)

@@ -89,6 +89,8 @@ export default function Home() {
         <nav aria-label="Navigation principale">
           <a href="#formations">Formations</a>
           <a href="#actualites">Actualités</a>
+          <a href="/documents">Documents</a>
+          <a href="/contact">Contact</a>
           <a href="#galerie">Campus</a>
           <a href="#espaces">Espaces</a>
         </nav>
@@ -123,6 +125,7 @@ export default function Home() {
               <p className="code">{faculty.code}</p>
               <h3>{faculty.name}</h3>
               <p>{faculty.description}</p>
+              <a className="space-link" href={`/facultes/${faculty.id}`}>Découvrir la faculté</a>
             </article>
           ))}
         </div>
@@ -142,6 +145,7 @@ export default function Home() {
                     </li>
                   ))}
               </ul>
+              <a className="space-link" href={`/formations/${program.id}`}>Voir la formation</a>
             </article>
           ))}
         </div>
@@ -178,6 +182,7 @@ export default function Home() {
               <p className="code">{item.publishedAt}</p>
               <h3>{item.title}</h3>
               <p>{item.summary}</p>
+              <a className="space-link" href={`/actualites/${item.id}`}>Lire l&apos;actualité</a>
             </article>
           ))}
         </div>

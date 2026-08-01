@@ -11,6 +11,7 @@ const {
   teachers,
   calendarEvents,
   documents,
+  newsItems,
   grades,
   deliberations
 } = require('./data');
@@ -22,6 +23,8 @@ const PORT = process.env.PORT || 4002;
 const app = express();
 const transcriptRegistry = new Map();
 const auditLogs = [];
+const contactRequests = [];
+const contactRateLimits = new Map();
 
 app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
@@ -43,6 +46,16 @@ app.get('/health', (req, res) => {
 
 app.get('/faculties', (req, res) => {
   res.json(faculties);
+});
+
+app.get('/faculties/:id', (req, res) => {
+  const faculty = faculties.find((item) => item.id === Number(req.params.id));
+  if (!faculty) {
+    return res.status(404).json({ error: 'Faculty not found' });
+  }
+  const facultyPrograms = programs.filter((program) => program.facultyId === faculty.id);
+  const facultyTracks = tracks.filter((track) => facultyPrograms.some((program) => program.id === track.programId));
+  res.json({ ...faculty, programs: facultyPrograms, tracks: facultyTracks });
 });
 
 app.post('/faculties', authenticate, requireRole('admin'), (req, res) => {
@@ -78,7 +91,10 @@ app.get('/programs/:id', (req, res) => {
   if (!program) {
     return res.status(404).json({ error: 'Program not found' });
   }
-  res.json(program);
+  const faculty = faculties.find((item) => item.id === program.facultyId);
+  const programTracks = tracks.filter((track) => track.programId === program.id);
+  const programCourses = courses.filter((course) => programTracks.some((track) => track.id === course.trackId));
+  res.json({ ...program, faculty, tracks: programTracks, courses: programCourses });
 });
 
 app.get('/tracks', (req, res) => {
@@ -95,9 +111,16 @@ app.get('/faculty/:id', (req, res) => {
 });
 
 app.get('/news', (req, res) => {
-  res.json([
-    { id: 1, title: 'Lancement du portail IUM-MORAVE', summary: 'Le portail institutionnel est en cours de développement.', publishedAt: '2026-08-01' }
-  ]);
+  const category = String(req.query.category || '');
+  res.json(category ? newsItems.filter((item) => item.category === category) : newsItems);
+});
+
+app.get('/news/:id', (req, res) => {
+  const news = newsItems.find((item) => item.id === Number(req.params.id));
+  if (!news) {
+    return res.status(404).json({ error: 'News item not found' });
+  }
+  res.json(news);
 });
 
 app.get('/courses', (req, res) => {
@@ -111,7 +134,53 @@ app.get('/calendar', (req, res) => {
 
 app.get('/documents', (req, res) => {
   const isAuthenticated = Boolean(req.headers.authorization);
-  res.json(documents.filter((document) => document.visibility === 'public' || isAuthenticated));
+  const query = String(req.query.query || '').trim().toLowerCase();
+  const visibleDocuments = documents.filter((document) => document.visibility === 'public' || isAuthenticated);
+  res.json(query ? visibleDocuments.filter((document) => document.title.toLowerCase().includes(query)) : visibleDocuments);
+});
+
+app.post('/contact', (req, res) => {
+  const { name, email, subject, message, website } = req.body;
+  if (website) {
+    return res.status(400).json({ error: 'Invalid contact request' });
+  }
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ error: 'name, email, subject and message are required' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'A valid email address is required' });
+  }
+  if (message.length < 10 || message.length > 4000) {
+    return res.status(400).json({ error: 'message must contain between 10 and 4000 characters' });
+  }
+
+  const ip = req.ip || 'unknown';
+  const now = Date.now();
+  const windowStart = now - (60 * 60 * 1000);
+  const attempts = (contactRateLimits.get(ip) || []).filter((timestamp) => timestamp > windowStart);
+  if (attempts.length >= 5) {
+    return res.status(429).json({ error: 'Too many contact requests. Please try again later.' });
+  }
+  attempts.push(now);
+  contactRateLimits.set(ip, attempts);
+
+  const request = {
+    id: contactRequests.length + 1,
+    name,
+    email,
+    subject,
+    message,
+    receivedAt: new Date().toISOString()
+  };
+  contactRequests.push(request);
+  const notification = sendInstitutionalEmail(createInstitutionalEmail({
+    to: process.env.CONTACT_INBOX || 'contact@ium-morave.edu',
+    subject: `[Portail] ${subject}`,
+    text: `Message de ${name} <${email}> :\n\n${message}`,
+    category: 'contact'
+  }));
+  audit(req, 'create', 'contact-request', request.id);
+  res.status(202).json({ id: request.id, status: 'received', notification: notification.delivery });
 });
 
 app.post('/enrollments', authenticate, requireRole('admin'), (req, res) => {

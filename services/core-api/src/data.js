@@ -176,6 +176,27 @@ const documents = [
   }
 ];
 
+const newsItems = [
+  {
+    id: 1,
+    slug: 'lancement-portail-ium-morave',
+    title: 'Lancement du portail IUM-MORAVE',
+    summary: 'Le portail institutionnel est en cours de développement.',
+    content: 'L’IUM-MORAVE met progressivement en place son portail numérique pour améliorer l’accès aux informations, formations et services universitaires.',
+    category: 'institution',
+    publishedAt: '2026-08-01'
+  },
+  {
+    id: 2,
+    slug: 'rentree-academique-2026',
+    title: 'Préparation de la rentrée académique',
+    summary: 'Les informations administratives et académiques seront publiées sur le portail.',
+    content: 'Les étudiants et candidats pourront consulter les dates importantes, les programmes et les documents nécessaires à la rentrée académique.',
+    category: 'academic',
+    publishedAt: '2026-08-05'
+  }
+];
+
 const grades = [
   { enrollmentId: 1, courseCode: 'INF101', courseTitle: 'Algorithmique', credits: 6, score: 15, status: 'validated' },
   { enrollmentId: 1, courseCode: 'INF102', courseTitle: 'Programmation', credits: 6, score: 14, status: 'validated' },
@@ -194,6 +215,7 @@ module.exports = {
   teachers,
   calendarEvents,
   documents,
+  newsItems,
   grades,
   deliberations
 };

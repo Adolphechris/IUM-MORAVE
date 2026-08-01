@@ -2,7 +2,7 @@
 
 > **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 — Fondations & Structure Monorepo  
 > **Dernière mise à jour** : 01 Août 2026 18:16
-> **Prochaines actions** : corriger la connexion Supabase, valider le build, puis démarrer Phase 2.
+> **Prochaines actions** : connecter les données temporaires à Supabase, compléter les espaces métiers et préparer les modules finance/LMS.
 
 ---
 
@@ -66,7 +66,7 @@ gantt
 
 ### SPRINT 2 : MVP PUBLIC ET ESPACE UTILISATEUR
 - [x] Développer le portail public basique (`apps/web`) avec pages institutionnelles.
-- [ ] Créer l’espace utilisateur étudiant/enseignant minimal.
+- [x] Créer l’espace utilisateur étudiant/enseignant minimal.
 - [x] Mettre en place les premières pages de consultation de programmes, facultés et actualités.
 - [x] Connecter les premiers flux frontaux au backend API core.
 - [x] Ajouter un système de courriel professionnel avec aperçu de développement.
@@ -86,6 +86,12 @@ gantt
 - [x] Ajouter des spécialités par filière dans le catalogue MVP.
 - [x] Prévoir un emplacement pour le logo officiel et onze emplacements photo dans le portail.
 - [ ] Recevoir, optimiser et publier le logo officiel et les onze photos institutionnelles validées.
+
+### LOT LIVRÉ : PORTAIL PUBLIC DÉTAILLÉ
+- [x] Ajouter les pages détaillées pour facultés, formations et actualités.
+- [x] Ajouter la recherche de documents publics.
+- [x] Ajouter le formulaire de contact public avec validation, champ piège et limite de cinq demandes par heure et par IP.
+- [ ] Rendre persistants les demandes de contact et les documents avec Supabase avant toute ouverture réelle.
 
 ---
 
