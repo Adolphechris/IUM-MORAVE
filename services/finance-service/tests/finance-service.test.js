@@ -51,11 +51,11 @@ test('POST /payment-plans creates a plan', async () => {
   const response = await fetch(`${baseUrl}/payment-plans`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ studentId: 1, totalAmount: 1500000, installments: 2 })
+    body: JSON.stringify({ studentId: 99, totalAmount: 1500000, installments: 2 })
   });
   assert.equal(response.status, 201);
   const body = await response.json();
-  assert.equal(body.studentId, 1);
+  assert.equal(body.studentId, 99);
   assert.equal(body.totalAmount, 1500000);
 });
 
@@ -75,10 +75,17 @@ test('POST /payments processes a payment', async () => {
 });
 
 test('GET /student-status/:id returns status', async () => {
-  const response = await fetch(`${baseUrl}/student-status/1`);
+  const response = await fetch(`${baseUrl}/student-status/99`);
   assert.equal(response.status, 200);
   const body = await response.json();
-  assert.ok('hasFinancialHold' in body);
+  assert.ok('status' in body);
+});
+
+test('GET /student-status for unknown student returns no_plan', async () => {
+  const response = await fetch(`${baseUrl}/student-status/99999`);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.status, 'no_plan');
 });
 
 test('POST /send/:templateId on unknown template returns 404', async () => {
