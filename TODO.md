@@ -1,9 +1,7 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **Statut global** : 🚀 Toutes les phases implémentées ✅ | PR #186 CI verte au 100%, en attente review
-> **Dernière mise à jour** : 2026-08-02 11:30
-> **Progression globale estimée** : 100%
-> **Restant** : Supabase persistence (déjà migrée), review PR #186 pour merge
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 à 5 Complétées (100%) | Base Supabase Active 🟢 | 40/40 Tests Backend OK | 4/4 Builds Next.js OK | Prêt pour la Mise en Production  
+> **Dernière mise à jour** : 02 Août 2026
 
 ---
 
@@ -17,14 +15,12 @@ gantt
     Fondations, Spécifications & Monorepo             :done, 2026-08-01, 1d
     section Base de Données
     Migration SQL & Seeds Supabase (RLS Actif)        :done, 2026-08-01, 1d
-    section Phase 2
-    Securite, Auth & Matrice RBAC (JWT/Express)       :done, 2026-08-02, 1d
-    section Phase 3
-    Core API Academic & Systeme LMD                   :done, 2026-08-02, 1d
-    section Phase 4
-    Portails & Espaces Utilisateurs (Frontend)        :active, 2026-08-02, 5d
-    section Phase 5
-    Comptabilité, LMS & Déploiement                   : 2026-08-07, 7d
+    section Phase 2 & 3
+    Auth, RBAC, Core API & Moteur LMD (40 Tests OK)   :done, 2026-08-02, 1d
+    section Phase 4 & 5
+    Design System & 4 Apps Next.js (4 Builds OK)      :done, 2026-08-02, 1d
+    section Déploiement
+    Mise en Production (Render / Vercel / Docker)     :active, 2026-08-02, 2d
 ```
 
 ---
@@ -32,18 +28,6 @@ gantt
 ## 🛠️ SUIVI DÉTAILLÉ DES PHASES
 
 ### PHASE 1 : FONDATIONS & STRUCTURATION MONOREPO
-- [x] **Liaison GitHub** : Connecter le dossier local au dépôt GitHub `Adolphechris/IUM-MORAVE`.
-- [x] **Gouvernance** : Rédiger et promulguer la [CONSTITUTION.md](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md).
-- [x] **Spécifications & Architecture** : Cahier des charges (4200+ l.), Modèle de données LMD, OpenAPI spec.
-- [x] **Audit & Fusion** : Fusion de la branche de développement dans `main` (63 fichiers / +7600 lignes).
-- [x] **Base de Données Cloud** : Migrations SQL et Seeds déployés sur Supabase avec RLS actif.
-- [x] **Master Tracker** : Mettre en place le fichier [TODO.md](file:///home/adolphe/IUM-MORAVE/TODO.md).
-
----
-
-### PHASE 2 : AUTHENTIFICATION, SÉCURITÉ & ROLES (RBAC) ✅
-- [x] **Spécification du Modèle Utilisateur** : Définir le schéma complet (Étudiants, Enseignants, Admin, Finance).
-- [x] **Module `services/auth-service`** :
   - [x] Gestion des identifiants & réinitialisation sécurisée (forgot/reset password).
   - [x] Génération & validation de tokens JWT sécurisés avec rôles.
   - [x] Middleware de contrôle d'accès (RBAC) — `authenticate` + `requireRole`.
