@@ -1,70 +1,93 @@
-import Header from '../../shared/src/Header';
-import Footer from '../../shared/src/Footer';
-import React, { FormEvent, useState } from 'react'
+import Header from '../../../shared/src/Header';
+import Footer from '../../../shared/src/Footer';
+import React, { FormEvent, useState } from 'react';
 
 type Session = {
-  token: string
+  token: string;
   user: {
-    email: string
-    role: 'student' | 'teacher' | 'admin' | 'finance'
-    firstName: string
-    lastName: string
-  }
-}
+    email: string;
+    role: 'student' | 'teacher' | 'admin' | 'finance';
+    firstName: string;
+    lastName: string;
+  };
+};
+
 type Course = {
-  id: number
-  code: string
-  title: string
-  credits: number
+  id: number;
+  code: string;
+  title: string;
+  credits: number;
+};
+
 type TeacherGrade = {
-  courseCode: string
-  courseTitle: string
-  score: number
-  status: string
-  student?: { name: string; email: string }
-const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
-const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
+  courseCode: string;
+  courseTitle: string;
+  score: number;
+  status: string;
+  student?: { name: string; email: string };
+};
+
+const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
+const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
+
 export default function TeacherSpace() {
-  const [session, setSession] = useState<Session | null>(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [courses, setCourses] = useState<Course[] | null>(null)
-  const [teacherGrades, setTeacherGrades] = useState<TeacherGrade[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [session, setSession] = useState<Session | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [courses, setCourses] = useState<Course[] | null>(null);
+  const [teacherGrades, setTeacherGrades] = useState<TeacherGrade[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   async function login(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setLoading(true)
-    setError(null)
-    setCourses(null)
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+    setCourses(null);
     try {
       const response = await fetch(`${authApiUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
-      })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'Connexion impossible.')
-      setSession(result)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Connexion impossible.');
+      setSession(result);
     } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.')
+      setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
+  }
+
   async function loadCourses() {
-    if (!session) return
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/teachers/me/courses`, {
         headers: { Authorization: `Bearer ${session.token}` }
-      if (!response.ok) throw new Error(result.error || 'Cours indisponibles.')
-      setCourses(result)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Cours indisponibles.');
+      setCourses(result);
     } catch (coursesError) {
-      setError(coursesError instanceof Error ? coursesError.message : 'Cours indisponibles.')
+      setError(coursesError instanceof Error ? coursesError.message : 'Cours indisponibles.');
+    }
+  }
+
   async function loadTeacherGrades() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/teachers/me/grades`, {
-      if (!response.ok) throw new Error(result.error || 'Notes indisponibles.')
-      setTeacherGrades(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Notes indisponibles.');
+      setTeacherGrades(result);
     } catch (gradesError) {
-      setError(gradesError instanceof Error ? gradesError.message : 'Notes indisponibles.')
+      setError(gradesError instanceof Error ? gradesError.message : 'Notes indisponibles.');
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -100,11 +123,18 @@ export default function TeacherSpace() {
           </article>
         ) : null}
         {teacherGrades ? (
+          <article className="panel">
             <h2>Notes saisies</h2>
+            <ul>
               {teacherGrades.map((grade, index) => (
                 <li key={index}><strong>{grade.courseTitle} ({grade.courseCode})</strong> — {grade.student?.name || grade.student?.email} : {grade.score}/20</li>
+              ))}
+            </ul>
+          </article>
+        ) : null}
         {error ? <p role="alert" className="alert">{error}</p> : null}
       </section>
+      <Footer />
       <style jsx>{`
         main { min-height: 100vh; background: #f6f8fb; color: #132238; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
         header, section { max-width: 760px; margin: 0 auto; padding: 1.5rem; }
@@ -121,6 +151,6 @@ export default function TeacherSpace() {
         ul { display: grid; gap: .75rem; list-style: none; padding: 0; }
         li { background: #fff; border: 1px solid #dce5ed; border-radius: .5rem; padding: 1rem; }
       `}</style>
-    <Footer />
-      </main>
-  )
+    </main>
+  );
+}

@@ -1,121 +1,182 @@
-import Header from '../../shared/src/Header';
-import Footer from '../../shared/src/Footer';
-import { Table } from '../../shared/src'
-import { Tabs } from '../../shared/src';
-import React, { FormEvent, useState } from 'react'
+import Header from '../../../shared/src/Header';
+import Footer from '../../../shared/src/Footer';
+import Table from '../../../shared/src/Table';
+import Tabs from '../../../shared/src/Tabs';
+import React, { FormEvent, useState } from 'react';
 
 type Session = {
-  token: string
+  token: string;
   user: {
-    email: string
-    role: 'student' | 'teacher' | 'admin' | 'finance'
-    firstName: string
-    lastName: string
-  }
-}
+    email: string;
+    role: 'student' | 'teacher' | 'admin' | 'finance';
+    firstName: string;
+    lastName: string;
+  };
+};
+
 type Dashboard = {
-  totals: Record<string, number>
-  recentAuditEvents: Array<{ action: string; resource: string; createdAt: string }>
-  upcomingEvents: Array<{ id: number; title: string; startsAt: string }>
+  totals: Record<string, number>;
+  recentAuditEvents: Array<{ action: string; resource: string; createdAt: string }>;
+  upcomingEvents: Array<{ id: number; title: string; startsAt: string }>;
+};
+
 type AuditLog = {
-  id: number
-  actor: string
-  action: string
-  resource: string
-  resourceId: number
-  createdAt: string
+  id: number;
+  actor: string;
+  action: string;
+  resource: string;
+  resourceId: number;
+  createdAt: string;
+};
+
 type Enrollment = {
-  studentEmail: string
-  studentName: string
-  matricule: string
-  programId: number
-  trackId: number | null
-  academicYear: string
-  status: string
-  program?: { title: string }
-  track?: { title: string }
+  studentEmail: string;
+  studentName: string;
+  matricule: string;
+  programId: number;
+  trackId: number | null;
+  academicYear: string;
+  status: string;
+  program?: { title: string };
+  track?: { title: string };
+};
+
 type AdminDocument = {
-  title: string
-  filePath: string
-  mime: string
-  visibility: string
+  title: string;
+  filePath: string;
+  mime: string;
+  visibility: string;
+};
+
 type AdminUser = {
-  email: string
-  name: string
-  type: 'student' | 'teacher'
-const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
-const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
+  email: string;
+  name: string;
+  type: 'student' | 'teacher';
+};
+
+const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
+const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
+
 export default function AdminDashboard() {
-  const [session, setSession] = useState<Session | null>(null)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [dashboard, setDashboard] = useState<Dashboard | null>(null)
-  const [logs, setLogs] = useState<AuditLog[] | null>(null)
-  const [enrollments, setEnrollments] = useState<Enrollment[] | null>(null)
-  const [adminDocuments, setAdminDocuments] = useState<AdminDocument[] | null>(null)
-  const [adminUsers, setAdminUsers] = useState<AdminUser[] | null>(null)
-  const [deliberations, setDeliberations] = useState<Array<{ id: number; enrollmentId: number; decision: string; finalizedAt: string; enrollment?: { studentName: string; matricule: string } }> | null>(null)
-  const [activeTab, setActiveTab] = useState(0)
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [session, setSession] = useState<Session | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [dashboard, setDashboard] = useState<Dashboard | null>(null);
+  const [logs, setLogs] = useState<AuditLog[] | null>(null);
+  const [enrollments, setEnrollments] = useState<Enrollment[] | null>(null);
+  const [adminDocuments, setAdminDocuments] = useState<AdminDocument[] | null>(null);
+  const [adminUsers, setAdminUsers] = useState<AdminUser[] | null>(null);
+  const [deliberations, setDeliberations] = useState<Array<{ id: number; enrollmentId: number; decision: string; finalizedAt: string; enrollment?: { studentName: string; matricule: string } }> | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   async function login(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setLoading(true)
-    setError(null)
-    setDashboard(null)
-    setLogs(null)
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
+    setDashboard(null);
+    setLogs(null);
     try {
       const response = await fetch(`${authApiUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
-      })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'Connexion impossible.')
-      setSession(result)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Connexion impossible.');
+      setSession(result);
     } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.')
+      setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
+  }
+
   async function loadDashboard() {
-    if (!session) return
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/dashboard`, {
         headers: { Authorization: `Bearer ${session.token}` }
-      if (!response.ok) throw new Error(result.error || 'Tableau de bord indisponible.')
-      setDashboard(result)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Tableau de bord indisponible.');
+      setDashboard(result);
     } catch (dashboardError) {
-      setError(dashboardError instanceof Error ? dashboardError.message : 'Tableau de bord indisponible.')
+      setError(dashboardError instanceof Error ? dashboardError.message : 'Tableau de bord indisponible.');
+    }
+  }
+
   async function loadAuditLogs() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/audit-logs`, {
-      if (!response.ok) throw new Error(result.error || 'Journal indisponible.')
-      setLogs(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Journal indisponible.');
+      setLogs(result);
     } catch (logsError) {
-      setError(logsError instanceof Error ? logsError.message : 'Journal indisponible.')
+      setError(logsError instanceof Error ? logsError.message : 'Journal indisponible.');
+    }
+  }
+
   async function loadEnrollments() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/enrollments`, {
-      if (!response.ok) throw new Error(result.error || 'Inscriptions indisponibles.')
-      setEnrollments(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Inscriptions indisponibles.');
+      setEnrollments(result);
     } catch (enrollmentsError) {
-      setError(enrollmentsError instanceof Error ? enrollmentsError.message : 'Inscriptions indisponibles.')
+      setError(enrollmentsError instanceof Error ? enrollmentsError.message : 'Inscriptions indisponibles.');
+    }
+  }
+
   async function loadDocuments() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/documents`, {
-      if (!response.ok) throw new Error(result.error || 'Documents indisponibles.')
-      setAdminDocuments(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Documents indisponibles.');
+      setAdminDocuments(result);
     } catch (documentsError) {
-      setError(documentsError instanceof Error ? documentsError.message : 'Documents indisponibles.')
+      setError(documentsError instanceof Error ? documentsError.message : 'Documents indisponibles.');
+    }
+  }
+
   async function loadUsers() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/users`, {
-      if (!response.ok) throw new Error(result.error || 'Utilisateurs indisponibles.')
-      setAdminUsers(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Utilisateurs indisponibles.');
+      setAdminUsers(result);
     } catch (usersError) {
-      setError(usersError instanceof Error ? usersError.message : 'Utilisateurs indisponibles.')
+      setError(usersError instanceof Error ? usersError.message : 'Utilisateurs indisponibles.');
+    }
+  }
+
   async function loadDeliberations() {
+    if (!session) return;
+    try {
       const response = await fetch(`${coreApiUrl}/admin/deliberations`, {
-      if (!response.ok) throw new Error(result.error || 'Délibérations indisponibles.')
-      setDeliberations(result)
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Délibérations indisponibles.');
+      setDeliberations(result);
     } catch (deliberationsError) {
-      setError(deliberationsError instanceof Error ? deliberationsError.message : 'Délibérations indisponibles.')
+      setError(deliberationsError instanceof Error ? deliberationsError.message : 'Délibérations indisponibles.');
+    }
+  }
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -164,12 +225,14 @@ export default function AdminDashboard() {
                 <ul>
                   {dashboard.upcomingEvents.map((event) => (
                     <li key={event.id}>{event.startsAt} — {event.title}</li>
+                  ))}
                 </ul>
               </article>
             ) : (
               <p>Aucune donnée. Cliquez sur &quot;Tableau de bord&quot; pour charger.</p>
             )}
             {logs ? (
+              <article className="panel">
                 <h2>Journal d&apos;audit</h2>
                 <Table
                   columns={[
@@ -181,41 +244,82 @@ export default function AdminDashboard() {
                   data={logs.slice(-20).reverse()}
                   keyExtractor={(item) => item.id}
                 />
+              </article>
+            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Journal&quot; pour charger.</p>
+            )}
             {enrollments ? (
+              <article className="panel">
                 <h2>Inscriptions</h2>
+                <Table
+                  columns={[
                     { key: 'studentName', label: 'Étudiant' },
                     { key: 'matricule', label: 'Matricule' },
                     { key: 'program', label: 'Programme', render: (value) => (value as Enrollment['program'])?.title || '' },
                     { key: 'track', label: 'Parcours', render: (value) => (value as Enrollment['track'])?.title || '' },
                     { key: 'academicYear', label: 'Année' }
+                  ]}
                   data={enrollments}
+                  keyExtractor={(item, index) => index}
+                />
+              </article>
+            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Inscriptions&quot; pour charger.</p>
+            )}
             {adminDocuments ? (
+              <article className="panel">
                 <h2>Documents</h2>
+                <Table
+                  columns={[
                     { key: 'title', label: 'Titre' },
                     { key: 'mime', label: 'Type' },
                     { key: 'visibility', label: 'Visibilité' }
+                  ]}
                   data={adminDocuments}
+                  keyExtractor={(item, index) => index}
+                />
+              </article>
+            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Documents&quot; pour charger.</p>
+            )}
             {adminUsers ? (
+              <article className="panel">
                 <h2>Utilisateurs</h2>
+                <Table
+                  columns={[
                     { key: 'name', label: 'Nom' },
                     { key: 'email', label: 'Email' },
                     { key: 'type', label: 'Type' }
+                  ]}
                   data={adminUsers}
+                  keyExtractor={(item, index) => index}
+                />
+              </article>
+            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Utilisateurs&quot; pour charger.</p>
+            )}
             {deliberations ? (
+              <article className="panel">
                 <h2>Délibérations</h2>
+                <Table
+                  columns={[
                     { key: 'enrollmentId', label: 'Inscription' },
                     { key: 'studentName', label: 'Étudiant', render: (value) => (value as { studentName?: string })?.studentName || '' },
                     { key: 'decision', label: 'Décision' },
                     { key: 'finalizedAt', label: 'Finalisé le' }
+                  ]}
                   data={deliberations.map((item) => ({ ...item, studentName: item.enrollment?.studentName }))}
+                  keyExtractor={(item) => item.id}
+                />
+              </article>
+            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Délibérations&quot; pour charger.</p>
+            )}
           </Tabs>
         ) : null}
+        {error ? <p role="alert" className="alert">{error}</p> : null}
       </section>
+      <Footer />
       <style jsx>{`
         main { min-height: 100vh; background: #f6f8fb; color: #132238; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
         header, section { max-width: 760px; margin: 0 auto; padding: 1.5rem; }
@@ -237,6 +341,6 @@ export default function AdminDashboard() {
         ul { display: grid; gap: .75rem; list-style: none; padding: 0; }
         li { background: #fff; border: 1px solid #dce5ed; border-radius: .5rem; padding: 1rem; }
       `}</style>
-    <Footer />
-      </main>
-  )
+    </main>
+  );
+}
