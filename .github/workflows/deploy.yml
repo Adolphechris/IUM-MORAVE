@@ -27,3 +27,4 @@ jobs:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
           JWT_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
+          TRANSCRIPT_SIGNING_SECRET: ${{ secrets.TRANSCRIPT_SIGNING_SECRET || 'default-transcript-secret' }}

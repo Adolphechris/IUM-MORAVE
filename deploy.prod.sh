@@ -22,25 +22,25 @@ npm install --workspaces=false
 # Start services in order
 echo "Starting auth-service..."
 cd services/auth-service
-npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
 AUTH_PID=$!
 sleep 2
 
 echo "Starting core-api..."
 cd ../core-api
-npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" TRANSCRIPT_SIGNING_SECRET="${TRANSCRIPT_SIGNING_SECRET:-transcript-signing-secret}" npm start &
 CORE_PID=$!
 sleep 2
 
 echo "Starting finance-service..."
 cd ../finance-service
-npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
 FINANCE_PID=$!
 sleep 2
 
 echo "Starting notification-service..."
 cd ../notification-service
-npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
 NOTIFY_PID=$!
 
 echo ""
