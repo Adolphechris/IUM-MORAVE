@@ -183,3 +183,37 @@ CREATE INDEX idx_enrollments_program_id ON enrollments(program_id);
 CREATE INDEX idx_grades_enrollment_id ON grades(enrollment_id);
 CREATE INDEX idx_diplomas_number ON diplomas(diploma_number);
 CREATE INDEX idx_documents_visibility ON documents(visibility);
+
+-- All database access is brokered by backend services using the service-role key.
+-- Explicitly deny browser roles; the service role bypasses RLS.
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE faculties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE programs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tracks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE enrollments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE grades ENABLE ROW LEVEL SECURITY;
+ALTER TABLE diplomas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE diploma_verifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE calendar_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+ALTER TABLE deliberations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY users_backend_only ON users FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY faculties_backend_only ON faculties FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY programs_backend_only ON programs FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY tracks_backend_only ON tracks FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY courses_backend_only ON courses FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY enrollments_backend_only ON enrollments FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY documents_backend_only ON documents FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY grades_backend_only ON grades FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY diplomas_backend_only ON diplomas FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY diploma_verifications_backend_only ON diploma_verifications FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY audit_logs_backend_only ON audit_logs FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY calendar_events_backend_only ON calendar_events FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY news_backend_only ON news FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY deliberations_backend_only ON deliberations FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY email_notifications_backend_only ON email_notifications FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);

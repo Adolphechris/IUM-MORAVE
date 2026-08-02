@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { authenticate, requireRole } = require('../../../shared/auth');
 
 const app = express();
 const PORT = process.env.PORT || 4003;
@@ -12,6 +13,9 @@ let payments = [];
 let paymentPlans = [];
 
 app.get('/health', (req, res) => res.json({ status: 'OK', service: 'finance-service' }));
+
+app.use(authenticate);
+app.use(requireRole('admin', 'finance'));
 
 app.get('/payment-plans', (req, res) => {
   res.json(paymentPlans);

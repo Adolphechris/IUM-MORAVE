@@ -1,10 +1,15 @@
 const { spawn } = require('child_process');
+const jwt = require('jsonwebtoken');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const port = 4104;
 const baseUrl = `http://127.0.0.1:${port}`;
 let service;
+const jwtSecret = 'notification-service-test-secret';
+const authorization = {
+  Authorization: `Bearer ${jwt.sign({ sub: 1, email: 'admin@example.test', role: 'admin' }, jwtSecret)}`
+};
 
 async function waitForHealth() {
   for (let attempt = 0; attempt < 25; attempt += 1) {
@@ -21,7 +26,7 @@ async function waitForHealth() {
 test.before(async () => {
   service = spawn(process.execPath, ['src/index.js'], {
     cwd: __dirname + '/..',
-    env: { ...process.env, PORT: port }
+    env: { ...process.env, PORT: port, JWT_SECRET: jwtSecret }
   });
   service.stdout.on('data', () => {});
   service.stderr.on('data', () => {});
@@ -40,7 +45,7 @@ test('GET /health returns OK status', async () => {
 });
 
 test('GET /templates returns array', async () => {
-  const response = await fetch(`${baseUrl}/templates`);
+  const response = await fetch(`${baseUrl}/templates`, { headers: authorization });
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(Array.isArray(body), true);
@@ -50,7 +55,7 @@ test('GET /templates returns array', async () => {
 test('POST /send/:templateId sends notification', async () => {
   const response = await fetch(`${baseUrl}/send/grade_published`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authorization },
     body: JSON.stringify({ recipient: 'student@example.com', data: { studentName: 'Jean', courseTitle: 'Math', score: 16 } })
   });
   assert.equal(response.status, 201);
@@ -62,7 +67,7 @@ test('POST /send/:templateId sends notification', async () => {
 test('POST /send-bulk/:templateId sends bulk notifications', async () => {
   const response = await fetch(`${baseUrl}/send-bulk/financial_reminder`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authorization },
     body: JSON.stringify({ recipients: ['a@example.com', 'b@example.com'], data: { studentName: 'Test', amount: 1500000 } })
   });
   assert.equal(response.status, 201);
@@ -71,8 +76,17 @@ test('POST /send-bulk/:templateId sends bulk notifications', async () => {
 });
 
 test('GET /notifications returns history', async () => {
-  const response = await fetch(`${baseUrl}/notifications`);
+  const response = await fetch(`${baseUrl}/notifications`, { headers: authorization });
   assert.equal(response.status, 200);
   const body = await response.json();
   assert.equal(Array.isArray(body), true);
+});
+
+test('rejects unauthenticated notification sends', async () => {
+  const response = await fetch(`${baseUrl}/send/grade_published`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ recipient: 'student@example.com', data: {} })
+  });
+  assert.equal(response.status, 401);
 });

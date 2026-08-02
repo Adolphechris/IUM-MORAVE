@@ -289,7 +289,7 @@ export default function AdminDashboard() {
                     { key: 'academicYear', label: 'Année' }
                   ]}
                   data={enrollments}
-                  keyExtractor={(item, index) => index}
+                  keyExtractor={(item) => item.matricule}
                 />
               </article>
             ) : (
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
                     { key: 'visibility', label: 'Visibilité' }
                   ]}
                   data={adminDocuments}
-                  keyExtractor={(item, index) => index}
+                  keyExtractor={(item) => item.filePath}
                 />
               </article>
             ) : (
@@ -321,7 +321,7 @@ export default function AdminDashboard() {
                     { key: 'type', label: 'Type' }
                   ]}
                   data={adminUsers}
-                  keyExtractor={(item, index) => index}
+                  keyExtractor={(item) => item.email}
                 />
               </article>
             ) : (

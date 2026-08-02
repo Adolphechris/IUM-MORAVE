@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { authenticate, requireRole } = require('../../../shared/auth');
 
 const app = express();
 const PORT = process.env.PORT || 4004;
@@ -31,6 +32,9 @@ let templates = [
 let notifications = [];
 
 app.get('/health', (req, res) => res.json({ status: 'OK', service: 'notification-service' }));
+
+app.use(authenticate);
+app.use(requireRole('admin', 'finance', 'teacher'));
 
 app.get('/templates', (req, res) => {
   res.json(templates);
