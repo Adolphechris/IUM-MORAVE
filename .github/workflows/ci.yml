@@ -23,11 +23,7 @@ jobs:
         run: |
           set -eux
           if [ -f package.json ]; then
-            if [ -f package-lock.json ]; then
-              npm ci
-            else
-              npm install
-            fi
+            npm install --workspaces=false
           else
             echo "No root package.json found — skipping root install"
           fi
