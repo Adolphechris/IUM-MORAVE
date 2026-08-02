@@ -8,15 +8,22 @@ type Faculty = {
   name: string;
   description: string;
 };
+
 type Program = {
   title: string;
   level: string;
   durationMonths: number;
+};
+
 type NewsItem = {
   summary: string;
   publishedAt: string;
+};
+
 type Track = {
   programId: number;
+};
+
 const illustrationSlots = [
   'Étudiants sur le campus',
   'Étudiants dans un auditoire',
@@ -30,13 +37,16 @@ const illustrationSlots = [
   'Événement académique',
   'Vue générale des bâtiments'
 ];
+
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
+
 export default function Home() {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     async function loadPortalData() {
       try {
@@ -59,6 +69,7 @@ export default function Home() {
     }
     loadPortalData();
   }, []);
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -85,6 +96,7 @@ export default function Home() {
       {error ? (
         <p className="alert" role="alert">
           {error} Vérifiez que le service API académique est disponible sur {apiUrl}.
+        </p>
       ) : null}
       <section id="formations" aria-labelledby="formations-title">
         <p className="eyebrow">Offre académique</p>
@@ -98,6 +110,7 @@ export default function Home() {
               <a className="space-link" href={`/facultes/${faculty.id}`}>Découvrir la faculté</a>
             </article>
           ))}
+        </div>
         <div className="grid program-grid">
           {programs.map((program) => (
             <article className="card program" key={program.id}>
@@ -115,35 +128,52 @@ export default function Home() {
                   ))}
               </ul>
               <a className="space-link" href={`/formations/${program.id}`}>Voir la formation</a>
+            </article>
+          ))}
+        </div>
+      </section>
       <section id="espaces" aria-labelledby="espaces-title">
         <p className="eyebrow">Services numériques</p>
         <h2 id="espaces-title">Vos espaces institutionnels</h2>
+        <div className="grid">
           <article className="card">
             <h3>Étudiants</h3>
             <p>Consultez votre parcours, vos résultats et vos documents académiques.</p>
             <a className="space-link" href="http://localhost:3001" target="_blank" rel="noreferrer">Ouvrir l&apos;espace étudiant</a>
           </article>
+          <article className="card">
             <h3>Enseignants</h3>
             <p>Gérez la saisie des notes et les informations pédagogiques.</p>
             <a className="space-link" href="http://localhost:3002" target="_blank" rel="noreferrer">Ouvrir l&apos;espace enseignant</a>
+          </article>
+          <article className="card">
             <h3>Administration</h3>
             <p>Supervisez les inscriptions, délibérations et communications officielles.</p>
             <a className="space-link" href="http://localhost:3003" target="_blank" rel="noreferrer">Ouvrir le tableau de bord</a>
+          </article>
+        </div>
+      </section>
       <section id="actualites" aria-labelledby="actualites-title">
         <p className="eyebrow">Vie universitaire</p>
         <h2 id="actualites-title">Actualités</h2>
+        <div className="grid">
           {news.map((item) => (
             <article className="card" key={item.id}>
               <p className="code">{item.publishedAt}</p>
               <h3>{item.title}</h3>
               <p>{item.summary}</p>
               <a className="space-link" href={`/actualites/${item.id}`}>Lire l&apos;actualité</a>
+            </article>
+          ))}
+        </div>
+      </section>
       <section id="galerie" aria-labelledby="galerie-title">
         <p className="eyebrow">Campus en images</p>
         <h2 id="galerie-title">Galerie institutionnelle</h2>
         <p className="gallery-intro">
           Onze emplacements sont réservés aux photographies officielles. Ils seront remplacés
           par les visuels validés par l&apos;institution, avec leur texte alternatif.
+        </p>
         <div className="gallery">
           {illustrationSlots.map((label, index) => (
             <figure className="photo-slot" key={label}>
@@ -152,25 +182,29 @@ export default function Home() {
               </div>
               <figcaption>{label}</figcaption>
             </figure>
-      <footer>
-        <p>© {new Date().getFullYear()} Institut Universitaire Morave · Portail MVP</p>
-      </footer>
+          ))}
+        </div>
+      </section>
+      <Footer />
       <style jsx>{`
         main {
           min-height: 100vh;
           color: #132238;
           background: #f6f8fb;
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
         header, section, footer {
           max-width: 1120px;
           margin: 0 auto;
           padding-left: 1.5rem;
           padding-right: 1.5rem;
+        }
         header {
           min-height: 76px;
           display: flex;
           align-items: center;
           justify-content: space-between;
+        }
         .brand {
           color: #0a4f82;
           display: inline-flex;
@@ -179,6 +213,7 @@ export default function Home() {
           font-weight: 800;
           letter-spacing: .06em;
           text-decoration: none;
+        }
         .logo-slot {
           background: #0a4f82;
           border-radius: 50%;
@@ -188,6 +223,7 @@ export default function Home() {
           justify-content: center;
           letter-spacing: .03em;
           width: 2.25rem;
+        }
         nav { display: flex; gap: 1.25rem; }
         nav a { color: #25425e; text-decoration: none; font-weight: 600; }
         .hero {
@@ -195,6 +231,7 @@ export default function Home() {
           padding: 6rem max(1.5rem, calc((100% - 1072px) / 2));
           background: linear-gradient(120deg, #063d68, #0b6aa8);
           color: white;
+        }
         .hero > * { max-width: 720px; }
         h1 { font-size: clamp(2.25rem, 5vw, 4.4rem); line-height: 1.05; margin: .5rem 0 1.25rem; }
         h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); margin-top: .25rem; }
@@ -225,8 +262,8 @@ export default function Home() {
         @media (max-width: 600px) {
           header { flex-direction: column; gap: .85rem; padding-top: 1rem; padding-bottom: 1rem; }
           nav { gap: .75rem; font-size: .9rem; }
+        }
       `}</style>
-    <Footer />
-      </main>
+    </main>
   );
 }
