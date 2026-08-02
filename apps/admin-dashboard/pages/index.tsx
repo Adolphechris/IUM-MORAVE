@@ -2,7 +2,7 @@ import Header from '../../../shared/src/Header';
 import Footer from '../../../shared/src/Footer';
 import Table from '../../../shared/src/Table';
 import Tabs from '../../../shared/src/Tabs';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 type Session = {
   token: string;
@@ -86,6 +86,8 @@ export default function AdminDashboard() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Connexion impossible.');
       setSession(result);
+      localStorage.setItem('token', result.token);
+      if (result.refreshToken) localStorage.setItem('refreshToken', result.refreshToken);
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.');
     } finally {
@@ -177,6 +179,32 @@ export default function AdminDashboard() {
     }
   }
 
+  async function logout() {
+    await fetch(`${authApiUrl}/auth/logout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: session?.token })
+    }).catch(() => {});
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    setSession(null);
+    setDashboard(null);
+    setLogs(null);
+    setEnrollments(null);
+    setAdminDocuments(null);
+    setAdminUsers(null);
+    setDeliberations(null);
+    setError(null);
+  }
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    if (storedToken && storedRefreshToken) {
+      setSession({ token: storedToken, user: { email: '', role: 'admin', firstName: '', lastName: '' } });
+    }
+  }, []);
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -195,7 +223,7 @@ export default function AdminDashboard() {
             <button type="submit" disabled={loading}>{loading ? 'Connexion…' : 'Se connecter'}</button>
           </form>
         ) : (
-          <div className="panel">
+  <div className="panel">
             <p><strong>Rôle :</strong> {session.user.role}</p>
             <div className="actions">
               <button type="button" onClick={loadDashboard}>Tableau de bord</button>
@@ -204,6 +232,7 @@ export default function AdminDashboard() {
               <button type="button" onClick={loadDocuments}>Documents</button>
               <button type="button" onClick={loadUsers}>Utilisateurs</button>
               <button type="button" onClick={loadDeliberations}>Délibérations</button>
+              <button type="button" onClick={logout}>Déconnexion</button>
             </div>
           </div>
         )}

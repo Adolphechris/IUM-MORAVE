@@ -1,6 +1,6 @@
 import Header from '../../../shared/src/Header';
 import Footer from '../../../shared/src/Footer';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 type Session = {
   token: string;
@@ -81,6 +81,8 @@ export default function StudentSpace() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Connexion impossible.');
       setSession(result);
+      localStorage.setItem('token', result.token);
+      if (result.refreshToken) localStorage.setItem('refreshToken', result.refreshToken);
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Connexion impossible.');
     } finally {
@@ -144,6 +146,30 @@ export default function StudentSpace() {
     }
   }
 
+  async function logout() {
+    await fetch(`${authApiUrl}/auth/logout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: session?.token })
+    }).catch(() => {});
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    setSession(null);
+    setTranscript(null);
+    setSchedule(null);
+    setGrades(null);
+    setStudentDocuments(null);
+    setError(null);
+  }
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    if (storedToken && storedRefreshToken) {
+      setSession({ token: storedToken, user: { email: '', role: 'student', firstName: '', lastName: '' } });
+    }
+  }, []);
+
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -168,6 +194,7 @@ export default function StudentSpace() {
             <button type="button" onClick={loadGrades}>Voir mes notes détaillées</button>
             <button type="button" onClick={loadStudentDocuments}>Voir mes documents</button>
             <button type="button" onClick={loadSchedule}>Voir mon emploi du temps</button>
+            <button type="button" onClick={logout}>Déconnexion</button>
           </div>
         )}
         {studentDocuments ? (
