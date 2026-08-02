@@ -23,7 +23,10 @@ type NewsItem = {
 };
 
 type Track = {
+  id: number;
   programId: number;
+  title: string;
+  description: string;
 };
 
 const illustrationSlots = [
