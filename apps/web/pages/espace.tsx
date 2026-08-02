@@ -1,7 +1,6 @@
-import Footer from '../../shared/src/Footer';
-import Header from '../../shared/src/Header';
+import Header from '@ium-morave/shared/src/Header';
+import Footer from '@ium-morave/shared/src/Footer';
 import React, { FormEvent, useState } from 'react';
-import Header from '../../shared/src/Header';
 
 type Session = {
   token: string;

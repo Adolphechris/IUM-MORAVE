@@ -1,19 +1,14 @@
-# Core API Service
+# services/core-api
 
-Service responsable de l'API académique et de la gestion des entités métier de base.
+API académique IUM-MORAVE (Express + Supabase admin).
 
 ## Démarrage
 
-- `npm install` dans la racine du monorepo
-- `cd services/core-api && npm run start`
+```bash
+npm install
+npm start
+```
 
-## Endpoints
+## Variables d'environnement
 
-- `GET /health` : vérifie que le service fonctionne.
-- `GET /faculties` : retourne la liste des facultés.
-- `GET /programs` : retourne la liste des programmes.
-- `GET /tracks` : retourne la liste des parcours.
-- `GET /faculty/:id` : retourne les détails d'une faculté.
-
-## Environnement
-- `PORT` : port d'écoute du service (par défaut 4002).
+Copier `.env.example` vers `.env`.

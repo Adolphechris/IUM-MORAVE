@@ -1,20 +1,14 @@
 # apps/web
 
-Next.js frontend for IUM-MORAVE (prototype scaffold)
+Portail public MVP de l'IUM-MORAVE (Next.js).
 
-Run locally:
+## Démarrage
 
-1. From repository root, install workspace deps:
-   npm install
+```bash
+npm install
+npm run dev
+```
 
-2. Start frontend (in workspace root or apps/web):
-   cd apps/web
-   npm run dev
+## Variables d'environnement
 
-Build for production:
-   cd apps/web
-   npm run build
-   npm start
-
-Environment variables
-- Create a file apps/web/.env.local from apps/web/.env.example and set values as needed.
+Copier `.env.example` vers `.env.local` et adapter les URLs des services backend.
