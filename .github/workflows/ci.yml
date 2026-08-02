@@ -27,25 +27,19 @@ jobs:
           else
             echo "No root package.json found — skipping root install"
           fi
-      - name: Lint frontend
+      - name: Lint and build frontends
         run: |
-          if [ -f apps/web/package.json ]; then
-            cd apps/web && npm install --silent && npm run lint
-          else
-            echo "no frontend"
-          fi
-      - name: Build frontend
-        run: |
-          if [ -f apps/web/package.json ]; then
-            cd apps/web && npm run build
-          else
-            echo "no frontend"
-          fi
+          set -eux
+          for app in apps/web apps/student-space apps/teacher-space apps/admin-dashboard; do
+            npm --prefix "$app" install --silent
+            npm --prefix "$app" run lint
+            npm --prefix "$app" run build
+          done
       - name: Test backend services
         run: npm run test:services
       - name: Fail if build artifacts missing
         run: |
-          if [ -d apps/web/.next ] || [ -f services/core-api/src/index.js ]; then
+          if [ -d apps/web/.next ] && [ -d apps/student-space/.next ] && [ -d apps/teacher-space/.next ] && [ -d apps/admin-dashboard/.next ]; then
             echo "Artifacts present"
           else
             echo "Build artifacts missing" && exit 1
