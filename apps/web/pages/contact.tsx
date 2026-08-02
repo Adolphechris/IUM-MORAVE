@@ -5,19 +5,16 @@ import { Footer } from '../../shared/src';
 import React, { FormEvent, useState } from 'react';
 
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 export default function ContactPage() {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setStatus(null);
     setError(null);
     const form = new FormData(event.currentTarget);
-
     try {
       const response = await fetch(`${apiUrl}/contact`, {
         method: 'POST',
@@ -40,7 +37,6 @@ export default function ContactPage() {
       setLoading(false);
     }
   }
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>

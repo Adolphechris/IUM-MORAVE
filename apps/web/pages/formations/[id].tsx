@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 type ProgramDetail = {
   code: string;
   title: string;
@@ -16,12 +15,10 @@ type ProgramDetail = {
   tracks: Array<{ id: number; title: string; description: string }>;
   courses: Array<{ id: number; code: string; title: string; credits: number; semester: number }>;
 };
-
 export default function ProgramDetailPage() {
   const router = useRouter();
   const [program, setProgram] = useState<ProgramDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     if (!router.query.id) return;
     fetch(`${apiUrl}/programs/${router.query.id}`)
@@ -32,7 +29,6 @@ export default function ProgramDetailPage() {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : 'Formation indisponible.'));
   }, [router.query.id]);
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/#formations">Toutes les formations</a></Header>

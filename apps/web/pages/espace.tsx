@@ -13,7 +13,6 @@ type Session = {
     lastName: string;
   };
 };
-
 type Transcript = {
   student: { name: string; matricule: string };
   program: { title: string };
@@ -21,16 +20,11 @@ type Transcript = {
   weightedAverage: number;
   decision: string;
   verificationCode: string;
-};
-
 type Dashboard = {
   totals: Record<string, number>;
   upcomingEvents: Array<{ id: number; title: string; startsAt: string }>;
-};
-
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 export default function Espace() {
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState('');
@@ -40,13 +34,11 @@ export default function Espace() {
   const [courses, setCourses] = useState<Array<{ id: number; code: string; title: string; credits: number }> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError(null);
     setTranscript(null);
-
     try {
       const response = await fetch(`${authApiUrl}/auth/login`, {
         method: 'POST',
@@ -64,29 +56,15 @@ export default function Espace() {
       setLoading(false);
     }
   }
-
   async function loadTranscript() {
     if (!session) return;
-    setError(null);
-    try {
       const response = await fetch(`${coreApiUrl}/transcripts/me`, {
         headers: { Authorization: `Bearer ${session.token}` }
-      });
-      const result = await response.json();
-      if (!response.ok) {
         throw new Error(result.error || 'Le relevé est indisponible.');
-      }
-
       setTranscript(result);
     } catch (transcriptError) {
       setError(transcriptError instanceof Error ? transcriptError.message : 'Le relevé est indisponible.');
-    }
-  }
-
   async function loadRoleWorkspace() {
-    if (!session) return;
-    setError(null);
-    try {
       if (session.user.role === 'admin') {
         const response = await fetch(`${coreApiUrl}/admin/dashboard`, {
           headers: { Authorization: `Bearer ${session.token}` }
@@ -95,28 +73,18 @@ export default function Espace() {
         if (!response.ok) throw new Error(result.error || 'Tableau de bord indisponible.');
         setDashboard(result);
         return;
-      }
-
       if (session.user.role === 'teacher') {
         const response = await fetch(`${coreApiUrl}/teachers/me/courses`, {
-          headers: { Authorization: `Bearer ${session.token}` }
-        });
-        const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Cours indisponibles.');
         setCourses(result);
-      }
     } catch (workspaceError) {
       setError(workspaceError instanceof Error ? workspaceError.message : 'Espace indisponible.');
-    }
-  }
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
       <section>
         <p className="eyebrow">Espace numérique</p>
         <h1>{session ? `Bienvenue, ${session.user.firstName || session.user.email}` : 'Connexion sécurisée'}</h1>
-
         {!session ? (
           <form onSubmit={login}>
             <label htmlFor="email">Adresse email</label>
@@ -140,7 +108,6 @@ export default function Espace() {
             )}
           </div>
         )}
-
         {dashboard ? (
           <article className="panel">
             <h2>Tableau de bord administration</h2>
@@ -153,24 +120,14 @@ export default function Espace() {
             <ul>
               {dashboard.upcomingEvents.map((event) => (
                 <li key={event.id}>{event.startsAt} — {event.title}</li>
-              ))}
             </ul>
           </article>
         ) : null}
-
         {courses ? (
-          <article className="panel">
             <h2>Mes cours</h2>
-            <ul>
               {courses.map((course) => (
                 <li key={course.id}><strong>{course.code}</strong> — {course.title} ({course.credits} crédits)</li>
-              ))}
-            </ul>
-          </article>
-        ) : null}
-
         {transcript ? (
-          <article className="panel">
             <h2>Relevé de notes numérique</h2>
             <p><strong>Étudiant :</strong> {transcript.student.name} ({transcript.student.matricule})</p>
             <p><strong>Programme :</strong> {transcript.program.title}</p>
@@ -178,8 +135,6 @@ export default function Espace() {
             <p><strong>Moyenne pondérée :</strong> {transcript.weightedAverage}/20</p>
             <p><strong>Décision :</strong> {transcript.decision}</p>
             <p className="verification">Code de vérification : {transcript.verificationCode}</p>
-          </article>
-        ) : null}
         {error ? <p role="alert" className="alert">{error}</p> : null}
       </section>
       <style jsx>{`

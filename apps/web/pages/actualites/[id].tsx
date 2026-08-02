@@ -6,14 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 type NewsDetail = { title: string; summary: string; content: string; category: string; publishedAt: string };
-
 export default function NewsDetailPage() {
   const router = useRouter();
   const [news, setNews] = useState<NewsDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     if (!router.query.id) return;
     fetch(`${apiUrl}/news/${router.query.id}`)
@@ -24,7 +21,6 @@ export default function NewsDetailPage() {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : 'Actualité indisponible.'));
   }, [router.query.id]);
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/#actualites">Toutes les actualités</a></Header>

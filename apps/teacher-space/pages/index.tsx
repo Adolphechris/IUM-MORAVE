@@ -13,26 +13,19 @@ type Session = {
     lastName: string
   }
 }
-
 type Course = {
   id: number
   code: string
   title: string
   credits: number
-}
-
 type TeacherGrade = {
   courseCode: string
   courseTitle: string
-  credits: number
   score: number
   status: string
   student?: { name: string; email: string }
-}
-
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
-
 export default function TeacherSpace() {
   const [session, setSession] = useState<Session | null>(null)
   const [email, setEmail] = useState('')
@@ -41,13 +34,11 @@ export default function TeacherSpace() {
   const [teacherGrades, setTeacherGrades] = useState<TeacherGrade[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setLoading(true)
     setError(null)
     setCourses(null)
-
     try {
       const response = await fetch(`${authApiUrl}/auth/login`, {
         method: 'POST',
@@ -62,38 +53,20 @@ export default function TeacherSpace() {
     } finally {
       setLoading(false)
     }
-  }
-
   async function loadCourses() {
     if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/teachers/me/courses`, {
         headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Cours indisponibles.')
       setCourses(result)
     } catch (coursesError) {
       setError(coursesError instanceof Error ? coursesError.message : 'Cours indisponibles.')
-    }
-  }
-
   async function loadTeacherGrades() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/teachers/me/grades`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Notes indisponibles.')
       setTeacherGrades(result)
     } catch (gradesError) {
       setError(gradesError instanceof Error ? gradesError.message : 'Notes indisponibles.')
-    }
-  }
-
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -103,7 +76,6 @@ export default function TeacherSpace() {
       <section>
         <p className="eyebrow">Espace enseignant</p>
         <h1>{session ? `Bienvenue, ${session.user.firstName || session.user.email}` : 'Connexion sécurisée'}</h1>
-
         {!session ? (
           <form onSubmit={login}>
             <label htmlFor="email">Adresse email</label>
@@ -119,7 +91,6 @@ export default function TeacherSpace() {
             <button type="button" onClick={loadTeacherGrades}>Voir les notes saisies</button>
           </div>
         )}
-
         {courses ? (
           <article className="panel">
             <h2>Mes cours</h2>
@@ -130,17 +101,10 @@ export default function TeacherSpace() {
             </ul>
           </article>
         ) : null}
-
         {teacherGrades ? (
-          <article className="panel">
             <h2>Notes saisies</h2>
-            <ul>
               {teacherGrades.map((grade, index) => (
                 <li key={index}><strong>{grade.courseTitle} ({grade.courseCode})</strong> — {grade.student?.name || grade.student?.email} : {grade.score}/20</li>
-              ))}
-            </ul>
-          </article>
-        ) : null}
         {error ? <p role="alert" className="alert">{error}</p> : null}
       </section>
       <style jsx>{`
@@ -162,4 +126,3 @@ export default function TeacherSpace() {
     <Footer />
       </main>
   )
-}

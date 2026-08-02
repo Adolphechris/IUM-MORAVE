@@ -15,13 +15,10 @@ type Session = {
     lastName: string
   }
 }
-
 type Dashboard = {
   totals: Record<string, number>
   recentAuditEvents: Array<{ action: string; resource: string; createdAt: string }>
   upcomingEvents: Array<{ id: number; title: string; startsAt: string }>
-}
-
 type AuditLog = {
   id: number
   actor: string
@@ -29,10 +26,7 @@ type AuditLog = {
   resource: string
   resourceId: number
   createdAt: string
-}
-
 type Enrollment = {
-  id: number
   studentEmail: string
   studentName: string
   matricule: string
@@ -42,26 +36,17 @@ type Enrollment = {
   status: string
   program?: { title: string }
   track?: { title: string }
-}
-
 type AdminDocument = {
-  id: number
   title: string
   filePath: string
   mime: string
   visibility: string
-}
-
 type AdminUser = {
-  id: number
   email: string
   name: string
   type: 'student' | 'teacher'
-}
-
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001'
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002'
-
 export default function AdminDashboard() {
   const [session, setSession] = useState<Session | null>(null)
   const [email, setEmail] = useState('')
@@ -75,14 +60,12 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setLoading(true)
     setError(null)
     setDashboard(null)
     setLogs(null)
-
     try {
       const response = await fetch(`${authApiUrl}/auth/login`, {
         method: 'POST',
@@ -97,98 +80,44 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false)
     }
-  }
-
   async function loadDashboard() {
     if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/dashboard`, {
         headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Tableau de bord indisponible.')
       setDashboard(result)
     } catch (dashboardError) {
       setError(dashboardError instanceof Error ? dashboardError.message : 'Tableau de bord indisponible.')
-    }
-  }
-
   async function loadAuditLogs() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/audit-logs`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Journal indisponible.')
       setLogs(result)
     } catch (logsError) {
       setError(logsError instanceof Error ? logsError.message : 'Journal indisponible.')
-    }
-  }
-
   async function loadEnrollments() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/enrollments`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Inscriptions indisponibles.')
       setEnrollments(result)
     } catch (enrollmentsError) {
       setError(enrollmentsError instanceof Error ? enrollmentsError.message : 'Inscriptions indisponibles.')
-    }
-  }
-
   async function loadDocuments() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/documents`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Documents indisponibles.')
       setAdminDocuments(result)
     } catch (documentsError) {
       setError(documentsError instanceof Error ? documentsError.message : 'Documents indisponibles.')
-    }
-  }
-
   async function loadUsers() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/users`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Utilisateurs indisponibles.')
       setAdminUsers(result)
     } catch (usersError) {
       setError(usersError instanceof Error ? usersError.message : 'Utilisateurs indisponibles.')
-    }
-  }
-
   async function loadDeliberations() {
-    if (!session) return
-    setError(null)
-    try {
       const response = await fetch(`${coreApiUrl}/admin/deliberations`, {
-        headers: { Authorization: `Bearer ${session.token}` }
-      })
-      const result = await response.json()
       if (!response.ok) throw new Error(result.error || 'Délibérations indisponibles.')
       setDeliberations(result)
     } catch (deliberationsError) {
       setError(deliberationsError instanceof Error ? deliberationsError.message : 'Délibérations indisponibles.')
-    }
-  }
-
   return (
     <main>
       <Header title="IUM-MORAVE">
@@ -198,7 +127,6 @@ export default function AdminDashboard() {
       <section>
         <p className="eyebrow">Administration</p>
         <h1>{session ? `Bienvenue, ${session.user.firstName || session.user.email}` : 'Connexion sécurisée'}</h1>
-
         {!session ? (
           <form onSubmit={login}>
             <label htmlFor="email">Adresse email</label>
@@ -220,7 +148,6 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-
         {session ? (
           <Tabs
             labels={['Tableau de bord', 'Journal', 'Inscriptions', 'Documents', 'Utilisateurs', 'Délibérations']}
@@ -239,15 +166,12 @@ export default function AdminDashboard() {
                 <ul>
                   {dashboard.upcomingEvents.map((event) => (
                     <li key={event.id}>{event.startsAt} — {event.title}</li>
-                  ))}
                 </ul>
               </article>
             ) : (
               <p>Aucune donnée. Cliquez sur &quot;Tableau de bord&quot; pour charger.</p>
             )}
-
             {logs ? (
-              <article className="panel">
                 <h2>Journal d&apos;audit</h2>
                 <Table
                   columns={[
@@ -259,81 +183,38 @@ export default function AdminDashboard() {
                   data={logs.slice(-20).reverse()}
                   keyExtractor={(item) => item.id}
                 />
-              </article>
-            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Journal&quot; pour charger.</p>
-            )}
-
             {enrollments ? (
-              <article className="panel">
                 <h2>Inscriptions</h2>
-                <Table
-                  columns={[
                     { key: 'studentName', label: 'Étudiant' },
                     { key: 'matricule', label: 'Matricule' },
                     { key: 'program', label: 'Programme', render: (value) => (value as Enrollment['program'])?.title || '' },
                     { key: 'track', label: 'Parcours', render: (value) => (value as Enrollment['track'])?.title || '' },
                     { key: 'academicYear', label: 'Année' }
-                  ]}
                   data={enrollments}
-                  keyExtractor={(item) => item.id}
-                />
-              </article>
-            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Inscriptions&quot; pour charger.</p>
-            )}
-
             {adminDocuments ? (
-              <article className="panel">
                 <h2>Documents</h2>
-                <Table
-                  columns={[
                     { key: 'title', label: 'Titre' },
                     { key: 'mime', label: 'Type' },
                     { key: 'visibility', label: 'Visibilité' }
-                  ]}
                   data={adminDocuments}
-                  keyExtractor={(item) => item.id}
-                />
-              </article>
-            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Documents&quot; pour charger.</p>
-            )}
-
             {adminUsers ? (
-              <article className="panel">
                 <h2>Utilisateurs</h2>
-                <Table
-                  columns={[
                     { key: 'name', label: 'Nom' },
                     { key: 'email', label: 'Email' },
                     { key: 'type', label: 'Type' }
-                  ]}
                   data={adminUsers}
-                  keyExtractor={(item) => item.id}
-                />
-              </article>
-            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Utilisateurs&quot; pour charger.</p>
-            )}
-
             {deliberations ? (
-              <article className="panel">
                 <h2>Délibérations</h2>
-                <Table
-                  columns={[
                     { key: 'enrollmentId', label: 'Inscription' },
                     { key: 'studentName', label: 'Étudiant', render: (value) => (value as { studentName?: string })?.studentName || '' },
                     { key: 'decision', label: 'Décision' },
                     { key: 'finalizedAt', label: 'Finalisé le' }
-                  ]}
                   data={deliberations.map((item) => ({ ...item, studentName: item.enrollment?.studentName }))}
-                  keyExtractor={(item) => item.id}
-                />
-              </article>
-            ) : (
               <p>Aucune donnée. Cliquez sur &quot;Délibérations&quot; pour charger.</p>
-            )}
           </Tabs>
         ) : null}
       </section>
@@ -361,4 +242,3 @@ export default function AdminDashboard() {
     <Footer />
       </main>
   )
-}

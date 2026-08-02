@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 type FacultyDetail = {
   code: string;
   name: string;
@@ -14,12 +13,10 @@ type FacultyDetail = {
   programs: Array<{ id: number; code: string; title: string; level: string }>;
   tracks: Array<{ id: number; programId: number; title: string; description: string }>;
 };
-
 export default function FacultyDetailPage() {
   const router = useRouter();
   const [faculty, setFaculty] = useState<FacultyDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     if (!router.query.id) return;
     fetch(`${apiUrl}/faculties/${router.query.id}`)
@@ -30,7 +27,6 @@ export default function FacultyDetailPage() {
       })
       .catch((loadError) => setError(loadError instanceof Error ? loadError.message : 'Faculté indisponible.'));
   }, [router.query.id]);
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/#formations">Toutes les formations</a></Header>
@@ -48,9 +44,7 @@ export default function FacultyDetailPage() {
             ))}
           </div>
           <h2>Spécialités</h2>
-          <div className="grid">
             {faculty.tracks.map((track) => <article key={track.id}><h3>{track.title}</h3><p>{track.description}</p></article>)}
-          </div>
         </> : null}
       </section>
       <style jsx>{`

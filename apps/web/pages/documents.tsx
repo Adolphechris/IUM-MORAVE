@@ -10,14 +10,11 @@ type DocumentItem = {
   filePath: string;
   mime: string;
 };
-
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
-
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [query, setQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
-
   async function loadDocuments(search = '') {
     try {
       const response = await fetch(`${apiUrl}/documents?query=${encodeURIComponent(search)}`);
@@ -28,14 +25,10 @@ export default function DocumentsPage() {
       setError(loadError instanceof Error ? loadError.message : 'Documents indisponibles.');
     }
   }
-
   useEffect(() => { loadDocuments(); }, []);
-
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     loadDocuments(query);
-  }
-
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
