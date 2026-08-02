@@ -19,6 +19,8 @@ const { authenticate, requireRole } = require('./auth');
 const { createInstitutionalEmail, sendInstitutionalEmail } = require('./email-service');
 const { buildTranscript } = require('./transcript-service');
 const { evaluateDeliberation, generateDeliberationPV, generateDiplomaData, getMention } = require('./lmd-engine');
+const { getSupabase } = require('../../../shared/supabaseClient');
+const { from, initDatabase } = require('./db');
 
 const PORT = process.env.PORT || 4002;
 const app = express();
@@ -28,6 +30,151 @@ const diplomaRegistry = new Map();
 const auditLogs = [];
 const contactRequests = [];
 const contactRateLimits = new Map();
+
+const supabase = getSupabase();
+
+async function syncFromSupabase() {
+  if (!supabase) return;
+
+  try {
+    const { data: facultiesData, error: facultiesError } = await supabase.from('faculties').select();
+    if (!facultiesError && facultiesData) {
+      faculties.length = 0;
+      facultiesData.forEach(f => faculties.push({
+        id: f.id,
+        code: f.code,
+        name: f.name,
+        description: f.description,
+        facultyId: f.faculty_id
+      }));
+    }
+
+    const { data: programsData, error: programsError } = await supabase.from('programs').select();
+    if (!programsError && programsData) {
+      programs.length = 0;
+      programsData.forEach(p => programs.push({
+        id: p.id,
+        facultyId: p.faculty_id,
+        code: p.code,
+        title: p.title,
+        level: p.level,
+        durationMonths: p.duration_months,
+        description: p.description,
+        admissionConditions: p.admission_conditions
+      }));
+    }
+
+    const { data: tracksData, error: tracksError } = await supabase.from('tracks').select();
+    if (!tracksError && tracksData) {
+      tracks.length = 0;
+      tracksData.forEach(t => tracks.push({
+        id: t.id,
+        programId: t.program_id,
+        code: t.code,
+        title: t.title,
+        description: t.description
+      }));
+    }
+
+    const { data: coursesData, error: coursesError } = await supabase.from('courses').select();
+    if (!coursesError && coursesData) {
+      courses.length = 0;
+      coursesData.forEach(c => courses.push({
+        id: c.id,
+        trackId: c.track_id,
+        code: c.code,
+        title: c.title,
+        credits: c.credits,
+        semester: c.semester,
+        description: c.description,
+        teacherEmail: c.teacher_email
+      }));
+    }
+
+    const { data: enrollmentsData, error: enrollmentsError } = await supabase.from('enrollments').select();
+    if (!enrollmentsError && enrollmentsData) {
+      enrollments.length = 0;
+      enrollmentsData.forEach(e => enrollments.push({
+        id: e.id,
+        userId: e.user_id,
+        studentEmail: e.student_email || e.user?.email,
+        studentName: e.student_name,
+        programId: e.program_id,
+        trackId: e.track_id,
+        year: e.year,
+        status: e.status,
+        matricule: e.matricule
+      }));
+    }
+
+    const { data: gradesData, error: gradesError } = await supabase.from('grades').select();
+    if (!gradesError && gradesData) {
+      grades.length = 0;
+      gradesData.forEach(g => grades.push({
+        enrollmentId: g.enrollment_id,
+        courseId: g.course_id,
+        courseCode: g.course_code,
+        courseTitle: g.course_title,
+        credits: g.credits,
+        score: g.score,
+        status: g.status
+      }));
+    }
+
+    const { data: newsData, error: newsError } = await supabase.from('news').select();
+    if (!newsError && newsData) {
+      newsItems.length = 0;
+      newsData.forEach(n => newsItems.push({
+        id: n.id,
+        slug: n.slug,
+        title: n.title,
+        summary: n.summary,
+        content: n.content,
+        category: n.category,
+        publishedAt: n.published_at
+      }));
+    }
+
+    const { data: calendarData, error: calendarError } = await supabase.from('calendar_events').select();
+    if (!calendarError && calendarData) {
+      calendarEvents.length = 0;
+      calendarData.forEach(c => calendarEvents.push({
+        id: c.id,
+        title: c.title,
+        category: c.category,
+        startsAt: c.starts_at,
+        endsAt: c.ends_at
+      }));
+    }
+
+    const { data: docsData, error: docsError } = await supabase.from('documents').select();
+    if (!docsError && docsData) {
+      documents.length = 0;
+      docsData.forEach(d => documents.push({
+        id: d.id,
+        ownerType: d.owner_type,
+        ownerId: d.owner_id,
+        title: d.title,
+        filePath: d.file_path,
+        mime: d.mime,
+        visibility: d.visibility,
+        createdBy: d.created_by
+      }));
+    }
+
+     console.log('[core-api] Data synced from database');
+   } catch (err) {
+    console.error('[core-api] Failed to sync from database:', err.message);
+  }
+}
+
+let dbAvailable = false;
+initDatabase().then(available => {
+  dbAvailable = available;
+  if (dbAvailable) {
+    syncFromSupabase();
+  }
+});
 
 app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
@@ -61,7 +208,7 @@ app.get('/faculties/:id', (req, res) => {
   res.json({ ...faculty, programs: facultyPrograms, tracks: facultyTracks });
 });
 
-app.post('/faculties', authenticate, requireRole('admin'), (req, res) => {
+app.post('/faculties', authenticate, requireRole('admin'), async (req, res) => {
   const { code, name, description } = req.body;
   if (!code || !name) {
     return res.status(400).json({ error: 'code and name are required' });
@@ -79,6 +226,23 @@ app.post('/faculties', authenticate, requireRole('admin'), (req, res) => {
     description: description || ''
   };
   faculties.push(newFaculty);
+
+  if (dbAvailable) {
+    try {
+      const db = await from('faculties');
+      await db.insert({
+        code,
+        name,
+        description: description || '',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        deleted_at: null
+      });
+    } catch (err) {
+      console.error('[core-api] Failed to persist faculty:', err.message);
+    }
+  }
+
   audit(req, 'create', 'faculty', newFaculty.id);
   res.status(201).json(newFaculty);
 });

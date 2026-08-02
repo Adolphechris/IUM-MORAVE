@@ -18,6 +18,62 @@ const users = [
 ];
 
 const tokenBlacklist = new Set();
+let isInitialized = false;
+
+async function syncFromSupabase() {
+  if (isInitialized) return;
+  isInitialized = true;
+
+  try {
+    const { getSupabase } = require('../../../shared/supabaseClient');
+    const supabase = getSupabase();
+    if (!supabase) return;
+
+    const { data: usersData, error } = await supabase.from('users').select();
+    if (!error && usersData) {
+      users.length = 0;
+      usersData.forEach(u => {
+        users.push({
+          id: u.id,
+          email: u.email,
+          passwordHash: u.password_hash,
+          role: u.role,
+          firstName: u.first_name || '',
+          lastName: u.last_name || '',
+          emailVerified: true,
+          resetToken: u.reset_token || null,
+          resetExpiresAt: u.reset_expires_at || null,
+          metadata: u.metadata
+        });
+      });
+      console.log('[auth-service] Users synced from Supabase');
+    }
+  } catch (err) {
+    console.error('[auth-service] Failed to sync from Supabase:', err.message);
+  }
+}
+
+async function persistUserToSupabase(user) {
+  try {
+    const { getSupabase } = require('../../../shared/supabaseClient');
+    const supabase = getSupabase();
+    if (!supabase) return;
+
+    await supabase.from('users').insert({
+      email: user.email,
+      password_hash: user.passwordHash,
+      role: user.role,
+      first_name: user.firstName,
+      last_name: user.lastName,
+      email_verified: user.emailVerified,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted_at: null
+    });
+  } catch (err) {
+    console.error('[auth-service] Failed to persist user to Supabase:', err.message);
+  }
+}
 
 function findUserByEmail(email) {
   return users.find((user) => user.email.toLowerCase() === email.toLowerCase());
@@ -44,6 +100,9 @@ function createUser({ email, password, role = 'student', firstName = '', lastNam
   const passwordHash = bcrypt.hashSync(password, 12);
   const newUser = { id, email, passwordHash, role, firstName, lastName, emailVerified: false, resetToken: null, resetExpiresAt: null };
   users.push(newUser);
+
+  persistUserToSupabase(newUser);
+
   return newUser;
 }
 
@@ -86,5 +145,6 @@ module.exports = {
   safeUser,
   generateResetToken,
   blacklistToken,
-  isTokenBlacklisted
+  isTokenBlacklisted,
+  syncFromSupabase
 };

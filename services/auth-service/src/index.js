@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
-const { ROLES, findUserByEmail, findUserById, createUser, listUsers, validatePassword, safeUser, generateResetToken, blacklistToken, isTokenBlacklisted, updatePassword } = require('./user-store');
+const { ROLES, findUserByEmail, findUserById, createUser, listUsers, validatePassword, safeUser, generateResetToken, blacklistToken, isTokenBlacklisted, updatePassword, syncFromSupabase } = require('./user-store');
 const { signToken, verifyToken, signResetToken, verifyResetToken, signRefreshToken, verifyRefreshToken, signEmailVerifyToken, verifyEmailVerifyToken } = require('./token');
 
 const PORT = process.env.PORT || 4001;
@@ -12,6 +12,8 @@ app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:3000' }));
 app.use(express.json());
 
 const rateLimits = new Map();
+
+syncFromSupabase();
 
 function rateLimit(key, max = 5, windowMs = 60000) {
   const now = Date.now();
