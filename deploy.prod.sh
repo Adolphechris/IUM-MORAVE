@@ -22,25 +22,25 @@ npm install --workspaces=false
 # Start services in order
 echo "Starting auth-service..."
 cd services/auth-service
-JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" DATABASE_URL="${DATABASE_URL:-}" npm start &
 AUTH_PID=$!
 sleep 2
 
 echo "Starting core-api..."
 cd ../core-api
-JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" TRANSCRIPT_SIGNING_SECRET="${TRANSCRIPT_SIGNING_SECRET:-transcript-signing-secret}" npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" TRANSCRIPT_SIGNING_SECRET="${TRANSCRIPT_SIGNING_SECRET:-transcript-signing-secret}" DATABASE_URL="${DATABASE_URL:-}" npm start &
 CORE_PID=$!
 sleep 2
 
 echo "Starting finance-service..."
 cd ../finance-service
-JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" DATABASE_URL="${DATABASE_URL:-}" npm start &
 FINANCE_PID=$!
 sleep 2
 
 echo "Starting notification-service..."
 cd ../notification-service
-JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" npm start &
+JWT_SECRET="${JWT_SECRET:-$SUPABASE_ANON_KEY}" DATABASE_URL="${DATABASE_URL:-}" npm start &
 NOTIFY_PID=$!
 
 echo ""

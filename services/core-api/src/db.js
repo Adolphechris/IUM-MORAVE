@@ -2,9 +2,10 @@ const { Pool } = require('pg');
 const { getSupabase } = require('../../../shared/supabaseClient');
 
 const connectionString = process.env.DATABASE_URL || process.env.DB_URL || 'postgresql://adolphe@localhost:5435/ium_morave';
+const useSsl = process.env.DATABASE_URL && process.env.DATABASE_URL.includes('sslmode=require');
 const pool = connectionString ? new Pool({
   connectionString,
-  ssl: process.env.SUPABASE_URL && process.env.SUPABASE_URL.startsWith('https') ? { rejectUnauthorized: false } : false
+  ssl: useSsl ? { rejectUnauthorized: false } : false
 }) : null;
 
 async function query(text, params) {
