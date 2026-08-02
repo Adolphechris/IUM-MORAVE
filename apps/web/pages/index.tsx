@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 type Faculty = {
   id: number;
@@ -112,6 +113,13 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE — Enseignement Supérieur en RDC</title>
+        <meta name="description" content="Bienvenue à l'Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE). Université agréée par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Formations LMD : Licence, Master, Doctorat. Province de Lomami, République Démocratique du Congo." />
+        <link rel="canonical" href="https://ium-morave.vercel.app/" />
+        <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
+        <meta property="og:url" content="https://ium-morave.vercel.app/" />
+      </Head>
       {/* ─── NAVIGATION AVEC BLASON OFFICIEL ───────────────────── */}
       <header className="navbar">
         <div className="navbar-inner">
