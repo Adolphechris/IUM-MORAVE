@@ -27,6 +27,7 @@ export default function DocumentsPage() {
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     loadDocuments(query);
+  }
   return (
     <main>
       <Header title="IUM-MORAVE"><a href="/">Retour au portail</a></Header>
