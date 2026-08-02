@@ -10,6 +10,8 @@ type Faculty = {
 };
 
 type Program = {
+  id: number;
+  code: string;
   title: string;
   level: string;
   durationMonths: number;
