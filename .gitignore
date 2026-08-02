@@ -18,3 +18,6 @@ yarn-error.log*
 
 # Misc
 .DS_Store
+.kilo/
+apps/.auth-utils/
+supabase/
