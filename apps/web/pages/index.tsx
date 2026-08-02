@@ -434,10 +434,48 @@ export default function Home() {
               <a href="/contact">Contact &amp; Admissions</a>
               <a href="/espace">Portail Numérique</a>
             </div>
+            <div>
+              <strong>Coordonnées</strong>
+              <span>Mwene-Ditu, Province de Lomami</span>
+              <span>République Démocratique du Congo</span>
+              <span>B.P. 126 — Mwene-Ditu</span>
+            </div>
           </div>
         </div>
+
+        {/* ── BANDEAU JURIDIQUE OFFICIEL ──────────────────────── */}
+        <div className="footer-legal-band">
+          <div className="legal-band-inner">
+            <div className="legal-seal">
+              <img src="/images/logo-crest.jpg" alt="Sceau Officiel IUM-MORAVE" className="legal-seal-img" />
+            </div>
+            <div className="legal-content">
+              <p className="legal-title">⚖️ Existence Légalement Reconnue par l&apos;État Congolais</p>
+              <div className="legal-items">
+                <div className="legal-item">
+                  <span className="legal-label">AGRÉMENT OFFICIEL ESU</span>
+                  <span className="legal-value">N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018</span>
+                </div>
+                <div className="legal-divider" />
+                <div className="legal-item">
+                  <span className="legal-label">AUTORITÉ DE TUTELLE</span>
+                  <span className="legal-value">Ministère de l&apos;Enseignement Supérieur et Universitaire (ESU) — République Démocratique du Congo</span>
+                </div>
+                <div className="legal-divider" />
+                <div className="legal-item">
+                  <span className="legal-label">SIÈGE SOCIAL &amp; BOÎTE POSTALE</span>
+                  <span className="legal-value">Institut Universitaire Morave de Mwene-Ditu — B.P. 126 — Mwene-Ditu, Province de Lomami, RDC</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Institut Universitaire Morave (IUM-MORAVE) — Tous droits réservés.</p>
+          <p>
+            © {new Date().getFullYear()} Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE) — Tous droits réservés.
+            &nbsp;|&nbsp; Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 &nbsp;|&nbsp; B.P. 126, Mwene-Ditu, Lomami, RDC
+          </p>
         </div>
       </footer>
 
@@ -737,7 +775,54 @@ export default function Home() {
         .footer-links > div { display: flex; flex-direction: column; gap: .6rem; }
         .footer-links strong { color: #fff; font-size: .85rem; margin-bottom: .25rem; }
         .footer-links a { color: rgba(255,255,255,.55); text-decoration: none; font-size: .85rem; }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: 1.25rem 1.5rem; text-align: center; font-size: .82rem; }
+        /* ── BANDEAU JURIDIQUE OFFICIEL ─────────────────────── */
+        .footer-legal-band {
+          background: rgba(0,0,0,.35);
+          border-top: 1px solid rgba(245,185,20,.25);
+          border-bottom: 1px solid rgba(255,255,255,.06);
+          padding: 2rem 1.5rem;
+        }
+        .legal-band-inner {
+          max-width: 1240px; margin: 0 auto;
+          display: flex; align-items: flex-start; gap: 2rem;
+        }
+        .legal-seal {
+          flex-shrink: 0;
+        }
+        .legal-seal-img {
+          width: 4rem; height: 4rem; border-radius: 50%;
+          border: 2px solid var(--gold);
+          box-shadow: 0 0 16px rgba(245,185,20,.25);
+        }
+        .legal-content { flex: 1; }
+        .legal-title {
+          font-size: .8rem; font-weight: 800;
+          color: var(--gold); letter-spacing: .06em;
+          text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .legal-items {
+          display: flex; gap: 0; flex-wrap: wrap;
+        }
+        .legal-item {
+          display: flex; flex-direction: column; gap: .2rem;
+          padding: 0 1.75rem;
+          flex: 1; min-width: 220px;
+        }
+        .legal-item:first-child { padding-left: 0; }
+        .legal-divider {
+          width: 1px; background: rgba(255,255,255,.1);
+          flex-shrink: 0; margin: .25rem 0;
+        }
+        .legal-label {
+          font-size: .68rem; font-weight: 900;
+          color: var(--gold); letter-spacing: .1em;
+          text-transform: uppercase;
+        }
+        .legal-value {
+          font-size: .82rem; color: rgba(255,255,255,.82);
+          font-weight: 500; line-height: 1.5;
+        }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding: 1rem 1.5rem; text-align: center; font-size: .75rem; color: rgba(255,255,255,.4); }
 
         @media (max-width: 900px) {
           .hero-container, .grad-box, .eval-box { grid-template-columns: 1fr; gap: 2rem; }
