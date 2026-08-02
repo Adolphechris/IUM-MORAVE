@@ -1,7 +1,9 @@
-import { Header } from '@ium-morave/shared';
-import { Footer } from '@ium-morave/shared';
-import { Table } from '@ium-morave/shared'
-import { Tabs } from '@ium-morave/shared';
+import Header from '../../shared/src/Header';
+import Footer from '../../shared/src/Footer';
+import { Header } from '../../shared/src';
+import { Footer } from '../../shared/src';
+import { Table } from '../../shared/src'
+import { Tabs } from '../../shared/src';
 import React, { FormEvent, useState } from 'react'
 
 type Session = {

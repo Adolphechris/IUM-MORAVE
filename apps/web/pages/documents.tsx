@@ -1,5 +1,7 @@
-import { Header } from '@ium-morave/shared';
-import { Footer } from '@ium-morave/shared';
+import Header from '../shared/src/Header';
+import Footer from '../shared/src/Footer';
+import { Header } from '../../shared/src';
+import { Footer } from '../../shared/src';
 import React, { FormEvent, useEffect, useState } from 'react';
 
 type DocumentItem = {
