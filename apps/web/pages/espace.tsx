@@ -1,7 +1,5 @@
-import Header from '../shared/src/Header';
-import Footer from '../shared/src/Footer';
-import { Header } from '../../shared/src';
-import { Footer } from '../../shared/src';
+import Header from '../../shared/src/Header';
+import Footer from '../../shared/src/Footer';
 import React, { FormEvent, useState } from 'react';
 
 type Session = {
