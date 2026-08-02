@@ -1,5 +1,5 @@
-import Header from '../../shared/src/Header';
-import Footer from '../../shared/src/Footer';
+import Header from '@ium-morave/shared/src/Header';
+import Footer from '@ium-morave/shared/src/Footer';
 import React, { useEffect, useState } from 'react';
 
 type Faculty = {
