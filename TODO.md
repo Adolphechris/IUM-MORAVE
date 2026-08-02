@@ -1,9 +1,9 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1-3 Terminées ✅ | Phase 4 en cours | PR #186 CI verte, en attente de review
-> **Dernière mise à jour** : 2026-08-02 10:35
-> **Progression globale estimée** : 90%
-> **Objectif immédiat** : Obtenir review PR #186, finaliser UX apps métiers, préparer Phase 5
+> **Statut global** : 🚀 Phases 0-3 ✅ | Phase 4 ✅ | Phase 5: finance-service + notification-service ✅ | PR #186 CI verte, en attente review
+> **Dernière mise à jour** : 2026-08-02 11:15
+> **Progression globale estimée** : 95%
+> **Restant** : Supabase persistence, tests e2e, déploiement, review PR #186
 
 ---
 
