@@ -108,13 +108,17 @@ gantt
 ---
 
 ### PHASE 5 : COMPTABILITÉ, LMS & DÉPLOIEMENT
-- [x] **Module `services/finance-service`** (MVP) :
+- [x] **Module `services/finance-service`** :
   - [x] Suivi du plan de règlement des frais de scolarité (`/payment-plans`).
-  - [x] Traitement des paiements avec reçus (`/payments`, `/receipts/:id`).
-  - [x] Vérification du statut financier (`/student-status/:id`).
-- [ ] **Système de Notification** : Alerte email/SMS pour les absences, notes publiées, et relances financières.
+  - [x] Génération automatique de reçus & quittances de paiement (`/payments`, `/receipts/:id`).
+  - [x] Blocage/Déblocage automatique des accès aux relevés selon le statut financier (`/student-status/:id`).
+- [x] **Système de Notification** (`services/notification-service`) :
+  - [x] Templates d'email/SMS pour notifications académiques (grades, absences, relances).
+  - [x] Envoi ciblé et groupé de notifications.
+  - [x] Historique des notifications envoyées.
 - [ ] **Persistance Supabase** : Remplacer les données en mémoire par Supabase.
-- [ ] **Intégration & Tests Globaux** : Validation de bout en bout et déploiement.
+- [ ] **Tests e2e** : Validation de bout en bout du flux complet.
+- [ ] **Déploiement** : Configuration pour déploiement en production.
 
 ---
 
@@ -134,3 +138,4 @@ gantt
 | 2026-08-02 | CI verte PR #186 + fixes builds frontend | Kilo | ✅ Terminé |
 | 2026-08-02 | Logout, refresh token storage, session restore apps métiers | Kilo | ✅ Terminé |
 | 2026-08-02 | Phase 5: finance-service MVP (payment plans, receipts, status) | Kilo | ✅ Terminé |
+| 2026-08-02 | Phase 5: notification-service (email/SMS templates, bulk send) | Kilo | ✅ Terminé |
