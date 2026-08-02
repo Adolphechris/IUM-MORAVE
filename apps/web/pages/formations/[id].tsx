@@ -1,5 +1,5 @@
-import Header from '../../../shared/src/Header';
-import Footer from '../../../shared/src/Footer';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
