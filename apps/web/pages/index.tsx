@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 type Faculty = {
   id: number;
@@ -39,34 +38,48 @@ const stats = [
   { value: '95%', label: 'Taux d\'insertion professionnelle' },
 ];
 
-const campusGalleries = [
+const campusShowcase = [
   {
     image: '/images/student-campus.jpg',
-    title: 'Un Cadre d\'Étude Moderne et Accueillant',
-    subtitle: 'Campus Principal & Infrastructures Académiques',
-    desc: 'L\'Institut Universitaire Morave offre un environnement d\'apprentissage serein et sécurisé, doté de bâtiments modernes conçus pour favoriser l\'épanouissement intellectuel et la réussite de chaque étudiant.',
-    badge: 'Vie de Campus',
+    title: 'Cadre Pédagogique Moderne',
+    subtitle: 'Campus Principal IUM-MORAVE',
+    desc: 'Des bâtiments modernes dotés de couloirs aérés et de structures adaptées, offrant un environnement d\'apprentissage sécurisé et inspirant.',
+    badge: 'Campus',
+  },
+  {
+    image: '/images/amphitheater-class.jpg',
+    title: 'Cours Magistraux en Amphithéâtre',
+    subtitle: 'Grands Amphithéâtres Académiques',
+    desc: 'Nos amphithéâtres accueillent des centaines d\'étudiants pour des cours interactifs animés par un corps professoral hautement qualifié.',
+    badge: 'Enseignement',
+  },
+  {
+    image: '/images/student-laptop.jpg',
+    title: 'Innovation & Campus Numérique',
+    subtitle: 'Technologies & Outils de Travail',
+    desc: 'L\'IUM-MORAVE intègre les technologies modernes et l\'apprentissage connecté pour préparer des diplômés prêts pour le marché du travail.',
+    badge: 'Innovation',
+  },
+  {
+    image: '/images/student-arcade.jpg',
+    title: 'Épanouissement & Vie Étudiante',
+    subtitle: 'Galeries & Espaces de Détente',
+    desc: 'Des espaces de travail et de convivialité en plein air où les étudiants échangent, révisent et tissent des liens durables.',
+    badge: 'Vie Étudiante',
   },
   {
     image: '/images/auditorium-exam.jpg',
-    title: 'Des Auditoires Spacieux pour des Formations d\'Envergure',
-    subtitle: 'Grand Auditoire & Évaluations Rigoureuses',
-    desc: 'Nos grandes salles d\'examen et nos auditoires permettent d\'accueillir des centaines d\'étudiants dans le respect des exigences académiques du système LMD et de la discipline universitaire.',
-    badge: 'Infrastructures',
-  },
-  {
-    image: '/images/students-work.jpg',
-    title: 'La Rigueur Pédagogique au Cœur de l\'Évaluation',
-    subtitle: 'Évaluations & Examens Officiels',
-    desc: 'Concentration, assiduité et intégrité : nos étudiants sont évalués selon des standards stricts garantissant la valeur et le mérite de chaque diplôme émis par l\'IUM-MORAVE.',
-    badge: 'Excellence LMD',
+    title: 'Grands Auditoires d\'Évaluation',
+    subtitle: 'Examens Officiels LMD',
+    desc: 'Des salles spacieuses garantissant l\'équité, la discipline et la transparence lors de toutes les sessions d\'évaluation académique.',
+    badge: 'Rigueur LMD',
   },
   {
     image: '/images/student-library.jpg',
-    title: 'Accès aux Ressources & Recherche Documentaire',
-    subtitle: 'Bibliothèque & Centre de Savoir',
-    desc: 'Des milliers d\'ouvrages spécialisés, de revues scientifiques et d\'outils numériques sont mis à disposition des étudiants et enseignants-chercheurs pour approfondir leurs travaux.',
-    badge: 'Recherche & Savoir',
+    title: 'Bibliothèque & Centre de Recherches',
+    subtitle: 'Ressources & Documentation',
+    desc: 'Un accès privilégié à des milliers d\'ouvrages, manuels scientifiques et publications pour soutenir la recherche et la rédaction des mémoires.',
+    badge: 'Recherche',
   },
 ];
 
@@ -117,8 +130,8 @@ export default function Home() {
           <nav className={`nav-links${menuOpen ? ' open' : ''}`}>
             <a href="#formations">Formations</a>
             <a href="#campus">Campus en Images</a>
-            <a href="#valeurs">L&apos;IUM</a>
-            <a href="#actualites">Actualités</a>
+            <a href="#diplomes">Diplômes &amp; Réussite</a>
+            <a href="#armoiries">Armoiries</a>
             <a href="/contact">Contact</a>
             <a href="/espace" className="nav-cta">Espace numérique →</a>
           </nav>
@@ -163,7 +176,7 @@ export default function Home() {
                 className="hero-main-img"
               />
               <div className="hero-image-caption">
-                <span className="caption-tag">Campus IUM</span>
+                <span className="caption-tag">Campus IUM-MORAVE</span>
                 <p>Des étudiants épanouis dans un cadre d&apos;apprentissage moderne et sécurisé.</p>
               </div>
             </div>
@@ -181,32 +194,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── GALERIE DÉTAILLÉE DES PHOTOS DU CAMPUS ─────────────── */}
+      {/* ─── GALERIE COMPLÈTE DU CAMPUS EN IMAGES ───────────────── */}
       <section className="section" id="campus">
         <div className="section-inner">
           <div className="section-header">
             <p className="eyebrow">Immersion Institutionnelle</p>
             <h2>Le Campus IUM-MORAVE en Images</h2>
             <p className="section-desc">
-              Découvrez la vie universitaire, nos auditoires lors des séances d&apos;évaluation, nos espaces de recherche
-              et la rigueur pédagogique qui caractérisent notre établissement.
+              Découvrez en images la richesse de nos infrastructures, la rigueur de nos salles de cours,
+              l&apos;accès au numérique et le dynamisme de nos étudiants.
             </p>
           </div>
 
-          <div className="gallery-showcase">
-            {campusGalleries.map((item, idx) => (
-              <article className={`gallery-card ${idx % 2 === 1 ? 'reverse' : ''}`} key={item.title}>
-                <div className="gallery-img-wrapper">
-                  <img src={item.image} alt={item.title} className="gallery-img" />
-                  <span className="gallery-badge">{item.badge}</span>
+          <div className="showcase-grid">
+            {campusShowcase.map((item) => (
+              <article className="showcase-card" key={item.title}>
+                <div className="showcase-img-box">
+                  <img src={item.image} alt={item.title} className="showcase-img" />
+                  <span className="showcase-badge">{item.badge}</span>
                 </div>
-                <div className="gallery-content">
-                  <p className="gallery-subtitle">{item.subtitle}</p>
+                <div className="showcase-body">
+                  <p className="showcase-subtitle">{item.subtitle}</p>
                   <h3>{item.title}</h3>
-                  <p className="gallery-text">{item.desc}</p>
-                  <div className="gallery-footer-tag">
-                    <span>📍 Institut Universitaire Morave</span>
-                  </div>
+                  <p>{item.desc}</p>
                 </div>
               </article>
             ))}
@@ -214,8 +224,86 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── SECTION DÉDIÉE À LA RÉUSSITE ET COLLATION DES GRADES ─ */}
+      <section className="section section-grad" id="diplomes">
+        <div className="section-inner">
+          <div className="grad-box">
+            <div className="grad-img-col">
+              <div className="grad-img-frame">
+                <img src="/images/graduation-ceremony.jpg" alt="Collation des Grades et Diplômés IUM-MORAVE" className="grad-img" />
+                <div className="grad-badge-overlay">🏆 Promotion d&apos;Excellence LMD</div>
+              </div>
+            </div>
+
+            <div className="grad-text-col">
+              <p className="eyebrow eyebrow-light">Couronnement des Écoles</p>
+              <h2>Collation des Grades &amp; Remise des Diplômes</h2>
+              <p className="grad-lead">
+                Le moment fort de la vie académique : la célébration du mérite, de la persévérance et du succès de nos étudiants.
+              </p>
+              <p className="grad-desc">
+                Chaque année, l&apos;Institut Universitaire Morave délivre des diplômes scellés et authentifiés dans le respect strict des normes du Ministère de l&apos;Enseignement Supérieur et Universitaire (ESU). Nos diplômés rejoignent les grandes entreprises, les institutions publiques et les centres de recherche à travers le continent.
+              </p>
+
+              <div className="grad-highlights">
+                <div className="grad-hl-item">
+                  <span className="grad-hl-icon">📜</span>
+                  <div>
+                    <strong>Diplômes Officiels Homologués</strong>
+                    <span>Licence, Master et Doctorat conformes au système LMD.</span>
+                  </div>
+                </div>
+                <div className="grad-hl-item">
+                  <span className="grad-hl-icon">🔐</span>
+                  <div>
+                    <strong>Authentification Numérique Sécurisée</strong>
+                    <span>Chaque relevé et diplôme est doté d&apos;une signature cryptographique HMAC.</span>
+                  </div>
+                </div>
+              </div>
+
+              <a className="btn btn-primary btn-grad" href="/contact">Rejoindre la prochaine promotion →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FOCUS ÉVALUATION & EXAMENS ───────────────────────── */}
+      <section className="section section-alt" id="rigueur">
+        <div className="section-inner">
+          <div className="eval-box">
+            <div className="eval-text-col">
+              <p className="eyebrow">Rigueur &amp; Discipline</p>
+              <h2>Évaluations &amp; Sessions d&apos;Examens Officiels</h2>
+              <p className="eval-text">
+                L&apos;IUM-MORAVE attache une importance capitale à l&apos;intégrité académique. Nos sessions d&apos;examens se déroulent sous une surveillance stricte et un anonymat rigoureux, garantissant l&apos;équité des résultats et le mérite absolu des étudiants.
+              </p>
+              <div className="eval-features">
+                <div className="eval-feat">
+                  <strong>100%</strong>
+                  <span>Transparence des jurys de délibération</span>
+                </div>
+                <div className="eval-feat">
+                  <strong>LMD</strong>
+                  <span>Contrôle continu et travaux pratiques intégrés</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="eval-img-col">
+              <div className="eval-img-frame">
+                <img src="/images/students-work.jpg" alt="Étudiants concentrés pendant l'évaluation" className="eval-img" />
+                <div className="eval-img-caption">
+                  <span>Séance d&apos;évaluation officielle en salle de cours.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── BLASON OFFICIEL ET SYMBOLES DE L'UNIVERSITÉ ────────── */}
-      <section className="section section-alt" id="armoiries">
+      <section className="section" id="armoiries">
         <div className="section-inner">
           <div className="crest-showcase-box">
             <div className="crest-showcase-img-col">
@@ -254,12 +342,12 @@ export default function Home() {
       </section>
 
       {/* ─── FACULTÉS & FORMATIONS ───────────────────────────── */}
-      <section className="section" id="formations">
+      <section className="section section-alt" id="formations">
         <div className="section-inner">
           <p className="eyebrow">Offre académique</p>
           <h2>Facultés &amp; Formations LMD</h2>
 
-          {faculties.length > 0 && (
+          {faculties.length > 0 ? (
             <div className="cards-grid">
               {faculties.map((faculty) => (
                 <article className="card faculty-card" key={faculty.id}>
@@ -270,40 +358,10 @@ export default function Home() {
                 </article>
               ))}
             </div>
-          )}
-
-          {programs.length > 0 && (
-            <>
-              <h3 className="sub-title">Programmes d&apos;études</h3>
-              <div className="cards-grid">
-                {programs.map((program) => (
-                  <article className="card program-card" key={program.id}>
-                    <span className="card-badge yellow">{program.code}</span>
-                    <h3>{program.title}</h3>
-                    <p className="program-meta">{program.level} · {program.durationMonths} mois</p>
-                    {tracks.filter((t) => t.programId === program.id).length > 0 && (
-                      <ul className="tracks-list">
-                        {tracks
-                          .filter((t) => t.programId === program.id)
-                          .map((track) => (
-                            <li key={track.id}>
-                              <strong>{track.title}</strong>
-                              <span>{track.description}</span>
-                            </li>
-                          ))}
-                      </ul>
-                    )}
-                    <a className="card-link" href={`/formations/${program.id}`}>Voir la formation →</a>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
-
-          {faculties.length === 0 && (
+          ) : (
             <div className="cards-grid">
               {[
-                { code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Mathematiques Appliquées.' },
+                { code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Mathématiques Appliquées.' },
                 { code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement.' },
                 { code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé, Droit Public, Relations Internationales.' },
                 { code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Médecine Générale, Santé Communautaire, Épidémiologie.' },
@@ -321,7 +379,7 @@ export default function Home() {
       </section>
 
       {/* ─── ESPACES NUMÉRIQUES ──────────────────────────────── */}
-      <section className="section section-alt" id="espaces">
+      <section className="section" id="espaces">
         <div className="section-inner">
           <p className="eyebrow">Services numériques</p>
           <h2>Vos espaces institutionnels en ligne</h2>
@@ -369,7 +427,7 @@ export default function Home() {
               <strong>Académique</strong>
               <a href="#formations">Formations LMD</a>
               <a href="#campus">Campus en Images</a>
-              <a href="/documents">Documents Officiels</a>
+              <a href="#diplomes">Diplômes &amp; Réussite</a>
             </div>
             <div>
               <strong>Institution</strong>
@@ -449,8 +507,7 @@ export default function Home() {
           background: var(--gold) !important;
           color: var(--navy) !important;
           font-weight: 800 !important;
-          padding: .55rem 1.2rem;
-          border-radius: .5rem;
+          padding: .55rem 1.2rem; border-radius: .5rem;
           font-size: .88rem !important;
           transition: transform .15s, box-shadow .15s !important;
         }
@@ -464,10 +521,7 @@ export default function Home() {
           padding: 5rem 1.5rem 4rem;
         }
         .hero-bg { position: absolute; inset: 0; pointer-events: none; }
-        .hero-orb {
-          position: absolute; border-radius: 50%;
-          filter: blur(90px); opacity: .25;
-        }
+        .hero-orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .25; }
         .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #1a8cd8, transparent); top: -120px; left: -100px; }
         .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, var(--gold), transparent); bottom: -80px; right: -80px; opacity: .18; }
         .hero-grid {
@@ -482,155 +536,155 @@ export default function Home() {
           display: grid; grid-template-columns: 1fr 1fr;
           gap: 3rem; align-items: center;
         }
-        .hero-badge-row {
-          display: flex; align-items: center; gap: .75rem;
-          margin-bottom: 1.25rem;
-        }
-        .hero-crest-mini {
-          width: 2rem; height: 2rem; border-radius: 50%;
-          border: 1.5px solid var(--gold);
-        }
-        .hero-overtitle {
-          color: var(--gold); font-size: .85rem; font-weight: 700;
-          letter-spacing: .08em; text-transform: uppercase;
-        }
+        .hero-badge-row { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.25rem; }
+        .hero-crest-mini { width: 2rem; height: 2rem; border-radius: 50%; border: 1.5px solid var(--gold); }
+        .hero-overtitle { color: var(--gold); font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
         .hero-title {
           font-size: clamp(2.5rem, 4.5vw, 4.2rem);
-          font-weight: 900; line-height: 1.08;
-          color: #fff; margin-bottom: 1.25rem;
-          letter-spacing: -.02em;
+          font-weight: 900; line-height: 1.08; color: #fff; margin-bottom: 1.25rem; letter-spacing: -.02em;
         }
         .highlight {
           background: linear-gradient(135deg, var(--gold) 0%, #f97316 100%);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-          background-clip: text;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        .hero-subtitle {
-          color: rgba(255,255,255,.82);
-          font-size: 1.05rem; margin-bottom: 2rem;
-          line-height: 1.7;
-        }
+        .hero-subtitle { color: rgba(255,255,255,.82); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.7; }
         .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
         .btn {
-          display: inline-block; text-decoration: none;
-          font-weight: 700; border-radius: .6rem;
-          padding: .85rem 1.75rem; font-size: .95rem;
+          display: inline-block; text-decoration: none; font-weight: 700;
+          border-radius: .6rem; padding: .85rem 1.75rem; font-size: .95rem;
           transition: transform .15s, box-shadow .15s;
         }
         .btn:hover { transform: translateY(-2px); }
-        .btn-primary {
-          background: var(--gold); color: var(--navy);
-          box-shadow: 0 6px 24px rgba(245,185,20,.35);
-        }
+        .btn-primary { background: var(--gold); color: var(--navy); box-shadow: 0 6px 24px rgba(245,185,20,.35); }
         .btn-ghost { border: 1.5px solid rgba(255,255,255,.35); color: #fff; }
         .btn-ghost:hover { background: rgba(255,255,255,.08); }
 
-        /* VISUEL HERO ÉTUDIANTE */
+        /* VISUEL HERO */
         .hero-visual-col { position: relative; }
         .hero-image-frame {
-          position: relative; border-radius: 1.25rem;
-          overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0,0,0,.4);
-          border: 3px solid rgba(255,255,255,.15);
+          position: relative; border-radius: 1.25rem; overflow: hidden;
+          box-shadow: 0 20px 50px rgba(0,0,0,.4); border: 3px solid rgba(255,255,255,.15);
         }
-        .hero-main-img {
-          width: 100%; height: 420px; object-fit: cover;
-          display: block;
-        }
+        .hero-main-img { width: 100%; height: 420px; object-fit: cover; display: block; }
         .hero-image-caption {
           position: absolute; bottom: 0; left: 0; right: 0;
           background: linear-gradient(0deg, rgba(7,30,56,.95) 0%, rgba(7,30,56,0) 100%);
           padding: 2rem 1.5rem 1.25rem; color: #fff;
         }
         .caption-tag {
-          background: var(--gold); color: var(--navy);
-          font-size: .7rem; font-weight: 800; text-transform: uppercase;
-          padding: .2rem .6rem; border-radius: 2rem;
-          display: inline-block; margin-bottom: .4rem;
+          background: var(--gold); color: var(--navy); font-size: .7rem;
+          font-weight: 800; text-transform: uppercase; padding: .2rem .6rem;
+          border-radius: 2rem; display: inline-block; margin-bottom: .4rem;
         }
         .hero-image-caption p { font-size: .9rem; opacity: .9; }
 
         /* STATS */
         .hero-stats {
           position: relative; z-index: 1;
-          display: grid; grid-template-columns: repeat(4, 1fr);
-          gap: 1px; background: rgba(255,255,255,.1);
-          border: 1px solid rgba(255,255,255,.12);
-          border-radius: var(--radius);
-          margin: 3.5rem auto 0;
-          max-width: 1240px; overflow: hidden;
+          display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+          background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.12);
+          border-radius: var(--radius); margin: 3.5rem auto 0; max-width: 1240px; overflow: hidden;
         }
-        .stat-card {
-          background: rgba(255,255,255,.04);
-          padding: 1.4rem 1rem;
-          display: flex; flex-direction: column; align-items: center;
-          gap: .25rem;
-        }
+        .stat-card { background: rgba(255,255,255,.04); padding: 1.4rem 1rem; display: flex; flex-direction: column; align-items: center; gap: .25rem; }
         .stat-value { font-size: 1.9rem; font-weight: 900; color: var(--gold); }
         .stat-label { color: rgba(255,255,255,.7); font-size: .82rem; text-align: center; }
 
-        /* ── SECTIONS & SHOWCASE GALERIE ──────────────────────── */
+        /* ── SECTIONS & SHOWCASE GALERIE GRID ───────────────────── */
         .section { padding: 5.5rem 1.5rem; }
         .section-alt { background: var(--white); }
         .section-inner { max-width: 1240px; margin: 0 auto; }
         .section-header { text-align: center; max-width: 760px; margin: 0 auto 3.5rem; }
-        .eyebrow {
-          color: var(--sky); font-size: .8rem; font-weight: 800;
-          letter-spacing: .12em; text-transform: uppercase;
-          margin-bottom: .4rem;
-        }
+        .eyebrow { color: var(--sky); font-size: .8rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .4rem; }
         h2 { font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 800; color: var(--navy); margin-bottom: .75rem; }
         .section-desc { color: var(--gray-500); font-size: 1.05rem; }
-        .sub-title { font-size: 1.35rem; font-weight: 700; color: var(--navy); margin: 2.5rem 0 1.5rem; }
 
-        .gallery-showcase { display: flex; flex-direction: column; gap: 3rem; }
-        .gallery-card {
-          display: grid; grid-template-columns: 1fr 1fr;
-          gap: 2.5rem; align-items: center;
-          background: var(--white);
-          border: 1px solid var(--gray-200);
-          border-radius: var(--radius);
-          overflow: hidden;
-          box-shadow: var(--shadow);
-          transition: transform .25s, box-shadow .25s;
+        .showcase-grid {
+          display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          gap: 1.75rem;
         }
-        .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(7,30,56,.12); }
-        .gallery-card.reverse { direction: rtl; }
-        .gallery-card.reverse .gallery-content { direction: ltr; }
-        .gallery-img-wrapper { position: relative; height: 340px; overflow: hidden; }
-        .gallery-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-        .gallery-card:hover .gallery-img { transform: scale(1.04); }
-        .gallery-badge {
-          position: absolute; top: 1.25rem; left: 1.25rem;
+        .showcase-card {
+          background: var(--white); border: 1px solid var(--gray-200);
+          border-radius: var(--radius); overflow: hidden;
+          box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
+          display: flex; flex-direction: column;
+        }
+        .showcase-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(7,30,56,.12); }
+        .showcase-img-box { position: relative; height: 230px; overflow: hidden; }
+        .showcase-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+        .showcase-card:hover .showcase-img { transform: scale(1.05); }
+        .showcase-badge {
+          position: absolute; top: 1rem; left: 1rem;
           background: rgba(7,30,56,.85); backdrop-filter: blur(8px);
-          color: var(--gold); font-size: .75rem; font-weight: 800;
-          padding: .35rem .85rem; border-radius: 2rem;
-          text-transform: uppercase; letter-spacing: .06em;
+          color: var(--gold); font-size: .72rem; font-weight: 800;
+          padding: .3rem .75rem; border-radius: 2rem; text-transform: uppercase;
         }
-        .gallery-content { padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: .75rem; }
-        .gallery-subtitle { color: var(--sky); font-size: .82rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-        .gallery-content h3 { font-size: 1.4rem; font-weight: 800; color: var(--navy); line-height: 1.25; }
-        .gallery-text { color: var(--gray-500); font-size: .98rem; line-height: 1.7; }
-        .gallery-footer-tag { font-size: .82rem; font-weight: 600; color: var(--gray-700); margin-top: .5rem; }
+        .showcase-body { padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+        .showcase-subtitle { color: var(--sky); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
+        .showcase-body h3 { font-size: 1.15rem; font-weight: 800; color: var(--navy); }
+        .showcase-body p { color: var(--gray-500); font-size: .92rem; line-height: 1.6; }
+
+        /* ── SECTION DIPLÔMES ET REMISE DES GRADES ─────────────── */
+        .section-grad {
+          background: linear-gradient(135deg, #071e38 0%, #0b3d6b 100%);
+          color: #fff; padding: 6rem 1.5rem;
+        }
+        .eyebrow-light { color: var(--gold); }
+        .grad-box {
+          display: grid; grid-template-columns: 1fr 1.1fr;
+          gap: 4rem; align-items: center;
+        }
+        .grad-img-frame {
+          position: relative; border-radius: 1.25rem; overflow: hidden;
+          border: 3px solid var(--gold); box-shadow: 0 20px 50px rgba(0,0,0,.5);
+        }
+        .grad-img { width: 100%; height: 440px; object-fit: cover; display: block; }
+        .grad-badge-overlay {
+          position: absolute; bottom: 1.5rem; left: 1.5rem;
+          background: rgba(245,185,20,.95); color: var(--navy);
+          font-weight: 900; font-size: .9rem; padding: .5rem 1.2rem;
+          border-radius: 2rem; box-shadow: 0 6px 20px rgba(0,0,0,.3);
+        }
+        .grad-text-col h2 { color: #fff; margin-bottom: 1rem; }
+        .grad-lead { font-size: 1.15rem; font-weight: 600; color: var(--gold-l); margin-bottom: 1rem; }
+        .grad-desc { color: rgba(255,255,255,.82); font-size: 1rem; margin-bottom: 2rem; line-height: 1.75; }
+        .grad-highlights { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2.5rem; }
+        .grad-hl-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .grad-hl-icon { font-size: 1.6rem; flex-shrink: 0; }
+        .grad-hl-item strong { color: #fff; display: block; font-size: 1rem; }
+        .grad-hl-item span { color: rgba(255,255,255,.75); font-size: .9rem; }
+        .btn-grad { padding: 1rem 2.25rem; font-size: 1rem; }
+
+        /* ── SECTION RIGUEUR & ÉVALUATION ───────────────────────── */
+        .eval-box {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 3.5rem; align-items: center;
+        }
+        .eval-text { color: var(--gray-500); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.7; }
+        .eval-features { display: flex; gap: 2.5rem; }
+        .eval-feat { display: flex; flex-direction: column; gap: .25rem; }
+        .eval-feat strong { font-size: 2.2rem; font-weight: 900; color: var(--navy); line-height: 1; }
+        .eval-feat span { font-size: .85rem; color: var(--gray-500); font-weight: 600; max-width: 180px; }
+        .eval-img-frame {
+          position: relative; border-radius: 1.25rem; overflow: hidden;
+          box-shadow: var(--shadow); border: 1px solid var(--gray-200);
+        }
+        .eval-img { width: 100%; height: 350px; object-fit: cover; display: block; }
+        .eval-img-caption {
+          position: absolute; bottom: 0; left: 0; right: 0;
+          background: rgba(7,30,56,.85); backdrop-filter: blur(8px);
+          color: #fff; padding: .85rem 1.25rem; font-size: .85rem; font-weight: 600;
+        }
 
         /* ── SHOWCASE ARMOIRIES ────────────────────────────── */
         .crest-showcase-box {
-          display: grid; grid-template-columns: 320px 1fr;
-          gap: 3.5rem; align-items: center;
+          display: grid; grid-template-columns: 320px 1fr; gap: 3.5rem; align-items: center;
           background: linear-gradient(135deg, #071e38 0%, #0b3d6b 100%);
-          border-radius: var(--radius);
-          padding: 3.5rem; color: #fff;
+          border-radius: var(--radius); padding: 3.5rem; color: #fff;
           box-shadow: 0 16px 40px rgba(7,30,56,.2);
         }
-        .crest-showcase-img-col {
-          display: flex; justify-content: center; align-items: center;
-        }
-        .crest-showcase-img {
-          width: 240px; height: auto; border-radius: 1.25rem;
-          box-shadow: 0 12px 32px rgba(0,0,0,.5);
-          border: 3px solid var(--gold);
-        }
+        .crest-showcase-img-col { display: flex; justify-content: center; align-items: center; }
+        .crest-showcase-img { width: 240px; height: auto; border-radius: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,.5); border: 3px solid var(--gold); }
         .crest-showcase-text-col h2 { color: #fff; }
         .crest-desc { color: rgba(255,255,255,.82); font-size: 1.05rem; margin-bottom: 1.5rem; }
         .crest-symbols-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
@@ -649,13 +703,7 @@ export default function Home() {
         }
         .card:hover { transform: translateY(-4px); }
         .faculty-card { border-top: 3px solid var(--sky); }
-        .program-card { border-top: 3px solid var(--gold); }
-        .card-badge {
-          display: inline-block; background: #e7f3fc; color: var(--blue);
-          font-size: .7rem; font-weight: 800; letter-spacing: .08em;
-          padding: .25rem .65rem; border-radius: 2rem; width: fit-content;
-        }
-        .card-badge.yellow { background: #fef9c3; color: #92400e; }
+        .card-badge { display: inline-block; background: #e7f3fc; color: var(--blue); font-size: .7rem; font-weight: 800; padding: .25rem .65rem; border-radius: 2rem; width: fit-content; }
         .card h3 { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
         .card p { font-size: .92rem; color: var(--gray-500); flex: 1; }
         .card-link { color: var(--sky); font-weight: 700; font-size: .9rem; text-decoration: none; margin-top: auto; }
@@ -692,9 +740,9 @@ export default function Home() {
         .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding: 1.25rem 1.5rem; text-align: center; font-size: .82rem; }
 
         @media (max-width: 900px) {
-          .hero-container { grid-template-columns: 1fr; }
-          .gallery-card, .gallery-card.reverse { grid-template-columns: 1fr; direction: ltr; }
+          .hero-container, .grad-box, .eval-box { grid-template-columns: 1fr; gap: 2rem; }
           .crest-showcase-box { grid-template-columns: 1fr; padding: 2rem; }
+          .showcase-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 600px) {
           .hero-stats { grid-template-columns: repeat(2, 1fr); }
