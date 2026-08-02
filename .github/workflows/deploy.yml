@@ -15,33 +15,15 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install --workspaces=false
-      - name: Deploy auth-service
+      - name: Start all services
         run: |
-          cd services/auth-service
-          npm start &
+          cd services/auth-service && npm start &
+          cd ../core-api && npm start &
+          cd ../finance-service && npm start &
+          cd ../notification-service && npm start &
+          wait
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
           JWT_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
-      - name: Deploy core-api
-        run: |
-          cd services/core-api
-          npm start &
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
-          JWT_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
-      - name: Deploy finance-service
-        run: |
-          cd services/finance-service
-          npm start &
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
-      - name: Deploy notification-service
-        run: |
-          cd services/notification-service
-          npm start &
