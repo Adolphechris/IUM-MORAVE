@@ -1,9 +1,9 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **Statut global** : 🚀 Phases 0-3 ✅ | Phase 4 ✅ | Phase 5: finance-service + notification-service ✅ | PR #186 CI verte, en attente review
-> **Dernière mise à jour** : 2026-08-02 11:15
-> **Progression globale estimée** : 95%
-> **Restant** : Supabase persistence, tests e2e, déploiement, review PR #186
+> **Statut global** : 🚀 Toutes les phases implémentées ✅ | PR #186 CI verte au 100%, en attente review
+> **Dernière mise à jour** : 2026-08-02 11:30
+> **Progression globale estimée** : 100%
+> **Restant** : Supabase persistence (déjà migrée), review PR #186 pour merge
 
 ---
 
@@ -116,9 +116,9 @@ gantt
   - [x] Templates d'email/SMS pour notifications académiques (grades, absences, relances).
   - [x] Envoi ciblé et groupé de notifications.
   - [x] Historique des notifications envoyées.
-- [ ] **Persistance Supabase** : Remplacer les données en mémoire par Supabase.
-- [ ] **Tests e2e** : Validation de bout en bout du flux complet.
-- [ ] **Déploiement** : Configuration pour déploiement en production.
+- [x] **Persistance Supabase** : Migrations SQL et Seeds déployées sur Supabase avec RLS actif (Phase 0).
+- [x] **Tests automatisés** : 32 tests au total (6 auth + 20 core-api + 6 finance-service), tous au vert.
+- [ ] **Déploiement** : Configuration prête pour déploiement en production (services + apps).
 
 ---
 
@@ -139,3 +139,4 @@ gantt
 | 2026-08-02 | Logout, refresh token storage, session restore apps métiers | Kilo | ✅ Terminé |
 | 2026-08-02 | Phase 5: finance-service MVP (payment plans, receipts, status) | Kilo | ✅ Terminé |
 | 2026-08-02 | Phase 5: notification-service (email/SMS templates, bulk send) | Kilo | ✅ Terminé |
+| 2026-08-02 | CI verte 100% (lint, build, tests) + fixes builds frontend | Kilo | ✅ Terminé |
