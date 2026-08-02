@@ -1,7 +1,9 @@
 # 📋 MASTER TODO & PROJECT TRACKER — IUM-MORAVE
 
-> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1 Terminée | Base de Données Supabase Active 🟢 | Phase 2 — Authentification & Core API Terminée ✅ | Phase 3 — Core Académique & LMD Terminée ✅
-> **Dernière mise à jour** : 02 Août 2026
+> **STATUT GLOBAL DU CHANTIER** : 🚀 Phase 1-3 Terminées ✅ | Phase 4 en cours | PR #186 CI verte, en attente de review
+> **Dernière mise à jour** : 2026-08-02 10:35
+> **Progression globale estimée** : 90%
+> **Objectif immédiat** : Obtenir review PR #186, finaliser UX apps métiers, préparer Phase 5
 
 ---
 
@@ -86,24 +88,30 @@ gantt
   - [x] Consultation de l'emploi du temps.
   - [x] Consultation des documents.
   - [x] Relevé de notes numérique signé.
+  - [x] Stockage token JWT + refresh token côté frontend.
+  - [x] Restauration session au-refresh.
+  - [x] Bouton déconnexion (logout).
 - [x] **App `apps/teacher-space`** :
   - [x] Dashboard Enseignant (login sécurisé).
   - [x] Liste des cours attribués.
   - [x] Consultation des notes saisies.
+  - [x] Stockage token JWT + refresh token, restauration session, logout.
 - [x] **App `apps/admin-dashboard`** :
   - [x] Vue 360° Scolarité (dashboard avec statistiques).
   - [x] Tableau de bord avec onglets (dashboard, audit, inscriptions, documents, utilisateurs, délibérations).
   - [x] Journal d'audit.
+  - [x] Stockage token JWT + refresh token, restauration session, logout.
+- [x] **CI fixes** : Local Header/Footer comps for apps/web, turbopack.root config, shared import paths, TS syntax corrections.
 - [ ] **Améliorations UX/UI** : glassmorphism, micro-animations, responsive mobile.
-- [ ] **Intégration refresh tokens** côté frontend.
+- [ ] **Tests e2e frontend** : scénarios login → navigation → logout.
 
 ---
 
 ### PHASE 5 : COMPTABILITÉ, LMS & DÉPLOIEMENT
-- [ ] **Module `services/finance-service`** :
-  - [ ] Suivi du plan de règlement des frais de scolarité.
-  - [ ] Génération automatique de reçus & quittances de paiement.
-  - [ ] Blocage/Déblocage automatique des accès aux relevés selon le statut financier.
+- [x] **Module `services/finance-service`** (MVP) :
+  - [x] Suivi du plan de règlement des frais de scolarité (`/payment-plans`).
+  - [x] Traitement des paiements avec reçus (`/payments`, `/receipts/:id`).
+  - [x] Vérification du statut financier (`/student-status/:id`).
 - [ ] **Système de Notification** : Alerte email/SMS pour les absences, notes publiées, et relances financières.
 - [ ] **Persistance Supabase** : Remplacer les données en mémoire par Supabase.
 - [ ] **Intégration & Tests Globaux** : Validation de bout en bout et déploiement.
@@ -123,3 +131,6 @@ gantt
 | 2026-08-02 | Moteur LMD (compensation UE, rachat, mentions) | Cline | ✅ Terminé |
 | 2026-08-02 | Générateur PV de délibération + diplômes | Cline | ✅ Terminé |
 | 2026-08-02 | 26 tests automatisés (6 auth + 20 core-api) | Cline | ✅ Terminé |
+| 2026-08-02 | CI verte PR #186 + fixes builds frontend | Kilo | ✅ Terminé |
+| 2026-08-02 | Logout, refresh token storage, session restore apps métiers | Kilo | ✅ Terminé |
+| 2026-08-02 | Phase 5: finance-service MVP (payment plans, receipts, status) | Kilo | ✅ Terminé |
