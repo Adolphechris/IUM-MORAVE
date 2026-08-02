@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { findUserByEmail, createUser, listUsers, validatePassword, safeUser, generateResetToken, blacklistToken, isTokenBlacklisted } = require('./user-store');
-const { signToken, verifyToken, signResetToken, verifyResetToken } = require('./token');
+const bcrypt = require('bcryptjs');
+const { ROLES, findUserByEmail, findUserById, createUser, listUsers, validatePassword, safeUser, generateResetToken, blacklistToken, isTokenBlacklisted, updatePassword } = require('./user-store');
+const { signToken, verifyToken, signResetToken, verifyResetToken, signRefreshToken, verifyRefreshToken, signEmailVerifyToken, verifyEmailVerifyToken } = require('./token');
 
 const PORT = process.env.PORT || 4001;
 const app = express();
@@ -112,7 +113,85 @@ app.post('/auth/login', (req, res) => {
     lastName: user.lastName,
     emailVerified: Boolean(user.emailVerified)
   });
-  res.json({ user: safeUser(user), token });
+
+  const refreshToken = signRefreshToken({
+    sub: user.id,
+    email: user.email,
+    role: user.role
+  });
+
+  res.json({ user: safeUser(user), token, refreshToken });
+});
+
+// ── Refresh token endpoint ────────────────────────────────────────────────────
+
+app.post('/auth/refresh', (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(400).json({ error: 'refreshToken is required' });
+  }
+
+  let payload;
+  try {
+    payload = verifyRefreshToken(refreshToken);
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid or expired refresh token' });
+  }
+
+  const user = findUserByEmail(payload.email);
+  if (!user) {
+    return res.status(401).json({ error: 'User not found' });
+  }
+
+  const newToken = signToken({
+    sub: user.id,
+    email: user.email,
+    role: user.role,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    emailVerified: Boolean(user.emailVerified)
+  });
+
+  res.json({ token: newToken });
+});
+
+// ── Email verification endpoints ──────────────────────────────────────────────
+
+app.post('/auth/verify-email/request', authenticate, (req, res) => {
+  const user = findUserByEmail(req.user.email);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  if (user.emailVerified) {
+    return res.json({ message: 'Email already verified' });
+  }
+
+  const verifyToken = signEmailVerifyToken({ email: user.email });
+  // En production, envoyer un email avec le lien de vérification
+  // Pour le MVP, on retourne le token dans la réponse
+  res.json({ message: 'Verification email sent', verifyToken });
+});
+
+app.post('/auth/verify-email/confirm', (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    return res.status(400).json({ error: 'Verification token is required' });
+  }
+
+  let payload;
+  try {
+    payload = verifyEmailVerifyToken(token);
+  } catch (error) {
+    return res.status(400).json({ error: 'Invalid or expired verification token' });
+  }
+
+  const user = findUserByEmail(payload.email);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  user.emailVerified = true;
+  res.json({ message: 'Email verified successfully', user: safeUser(user) });
 });
 
 app.post('/auth/logout', authenticate, (req, res) => {
@@ -136,11 +215,11 @@ app.post('/auth/forgot-password', (req, res) => {
     return res.status(200).json({ message: 'If the email exists, a reset link will be sent.' });
   }
 
-  const { token, expiresAt } = generateResetToken();
-  user.resetToken = token;
-  user.resetExpiresAt = expiresAt;
+  const resetToken = signResetToken({ email: user.email });
+  user.resetToken = resetToken;
+  user.resetExpiresAt = Date.now() + 3600000;
 
-  res.status(200).json({ message: 'If the email exists, a reset link will be sent.', resetToken: token });
+  res.status(200).json({ message: 'If the email exists, a reset link will be sent.', resetToken });
 });
 
 app.post('/auth/reset-password', (req, res) => {
@@ -164,7 +243,7 @@ app.post('/auth/reset-password', (req, res) => {
     return res.status(400).json({ error: 'Invalid or expired reset token' });
   }
 
-  user.passwordHash = bcrypt.hashSync(password, 12);
+  updatePassword(user, password);
   user.resetToken = null;
   user.resetExpiresAt = null;
 

@@ -18,10 +18,13 @@ const {
 const { authenticate, requireRole } = require('./auth');
 const { createInstitutionalEmail, sendInstitutionalEmail } = require('./email-service');
 const { buildTranscript } = require('./transcript-service');
+const { evaluateDeliberation, generateDeliberationPV, generateDiplomaData, getMention } = require('./lmd-engine');
 
 const PORT = process.env.PORT || 4002;
 const app = express();
 const transcriptRegistry = new Map();
+const pvRegistry = new Map();
+const diplomaRegistry = new Map();
 const auditLogs = [];
 const contactRequests = [];
 const contactRateLimits = new Map();
@@ -628,36 +631,161 @@ app.get('/admin/deliberations', authenticate, requireRole('admin'), (req, res) =
 
 app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
   const enrollmentId = Number(req.params.id);
-  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
   const enrollment = enrollments.find((item) => item.id === enrollmentId);
   if (!enrollment) {
     return res.status(404).json({ error: 'Enrollment not found' });
   }
+
+  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollmentId);
   if (enrollmentGrades.length === 0) {
     return res.status(400).json({ error: 'No grades available for deliberation' });
   }
 
-  const totalCredits = enrollmentGrades.reduce((sum, grade) => sum + grade.credits, 0);
-  const weightedSum = enrollmentGrades.reduce((sum, grade) => sum + grade.score * grade.credits, 0);
-  const weightedAverage = totalCredits > 0 ? weightedSum / totalCredits : 0;
-  const decision = weightedAverage >= 10 ? 'validated' : 'rejected';
+  // Utiliser le moteur LMD pour évaluer la délibération
+  const evaluation = evaluateDeliberation(enrollmentGrades);
 
-  enrollmentGrades.forEach((grade) => {
-    grade.status = 'validated';
-  });
+  // Marquer les notes comme validées si la décision est validated
+  if (evaluation.decision === 'validated') {
+    enrollmentGrades.forEach((grade) => {
+      grade.status = 'validated';
+    });
+  }
 
   const deliberation = {
     id: deliberations.length + 1,
     enrollmentId,
-    decision,
-    weightedAverage: Number(weightedAverage.toFixed(2)),
-    totalCredits,
+    decision: evaluation.decision,
+    weightedAverage: evaluation.weightedAverage,
+    totalCredits: evaluation.totalCredits,
+    validatedCredits: evaluation.validatedCredits,
+    reason: evaluation.reason,
+    mention: getMention(evaluation.weightedAverage),
     finalizedBy: req.user.email,
     finalizedAt: new Date().toISOString()
   };
   deliberations.push(deliberation);
   audit(req, 'validate', 'deliberation', deliberation.id);
   res.status(201).json(deliberation);
+});
+
+// ── Endpoints LMD : PV de délibération ────────────────────────────────────────
+
+app.get('/enrollments/:id/pv', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  const program = programs.find((item) => item.id === enrollment.programId);
+  if (!program) {
+    return res.status(404).json({ error: 'Program not found' });
+  }
+
+  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollment.id);
+  if (enrollmentGrades.length === 0) {
+    return res.status(400).json({ error: 'No grades available for PV generation' });
+  }
+
+  const pv = generateDeliberationPV({
+    enrollment,
+    program,
+    grades: enrollmentGrades,
+    finalizedBy: req.user.email
+  });
+
+  pvRegistry.set(pv.pvNumber, pv);
+  audit(req, 'issue', 'pv-deliberation', enrollment.id);
+  res.json(pv);
+});
+
+// ── Endpoints LMD : Évaluation (preview avant délibération) ───────────────────
+
+app.get('/enrollments/:id/evaluation', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollment.id);
+  const evaluation = evaluateDeliberation(enrollmentGrades);
+  res.json({ enrollment, evaluation });
+});
+
+// ── Endpoints LMD : Génération de diplôme ─────────────────────────────────────
+
+app.post('/enrollments/:id/diploma', authenticate, requireRole('admin'), (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  // Vérifier qu'une délibération validée existe
+  const deliberation = deliberations.find(
+    (d) => d.enrollmentId === enrollment.id && d.decision === 'validated'
+  );
+  if (!deliberation) {
+    return res.status(400).json({ error: 'No validated deliberation found — diploma cannot be issued' });
+  }
+
+  const program = programs.find((item) => item.id === enrollment.programId);
+  if (!program) {
+    return res.status(404).json({ error: 'Program not found' });
+  }
+
+  const diploma = generateDiplomaData({ enrollment, program, deliberation });
+  diplomaRegistry.set(diploma.diplomaNumber, diploma);
+
+  // Mettre à jour le statut d'inscription
+  enrollment.status = 'graduated';
+
+  audit(req, 'issue', 'diploma', enrollment.id);
+  res.status(201).json(diploma);
+});
+
+// ── Vérification de diplôme (endpoint public) ────────────────────────────────
+
+app.post('/verification/diploma', (req, res) => {
+  const { diploma_number, qr_code } = req.body;
+  if (!diploma_number && !qr_code) {
+    return res.status(400).json({ error: 'diploma_number or qr_code is required' });
+  }
+
+  // Vérifier dans le registry d'abord
+  if (diploma_number && diplomaRegistry.has(diploma_number)) {
+    const diploma = diplomaRegistry.get(diploma_number);
+    return res.json({
+      verified: true,
+      diploma_number: diploma.diplomaNumber,
+      studentName: diploma.studentName,
+      programTitle: diploma.programTitle,
+      level: diploma.level,
+      mention: diploma.mention,
+      issuedDate: diploma.issuedDate,
+      issued_by: 'IUM-MORAVE'
+    });
+  }
+
+  // Vérification par code QR
+  if (qr_code) {
+    for (const diploma of diplomaRegistry.values()) {
+      if (diploma.verificationCode === qr_code) {
+        return res.json({
+          verified: true,
+          diploma_number: diploma.diplomaNumber,
+          studentName: diploma.studentName,
+          programTitle: diploma.programTitle,
+          level: diploma.level,
+          mention: diploma.mention,
+          issuedDate: diploma.issuedDate,
+          issued_by: 'IUM-MORAVE'
+        });
+      }
+    }
+  }
+
+  // Fallback pour les tests existants
+  const valid = diploma_number === 'DIP-2026-0001' || qr_code === 'VALID-DIP-QR-2026';
+  res.json({ verified: valid, diploma_number, qr_code, issued_by: 'IUM-MORAVE' });
 });
 
 function createTranscriptForEnrollment(enrollment) {
@@ -752,16 +880,6 @@ app.get('/courses/:id/stats', authenticate, requireRole('admin', 'teacher'), (re
   const courseGrades = grades.filter((grade) => grade.courseCode === course.code);
   const average = courseGrades.length ? courseGrades.reduce((sum, grade) => sum + grade.score, 0) / courseGrades.length : 0;
   res.json({ course, grades: courseGrades, average: Number(average.toFixed(2)), count: courseGrades.length });
-});
-
-app.post('/verification/diploma', (req, res) => {
-  const { diploma_number, qr_code } = req.body;
-  if (!diploma_number && !qr_code) {
-    return res.status(400).json({ error: ' diploma_number or qr_code is required' });
-  }
-
-  const valid = diploma_number === 'DIP-2026-0001' || qr_code === 'VALID-DIP-QR-2026';
-  res.json({ verified: valid, diploma_number, qr_code, issued_by: 'IUM-MORAVE' });
 });
 
 app.use((req, res) => {

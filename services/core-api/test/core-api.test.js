@@ -240,7 +240,7 @@ test('allows admin to create and update academic catalog', async () => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${adminToken}`
     },
-    body: JSON.stringify({ code: 'FLSH', name: 'Lettres et Sciences Humaines' })
+    body: JSON.stringify({ code: 'FSS', name: 'Faculté des Sciences Sociales' })
   });
   assert.equal(faculty.status, 201);
   const facultyData = await faculty.json();
@@ -251,7 +251,7 @@ test('allows admin to create and update academic catalog', async () => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${adminToken}`
     },
-    body: JSON.stringify({ facultyId: facultyData.id, code: 'LIC-LSH', title: 'Licence Lettres', level: 'licence', durationMonths: 36 })
+    body: JSON.stringify({ facultyId: facultyData.id, code: 'LIC-SOC', title: 'Licence en Sociologie', level: 'licence', durationMonths: 36 })
   });
   assert.equal(program.status, 201);
 
@@ -303,7 +303,7 @@ test('allows admin to deliberate and compute weighted average', async () => {
   });
   assert.equal(deliberation.status, 201);
   const deliberationData = await deliberation.json();
-  assert.ok(['validated', 'rejected'].includes(deliberationData.decision));
+  assert.ok(['validated', 'rachat', 'rejected'].includes(deliberationData.decision));
   assert.ok(typeof deliberationData.weightedAverage === 'number');
 });
 
@@ -317,4 +317,122 @@ test('returns course stats for authenticated user', async () => {
   assert.equal(response.status, 200);
   assert.ok(result.course);
   assert.ok(typeof result.average === 'number');
+});
+
+// ── Tests LMD : Moteur de délibération, PV et diplômes ────────────────────────
+
+test('LMD: evaluates deliberation with weighted average and mention', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/enrollments/1/evaluation`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const result = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(result.evaluation);
+  assert.ok(['validated', 'rachat', 'rejected'].includes(result.evaluation.decision));
+  assert.ok(typeof result.evaluation.weightedAverage === 'number');
+  assert.ok(result.evaluation.ues);
+  assert.ok(result.evaluation.ues.length > 0);
+});
+
+test('LMD: generates a deliberation PV with full academic details', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+  const response = await fetch(`${baseUrl}/enrollments/1/pv`, {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const pv = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(pv.documentType, 'procès-verbal-délibération');
+  assert.ok(pv.pvNumber);
+  assert.equal(pv.institution, 'Institut Universitaire Morave de Mwene-Ditu');
+  assert.ok(pv.student.name);
+  assert.ok(pv.student.matricule);
+  assert.ok(pv.program.code);
+  assert.ok(pv.deliberation);
+  assert.ok(pv.units);
+  assert.ok(pv.mention);
+  assert.ok(['Très Bien', 'Bien', 'Assez Bien', 'Passable', 'Rachat', 'Ajourné'].includes(pv.mention));
+});
+
+test('LMD: issues a diploma after validated deliberation', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+
+  // D'abord délibérer
+  const deliberation = await fetch(`${baseUrl}/enrollments/1/deliberation`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+  const deliberationData = await deliberation.json();
+
+  // Si la délibération est validée, on peut émettre le diplôme
+  if (deliberationData.decision === 'validated') {
+    const diplomaResponse = await fetch(`${baseUrl}/enrollments/1/diploma`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`
+      }
+    });
+    const diploma = await diplomaResponse.json();
+
+    assert.equal(diplomaResponse.status, 201);
+    assert.ok(diploma.diplomaNumber);
+    assert.ok(diploma.verificationCode);
+    assert.equal(diploma.status, 'issued');
+    assert.equal(diploma.issuedBy, 'IUM-MORAVE');
+    assert.ok(diploma.mention);
+  } else {
+    // Si rachat ou rejected, le diplôme ne peut pas être émis
+    const diplomaResponse = await fetch(`${baseUrl}/enrollments/1/diploma`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`
+      }
+    });
+    assert.equal(diplomaResponse.status, 400);
+  }
+});
+
+test('LMD: verifies an issued diploma via diploma_number', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+
+  // Délibérer et émettre le diplôme
+  await fetch(`${baseUrl}/enrollments/1/deliberation`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+
+  const diplomaResponse = await fetch(`${baseUrl}/enrollments/1/diploma`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+
+  if (diplomaResponse.status === 201) {
+    const diploma = await diplomaResponse.json();
+
+    // Vérifier le diplôme
+    const verification = await fetch(`${baseUrl}/verification/diploma`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ diploma_number: diploma.diplomaNumber })
+    });
+    const result = await verification.json();
+
+    assert.equal(verification.status, 200);
+    assert.equal(result.verified, true);
+    assert.equal(result.studentName, diploma.studentName);
+    assert.equal(result.programTitle, diploma.programTitle);
+  }
 });

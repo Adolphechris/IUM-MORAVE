@@ -198,9 +198,9 @@ const newsItems = [
 ];
 
 const grades = [
-  { enrollmentId: 1, courseCode: 'INF101', courseTitle: 'Algorithmique', credits: 6, score: 15, status: 'validated' },
-  { enrollmentId: 1, courseCode: 'INF102', courseTitle: 'Programmation', credits: 6, score: 14, status: 'validated' },
-  { enrollmentId: 1, courseCode: 'MAT101', courseTitle: 'Mathématiques discrètes', credits: 4, score: 13, status: 'validated' }
+  { enrollmentId: 1, courseCode: 'SINT101', courseTitle: 'Algorithmique et structures de données', credits: 6, score: 15, status: 'validated' },
+  { enrollmentId: 1, courseCode: 'SINT102', courseTitle: 'Programmation orientée objet', credits: 6, score: 14, status: 'validated' },
+  { enrollmentId: 1, courseCode: 'SINT103', courseTitle: 'Réseaux informatiques', credits: 5, score: 13, status: 'validated' }
 ];
 
 const deliberations = [];

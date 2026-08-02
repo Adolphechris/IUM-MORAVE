@@ -51,6 +51,10 @@ function validatePassword(user, password) {
   return bcrypt.compareSync(password, user.passwordHash);
 }
 
+function updatePassword(user, newPassword) {
+  user.passwordHash = bcrypt.hashSync(newPassword, 12);
+}
+
 function safeUser(user) {
   if (!user) return null;
   const { passwordHash, resetToken, resetExpiresAt, ...rest } = user;
@@ -78,6 +82,7 @@ module.exports = {
   listUsers,
   createUser,
   validatePassword,
+  updatePassword,
   safeUser,
   generateResetToken,
   blacklistToken,
