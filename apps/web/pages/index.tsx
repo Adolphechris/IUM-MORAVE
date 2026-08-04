@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 type Faculty = {
   id: number;
@@ -80,8 +81,12 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <header>
+    <>
+      <Head>
+        <meta name="google-site-verification" content="T-Q3qt1mbofsJWPvUXY9yvZPtlq8TBf4sC_k9WTJTSE" />
+      </Head>
+      <main>
+        <header>
         <a className="brand" href="#accueil" aria-label="Accueil IUM-MORAVE">
           <span className="logo-slot" aria-label="Emplacement réservé au logo officiel">LOGO</span>
           <span>IUM-MORAVE</span>
@@ -211,7 +216,7 @@ export default function Home() {
         <p>© {new Date().getFullYear()} Institut Universitaire Morave · Portail MVP</p>
       </footer>
 
-      <style jsx>{`
+        <style jsx>{`
         main {
           min-height: 100vh;
           color: #132238;
@@ -291,7 +296,8 @@ export default function Home() {
           header { flex-direction: column; gap: .85rem; padding-top: 1rem; padding-bottom: 1rem; }
           nav { gap: .75rem; font-size: .9rem; }
         }
-      `}</style>
-    </main>
+        `}</style>
+      </main>
+    </>
   );
 }
