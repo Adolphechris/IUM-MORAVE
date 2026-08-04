@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <meta name="google-site-verification" content="T-Q3qt1mbofsJWPvUXY9yvZPtlq8TBf4sC_k9WTJTSE" />
+        <meta name="google-site-verification" content="T-Q3qt1mbofsJWVUXY9vZPtIq8TBF4sC_k9WTJTSE" />
       </Head>
       <main>
         <header>
