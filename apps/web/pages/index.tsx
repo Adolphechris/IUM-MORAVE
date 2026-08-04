@@ -369,16 +369,16 @@ export default function Home() {
           ) : (
             <div className="cards-grid">
               {[
-                { code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Mathématiques Appliquées.' },
-                { code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement.' },
-                { code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé, Droit Public, Relations Internationales.' },
-                { code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Médecine Générale, Santé Communautaire, Épidémiologie.' },
+                { id: 1, code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Mathematiques Appliquées.' },
+                { id: 2, code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement.' },
+                { id: 3, code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé, Droit Public, Relations Internationales.' },
+                { id: 4, code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Médecine Générale, Santé Communautaire, Épidémiologie.' },
               ].map((f) => (
                 <article className="card faculty-card" key={f.code}>
                   <span className="card-badge">{f.code}</span>
                   <h3>{f.name}</h3>
                   <p>{f.desc}</p>
-                  <a className="card-link" href="/contact">En savoir plus →</a>
+                  <a className="card-link" href={`/facultes/${f.id}`}>Explorer tous les programmes &amp; filières →</a>
                 </article>
               ))}
             </div>
