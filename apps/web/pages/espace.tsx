@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 type Session = {
   token: string;
@@ -38,6 +38,22 @@ export default function Espace() {
   const [courses, setCourses] = useState<Array<{ id: number; code: string; title: string; credits: number }> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    if (storedToken && storedRefreshToken) {
+      setSession({
+        token: storedToken,
+        user: {
+          email: '',
+          role: 'student',
+          firstName: '',
+          lastName: ''
+        }
+      });
+    }
+  }, []);
 
   async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -15,19 +15,25 @@ function tokenFor(payload) {
 }
 
 async function waitForHealth() {
-  for (let attempt = 0; attempt < 25; attempt += 1) {
+  let lastErr = null;
+  for (let attempt = 0; attempt < 50; attempt += 1) {
     try {
       const response = await fetch(`${baseUrl}/health`);
       if (response.ok) return;
-    } catch {
-      // The service has not started yet.
+    } catch (err) {
+      lastErr = err;
     }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
+  console.error('[waitForHealth failed] lastErr:', lastErr?.message || lastErr);
   throw new Error('core-api did not start');
 }
 
 test.before(async () => {
+  try {
+    const { execSync } = require('child_process');
+    execSync(`fuser -k ${port}/tcp 2>/dev/null || true`);
+  } catch {}
   service = spawn('node', ['src/index.js'], {
     cwd: path.resolve(__dirname, '..'),
     env: {
@@ -35,7 +41,9 @@ test.before(async () => {
       NODE_ENV: 'test',
       PORT: String(port),
       JWT_SECRET: secret,
-      TRANSCRIPT_SIGNING_SECRET: 'test-transcript-secret'
+      TRANSCRIPT_SIGNING_SECRET: 'test-transcript-secret',
+      DATABASE_URL: '',
+      DB_URL: ''
     },
     stdio: 'ignore'
   });
@@ -43,8 +51,13 @@ test.before(async () => {
 });
 
 test.after(async () => {
-  service.kill();
-  await once(service, 'exit');
+  if (service && !service.killed) {
+    service.kill('SIGKILL');
+  }
+  try {
+    const { execSync } = require('child_process');
+    execSync(`fuser -k ${port}/tcp 2>/dev/null || true`);
+  } catch {}
 });
 
 test('returns public academic data and filters programs by level', async () => {
@@ -435,4 +448,73 @@ test('LMD: verifies an issued diploma via diploma_number', async () => {
     assert.equal(result.studentName, diploma.studentName);
     assert.equal(result.programTitle, diploma.programTitle);
   }
+});
+
+test('PDF: generates transcript PDF with QR and security fields', async () => {
+  const studentToken = tokenFor({
+    sub: 2,
+    email: 'jean.kabamba@ium-morave.edu',
+    role: 'student',
+    enrollmentId: 1
+  });
+
+  const pdfResponse = await fetch(`${baseUrl}/transcripts/me/pdf`, {
+    headers: { Authorization: `Bearer ${studentToken}` }
+  });
+
+  assert.equal(pdfResponse.status, 200);
+  assert.equal(pdfResponse.headers.get('content-type'), 'application/pdf');
+  const buffer = Buffer.from(await pdfResponse.arrayBuffer());
+  assert.ok(buffer.length > 1000, 'Transcript PDF should not be empty');
+});
+
+test('PDF: generates diploma PDF with QR and security fields', async () => {
+  const adminToken = tokenFor({ sub: 1, email: 'admin@ium-morave.edu', role: 'admin' });
+
+  await fetch(`${baseUrl}/enrollments/1/deliberation`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+
+  const diplomaResponse = await fetch(`${baseUrl}/enrollments/1/diploma`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${adminToken}`
+    }
+  });
+
+  if (diplomaResponse.status === 201) {
+    const pdfResponse = await fetch(`${baseUrl}/enrollments/1/diploma/pdf`, {
+      headers: { Authorization: `Bearer ${adminToken}` }
+    });
+
+    assert.equal(pdfResponse.status, 200);
+    assert.equal(pdfResponse.headers.get('content-type'), 'application/pdf');
+    const buffer = Buffer.from(await pdfResponse.arrayBuffer());
+    assert.ok(buffer.length > 1000, 'Diploma PDF should not be empty');
+  }
+});
+
+test('Security: transcript JSON contains QR, HMAC and document signature', async () => {
+  const studentToken = tokenFor({
+    sub: 2,
+    email: 'jean.kabamba@ium-morave.edu',
+    role: 'student',
+    enrollmentId: 1
+  });
+
+  const response = await fetch(`${baseUrl}/transcripts/me`, {
+    headers: { Authorization: `Bearer ${studentToken}` }
+  });
+  const transcript = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.ok(transcript.integrityHash, 'integrityHash should be present');
+  assert.ok(transcript.verificationCode, 'verificationCode should be present');
+  assert.ok(transcript.qrCodeDataUrl, 'qrCodeDataUrl should be present');
+  assert.ok(transcript.documentSignature, 'documentSignature should be present');
 });

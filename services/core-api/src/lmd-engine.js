@@ -1,3 +1,11 @@
+const crypto = require('crypto');
+
+function signDocument({ documentType, verificationCode, integrityHash }) {
+  const secret = process.env.DOCUMENT_SECURITY_SECRET || process.env.TRANSCRIPT_SIGNING_SECRET || 'dev-document-sign';
+  const payload = `${documentType}:${verificationCode}:${integrityHash}`;
+  return crypto.createHmac('sha256', secret).update(payload).digest('hex');
+}
+
 /**
  * Moteur LMD (Licence — Master — Doctorat)
  * 
@@ -191,16 +199,11 @@ function getMention(average) {
   return 'Ajourné';
 }
 
-/**
- * Génère les données d'un diplôme après délibération validée.
- * 
- * @param {object} params - { enrollment, program, deliberation }
- * @returns {object} Données du diplôme
- */
 function generateDiplomaData({ enrollment, program, deliberation }) {
   const year = new Date().getFullYear();
   const diplomaNumber = `DIP-${year}-${String(enrollment.id).padStart(4, '0')}`;
   const verificationCode = `DIP-VRF-${year}-${enrollment.matricule.replace(/[^A-Z0-9]/gi, '')}`;
+  const secret = process.env.DOCUMENT_SECURITY_SECRET || process.env.TRANSCRIPT_SIGNING_SECRET || 'dev-diploma';
 
   return {
     diplomaNumber,
@@ -216,7 +219,9 @@ function generateDiplomaData({ enrollment, program, deliberation }) {
     issuedDate: new Date().toISOString().slice(0, 10),
     status: 'issued',
     verificationCode,
-    issuedBy: 'IUM-MORAVE'
+    issuedBy: 'IUM-MORAVE',
+    integrityHash: crypto.createHmac('sha256', secret).update(diplomaNumber).digest('hex'),
+    documentSignature: signDocument({ documentType: 'diploma', verificationCode, integrityHash: diplomaNumber })
   };
 }
 

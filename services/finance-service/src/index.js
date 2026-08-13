@@ -1,87 +1,84 @@
 const express = require('express');
 const cors = require('cors');
 const { authenticate, requireRole } = require('../../../shared/auth');
+const { insertPaymentPlan, findPaymentPlanByStudentId, listPaymentPlans, insertPayment, findReceiptByNumber } = require('./payment-plan-repository');
+const { rateLimit } = require('../../../shared/rate-limiter');
 
 const app = express();
 const PORT = process.env.PORT || 4003;
 const CORE_API_URL = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
-app.use(cors({ origin: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'https://ium-morave.vercel.app' }));
 app.use(express.json());
 
-let payments = [];
-let paymentPlans = [];
+const financeRateLimiter = rateLimit({
+  windowMs: 60000,
+  max: 120,
+  keyGenerator: (req) => req.user?.email || req.ip || 'anonymous'
+});
 
 app.get('/health', (req, res) => res.json({ status: 'OK', service: 'finance-service' }));
 
 app.use(authenticate);
 app.use(requireRole('admin', 'finance'));
+app.use(financeRateLimiter);
 
-app.get('/payment-plans', (req, res) => {
-  res.json(paymentPlans);
+app.get('/payment-plans', async (req, res) => {
+  const plans = await listPaymentPlans();
+  res.json(plans);
 });
 
-app.get('/payment-plans/:studentId', (req, res) => {
+app.get('/payment-plans/:studentId', async (req, res) => {
   const studentId = parseInt(req.params.studentId);
-  const plan = paymentPlans.find(p => p.studentId === studentId);
+  const plan = await findPaymentPlanByStudentId(studentId);
   if (!plan) return res.status(404).json({ error: 'Plan de paiement introuvable.' });
   res.json(plan);
 });
 
-app.post('/payment-plans', (req, res) => {
-  const plan = {
-    id: paymentPlans.length + 1,
+app.post('/payment-plans', async (req, res) => {
+  const plan = await insertPaymentPlan({
     ...req.body,
-    createdAt: new Date().toISOString(),
     status: 'pending'
-  };
-  paymentPlans.push(plan);
-  res.status(201).json(plan);
+  });
+  if (plan.error) return res.status(500).json({ error: plan.error.message || 'Insert failed' });
+  res.status(201).json(plan.data);
 });
 
-app.post('/payments', (req, res) => {
+app.post('/payments', async (req, res) => {
   const { paymentPlanId, amount, method } = req.body;
-  const plan = paymentPlans.find(p => p.id === paymentPlanId);
+  const plan = await findPaymentPlanByStudentId(paymentPlanId);
   if (!plan) return res.status(404).json({ error: 'Plan de paiement introuvable.' });
 
-  const payment = {
-    id: payments.length + 1,
-    paymentPlanId,
+  const receiptNumber = `RECP-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+  const payment = await insertPayment({
+    studentId: paymentPlanId,
+    planId: paymentPlanId,
     amount,
     method,
-    receiptNumber: `RECP-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+    reference: receiptNumber,
     status: 'completed',
-    paidAt: new Date().toISOString(),
-    verified: false
-  };
-  payments.push(payment);
+    paidAt: new Date().toISOString()
+  });
 
-  const totalPaid = payments
-    .filter(p => p.paymentPlanId === paymentPlanId && p.status === 'completed')
-    .reduce((sum, p) => sum + p.amount, 0);
+  if (payment.error) return res.status(500).json({ error: payment.error.message || 'Payment failed' });
 
-  if (totalPaid >= plan.totalAmount) {
-    plan.status = 'paid';
-  } else if (totalPaid > 0) {
-    plan.status = 'partial';
-  }
-
-  res.status(201).json(payment);
+  const payments = await listPaymentPlans();
+  res.status(201).json(payment.data);
 });
 
-app.get('/receipts/:receiptNumber', (req, res) => {
-  const payment = payments.find(p => p.receiptNumber === req.params.receiptNumber);
-  if (!payment) return res.status(404).json({ error: 'Reçu introuvable.' });
-  res.json(payment);
+app.get('/receipts/:receiptNumber', async (req, res) => {
+  const receipt = await findReceiptByNumber(req.params.receiptNumber);
+  if (!receipt) return res.status(404).json({ error: 'Reçu introuvable.' });
+  res.json(receipt);
 });
 
-app.get('/student-status/:studentId', (req, res) => {
+app.get('/student-status/:studentId', async (req, res) => {
   const studentId = parseInt(req.params.studentId);
-  const plan = paymentPlans.find(p => p.studentId === studentId);
+  const plan = await findPaymentPlanByStudentId(studentId);
   if (!plan) {
     return res.json({ hasFinancialHold: false, status: 'no_plan' });
   }
-  const hasHold = plan.status !== 'paid' && plan.dueDate && new Date(plan.dueDate) < new Date();
+  const hasHold = plan.status !== 'paid' && plan.due_date && new Date(plan.due_date) < new Date();
   res.json({ hasFinancialHold: hasHold, status: plan.status, plan });
 });
 

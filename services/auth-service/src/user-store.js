@@ -1,24 +1,37 @@
 const bcrypt = require('bcryptjs');
 const { randomBytes } = require('crypto');
 const jwt = require('jsonwebtoken');
+const { blacklistToken: blacklistTokenDb, isTokenBlacklisted: isTokenBlacklistedDb } = require('./token-blacklist-repository');
 
 const ROLES = new Set(['student', 'teacher', 'admin', 'finance']);
+
+function getDefaultAdminPassword() {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.ADMIN_DEFAULT_PASSWORD || null;
+  }
+  return process.env.ADMIN_DEFAULT_PASSWORD || 'ChangeMe123!';
+}
+
+const defaultAdminPassword = getDefaultAdminPassword();
+
 const users = [
   {
     id: 1,
     email: 'admin@ium-morave.edu',
-    passwordHash: bcrypt.hashSync('ChangeMe123!', 12),
+    passwordHash: defaultAdminPassword ? bcrypt.hashSync(defaultAdminPassword, 12) : bcrypt.hashSync(randomBytes(32).toString('hex'), 12),
     role: 'admin',
     firstName: 'Admin',
     lastName: 'IUM',
     emailVerified: true,
     resetToken: null,
-    resetExpiresAt: null
+    resetExpiresAt: null,
+    forcePasswordChange: !defaultAdminPassword
   }
 ];
 
 const tokenBlacklist = new Set();
 let isInitialized = false;
+let dbAvailable = false;
 
 async function syncFromSupabase() {
   if (isInitialized) return;
@@ -127,11 +140,20 @@ function generateResetToken() {
 }
 
 function blacklistToken(token) {
+  const expiresAt = Date.now() + 3600000;
+  blacklistTokenDb(token, new Date(expiresAt).toISOString());
   tokenBlacklist.add(token);
 }
 
-function isTokenBlacklisted(token) {
-  return tokenBlacklist.has(token);
+async function isTokenBlacklisted(token) {
+  if (tokenBlacklist.has(token)) {
+    return true;
+  }
+  try {
+    return await isTokenBlacklistedDb(token);
+  } catch {
+    return false;
+  }
 }
 
 module.exports = {

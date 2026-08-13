@@ -1,4 +1,14 @@
 const { createHmac, randomUUID } = require('crypto');
+const { generateVerificationQR } = require('./qr-service');
+
+function signDocument({ documentType, verificationCode, integrityHash }) {
+  const secret = process.env.DOCUMENT_SECURITY_SECRET || process.env.TRANSCRIPT_SIGNING_SECRET;
+  if (!secret && process.env.NODE_ENV === 'production') {
+    throw new Error('DOCUMENT_SECURITY_SECRET must be configured in production');
+  }
+  const payload = `${documentType}:${verificationCode}:${integrityHash}`;
+  return createHmac('sha256', secret || 'dev-document-sign').update(payload).digest('hex');
+}
 
 function calculateWeightedAverage(items) {
   const totalCredits = items.reduce((total, item) => total + item.credits, 0);
@@ -41,7 +51,11 @@ function buildTranscript({ enrollment, program, grades }) {
     .update(JSON.stringify(body))
     .digest('hex');
 
-  return { ...body, integrityHash };
+  return {
+    ...body,
+    integrityHash,
+    documentSignature: signDocument({ documentType: body.documentType, verificationCode, integrityHash })
+  };
 }
 
 module.exports = { buildTranscript, calculateWeightedAverage };

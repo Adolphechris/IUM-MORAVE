@@ -146,6 +146,25 @@ export default function StudentSpace() {
     }
   }
 
+  async function downloadTranscriptPdf() {
+    if (!session) return;
+    try {
+      const response = await fetch(`${coreApiUrl}/transcripts/me/pdf`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      if (!response.ok) throw new Error('Impossible de générer le PDF du relevé.');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'releve-de-notes.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Erreur lors du téléchargement du relevé.');
+    }
+  }
+
   async function logout() {
     await fetch(`${authApiUrl}/auth/logout`, {
       method: 'POST',
@@ -188,14 +207,16 @@ export default function StudentSpace() {
             <button type="submit" disabled={loading}>{loading ? 'Connexion…' : 'Se connecter'}</button>
           </form>
         ) : (
-          <div className="panel">
-            <p><strong>Rôle :</strong> {session.user.role}</p>
-            <button type="button" onClick={loadTranscript}>Consulter mon relevé de notes</button>
-            <button type="button" onClick={loadGrades}>Voir mes notes détaillées</button>
-            <button type="button" onClick={loadStudentDocuments}>Voir mes documents</button>
-            <button type="button" onClick={loadSchedule}>Voir mon emploi du temps</button>
-            <button type="button" onClick={logout}>Déconnexion</button>
-          </div>
+            <div className="panel">
+              <p><strong>Rôle :</strong> {session.user.role}</p>
+              <button type="button" onClick={loadTranscript}>Consulter mon relevé de notes</button>
+              <button type="button" onClick={downloadTranscriptPdf}>Télécharger mon relevé PDF</button>
+              <button type="button" onClick={loadGrades}>Voir mes notes détaillées</button>
+              <button type="button" onClick={loadStudentDocuments}>Voir mes documents</button>
+              <button type="button" onClick={loadSchedule}>Voir mon emploi du temps</button>
+              <button type="button" onClick={logout}>Déconnexion</button>
+            </div>
+
         )}
         {studentDocuments ? (
           <article className="panel">

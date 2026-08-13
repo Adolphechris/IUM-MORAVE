@@ -22,6 +22,10 @@ async function waitForHealth() {
 }
 
 test.before(async () => {
+  try {
+    const { execSync } = require('child_process');
+    execSync(`fuser -k ${port}/tcp 2>/dev/null || true`);
+  } catch {}
   service = spawn('node', ['src/index.js'], {
     cwd: path.resolve(__dirname, '..'),
     env: { ...process.env, NODE_ENV: 'test', PORT: String(port), JWT_SECRET: 'test-auth-secret' },
@@ -31,8 +35,13 @@ test.before(async () => {
 });
 
 test.after(async () => {
-  service.kill();
-  await once(service, 'exit');
+  if (service && !service.killed) {
+    service.kill('SIGKILL');
+  }
+  try {
+    const { execSync } = require('child_process');
+    execSync(`fuser -k ${port}/tcp 2>/dev/null || true`);
+  } catch {}
 });
 
 test('registers a student without allowing privilege escalation', async () => {

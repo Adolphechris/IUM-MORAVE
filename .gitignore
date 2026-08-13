@@ -24,3 +24,5 @@ yarn-error.log*
 .kilo/
 apps/.auth-utils/
 supabase/
+.vercel
+.env*

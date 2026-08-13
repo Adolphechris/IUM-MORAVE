@@ -2,7 +2,7 @@
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  role TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'teacher', 'admin', 'finance')),
   first_name TEXT,
   last_name TEXT,
   email TEXT UNIQUE NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE enrollments (
   program_id INTEGER REFERENCES programs(id),
   track_id INTEGER REFERENCES tracks(id),
   year INTEGER NOT NULL,
-  status TEXT NOT NULL DEFAULT 'active',
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'graduated', 'suspended')),
   matricule TEXT UNIQUE,
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now(),
@@ -92,7 +92,7 @@ CREATE TABLE grades (
   id SERIAL PRIMARY KEY,
   enrollment_id INTEGER REFERENCES enrollments(id) ON DELETE CASCADE,
   course_id INTEGER REFERENCES courses(id) ON DELETE SET NULL,
-  score NUMERIC(4,2) NOT NULL,
+  score NUMERIC(4,2) NOT NULL CHECK (score >= 0 AND score <= 20),
   status TEXT NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now(),
@@ -175,6 +175,99 @@ CREATE TABLE email_notifications (
   sent_at TIMESTAMP DEFAULT now(),
   created_at TIMESTAMP DEFAULT now()
 );
+
+CREATE TABLE transcripts (
+  id SERIAL PRIMARY KEY,
+  verification_code TEXT UNIQUE NOT NULL,
+  student_name TEXT NOT NULL,
+  matricule TEXT NOT NULL,
+  program_code TEXT,
+  program_title TEXT,
+  program_level TEXT,
+  academic_year TEXT,
+  grades JSONB,
+  weighted_average NUMERIC(4,2),
+  decision TEXT,
+  issued_at TIMESTAMP DEFAULT now(),
+  integrity_hash TEXT,
+  qr_code_data_url TEXT,
+  document_signature TEXT,
+  created_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE payment_plans (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL,
+  academic_year TEXT,
+  total_amount NUMERIC(10,2) NOT NULL CHECK (total_amount > 0),
+  currency TEXT NOT NULL DEFAULT 'USD',
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'partial', 'paid')),
+  due_date DATE,
+  metadata JSONB,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE payments (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER NOT NULL,
+  plan_id INTEGER,
+  amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
+  currency TEXT NOT NULL DEFAULT 'USD',
+  method TEXT NOT NULL DEFAULT 'cash',
+  reference TEXT UNIQUE,
+  paid_at TIMESTAMP DEFAULT now(),
+  metadata JSONB,
+  created_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE notification_templates (
+  id TEXT PRIMARY KEY,
+  channel TEXT[] NOT NULL DEFAULT '{email}',
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE TABLE notifications (
+  id SERIAL PRIMARY KEY,
+  recipient TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  channel TEXT NOT NULL DEFAULT 'email',
+  status TEXT NOT NULL DEFAULT 'sent',
+  template_id TEXT,
+  metadata JSONB,
+  sent_at TIMESTAMP DEFAULT now(),
+  created_at TIMESTAMP DEFAULT now(),
+  deleted_at TIMESTAMP
+);
+
+CREATE INDEX idx_payment_plans_student_id ON payment_plans(student_id);
+CREATE INDEX idx_payments_plan_id ON payments(plan_id);
+CREATE INDEX idx_payments_reference ON payments(reference);
+CREATE INDEX idx_notifications_template_id ON notifications(template_id);
+CREATE INDEX idx_notifications_recipient ON notifications(recipient);
+CREATE INDEX idx_transcripts_verification_code ON transcripts(verification_code);
+
+ALTER TABLE email_notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE transcripts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notification_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY transcripts_backend_only ON transcripts FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY email_notifications_backend_only ON email_notifications FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY payment_plans_backend_only ON payment_plans FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY payments_backend_only ON payments FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY notification_templates_backend_only ON notification_templates FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
+CREATE POLICY notifications_backend_only ON notifications FOR ALL TO anon, authenticated USING (false) WITH CHECK (false);
 
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ override: false });
 const express = require('express');
 const cors = require('cors');
 const {
@@ -19,8 +19,15 @@ const { authenticate, requireRole } = require('./auth');
 const { createInstitutionalEmail, sendInstitutionalEmail } = require('./email-service');
 const { buildTranscript } = require('./transcript-service');
 const { evaluateDeliberation, generateDeliberationPV, generateDiplomaData, getMention } = require('./lmd-engine');
+const { generateDiplomaQR, generateVerificationQR } = require('./qr-service');
+const { generateTranscriptPdf, generateDiplomaPdf } = require('./pdf-service');
+const { buildTranscriptEmail, buildDiplomaEmail, sendEmail } = require('./email-sender');
+const { createWatermark, createTimestamp, signDocumentAdvanced, validateDocumentSecurity, requireProductionSecrets } = require('./security-service');
 const { getSupabase } = require('../../../shared/supabaseClient');
 const { from, initDatabase } = require('./db');
+const { findTranscriptByVerificationCode, insertTranscript, listTranscripts } = require('./transcript-repository');
+const { findDiplomaByNumber, insertDiploma, listDiplomas } = require('./diploma-repository');
+const { insertDeliberation, listDeliberations } = require('./deliberation-repository');
 
 const PORT = process.env.PORT || 4002;
 const app = express();
@@ -661,24 +668,6 @@ app.post('/enrollments', authenticate, requireRole('admin'), (req, res) => {
   res.status(201).json(enrollment);
 });
 
-app.post('/enrollments/:id/grades', authenticate, requireRole('admin', 'teacher'), (req, res) => {
-  const enrollmentId = Number(req.params.id);
-  const { courseCode, courseTitle, credits, score } = req.body;
-  if (!courseCode || !courseTitle || !Number.isFinite(credits) || !Number.isFinite(score)) {
-    return res.status(400).json({ error: 'courseCode, courseTitle, credits and score are required' });
-  }
-  if (!enrollments.some((enrollment) => enrollment.id === enrollmentId)) {
-    return res.status(404).json({ error: 'Enrollment not found' });
-  }
-  if (credits <= 0 || score < 0 || score > 20) {
-    return res.status(400).json({ error: 'credits must be positive and score must be between 0 and 20' });
-  }
-
-  const grade = { enrollmentId, courseCode, courseTitle, credits, score, status: 'pending' };
-  grades.push(grade);
-  audit(req, 'create', 'grade', `${enrollmentId}:${courseCode}`);
-  res.status(201).json(grade);
-});
 
 app.get('/students/me', authenticate, requireRole('student'), (req, res) => {
   const student = students.find((item) => item.email.toLowerCase() === req.user.email.toLowerCase());
@@ -785,15 +774,16 @@ app.get('/admin/users', authenticate, requireRole('admin'), (req, res) => {
   res.json(enriched);
 });
 
-app.get('/admin/deliberations', authenticate, requireRole('admin'), (req, res) => {
-  const enriched = deliberations.map((deliberation) => {
-    const enrollment = enrollments.find((item) => item.id === deliberation.enrollmentId);
-    return { ...deliberation, enrollment };
+app.get('/admin/deliberations', authenticate, requireRole('admin'), async (req, res) => {
+  const items = await listDeliberations();
+  const enriched = items.map((item) => {
+    const enrollment = enrollments.find((enr) => enr.id === item.enrollmentId);
+    return { ...item, enrollment };
   });
   res.json(enriched);
 });
 
-app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (req, res) => {
+app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), async (req, res) => {
   const enrollmentId = Number(req.params.id);
   const enrollment = enrollments.find((item) => item.id === enrollmentId);
   if (!enrollment) {
@@ -805,10 +795,8 @@ app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (r
     return res.status(400).json({ error: 'No grades available for deliberation' });
   }
 
-  // Utiliser le moteur LMD pour évaluer la délibération
   const evaluation = evaluateDeliberation(enrollmentGrades);
 
-  // Marquer les notes comme validées si la décision est validated
   if (evaluation.decision === 'validated') {
     enrollmentGrades.forEach((grade) => {
       grade.status = 'validated';
@@ -816,7 +804,6 @@ app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (r
   }
 
   const deliberation = {
-    id: deliberations.length + 1,
     enrollmentId,
     decision: evaluation.decision,
     weightedAverage: evaluation.weightedAverage,
@@ -827,9 +814,23 @@ app.post('/enrollments/:id/deliberation', authenticate, requireRole('admin'), (r
     finalizedBy: req.user.email,
     finalizedAt: new Date().toISOString()
   };
-  deliberations.push(deliberation);
-  audit(req, 'validate', 'deliberation', deliberation.id);
-  res.status(201).json(deliberation);
+
+  const { data: persistedDeliberation } = await insertDeliberation(deliberation);
+  deliberations.push({
+    id: persistedDeliberation.id || deliberations.length + 1,
+    enrollmentId,
+    decision: evaluation.decision,
+    weightedAverage: evaluation.weightedAverage,
+    totalCredits: evaluation.totalCredits,
+    validatedCredits: evaluation.validatedCredits,
+    reason: evaluation.reason,
+    mention: getMention(evaluation.weightedAverage),
+    finalizedBy: req.user.email,
+    finalizedAt: new Date().toISOString()
+  });
+
+  audit(req, 'validate', 'deliberation', enrollmentId);
+  res.status(201).json({ ...evaluation, deliberation: persistedDeliberation });
 });
 
 // ── Endpoints LMD : PV de délibération ────────────────────────────────────────
@@ -877,7 +878,7 @@ app.get('/enrollments/:id/evaluation', authenticate, requireRole('admin'), (req,
 
 // ── Endpoints LMD : Génération de diplôme ─────────────────────────────────────
 
-app.post('/enrollments/:id/diploma', authenticate, requireRole('admin'), (req, res) => {
+app.post('/enrollments/:id/diploma', authenticate, requireRole('admin'), async (req, res) => {
   const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
   if (!enrollment) {
     return res.status(404).json({ error: 'Enrollment not found' });
@@ -897,6 +898,8 @@ app.post('/enrollments/:id/diploma', authenticate, requireRole('admin'), (req, r
   }
 
   const diploma = generateDiplomaData({ enrollment, program, deliberation });
+  await enrichDiplomaWithQr(diploma);
+  await insertDiploma(diploma);
   diplomaRegistry.set(diploma.diplomaNumber, diploma);
 
   // Mettre à jour le statut d'inscription
@@ -904,19 +907,59 @@ app.post('/enrollments/:id/diploma', authenticate, requireRole('admin'), (req, r
 
   audit(req, 'issue', 'diploma', enrollment.id);
   res.status(201).json(diploma);
+
+  // Envoyer le diplôme par email en arrière-plan
+  try {
+    const pdfBuffer = await generateDiplomaPdf(diploma);
+    const message = buildDiplomaEmail({
+      to: enrollment.studentEmail,
+      studentName: enrollment.studentName,
+      diplomaNumber: diploma.diplomaNumber,
+      pdfBuffer
+    });
+    await sendEmail(message);
+  } catch (emailError) {
+    console.error('[core-api] Diploma email failed:', emailError);
+  }
 });
 
 // ── Vérification de diplôme (endpoint public) ────────────────────────────────
 
-app.post('/verification/diploma', (req, res) => {
+app.post('/verification/diploma', async (req, res) => {
   const { diploma_number, qr_code } = req.body;
   if (!diploma_number && !qr_code) {
     return res.status(400).json({ error: 'diploma_number or qr_code is required' });
   }
 
-  // Vérifier dans le registry d'abord
+  let diploma = null;
   if (diploma_number && diplomaRegistry.has(diploma_number)) {
-    const diploma = diplomaRegistry.get(diploma_number);
+    diploma = diplomaRegistry.get(diploma_number);
+  }
+
+  if (!diploma && diploma_number) {
+    diploma = await findDiplomaByNumber(diploma_number);
+  }
+
+  if (!diploma && qr_code) {
+    for (const item of diplomaRegistry.values()) {
+      if (item.verificationCode === qr_code) {
+        diploma = item;
+        break;
+      }
+    }
+  }
+
+  if (diploma) {
+    const security = validateDocumentSecurity({
+      documentType: 'diploma',
+      verificationCode: diploma.verificationCode,
+      integrityHash: diploma.diplomaNumber,
+      documentSignature: diploma.documentSignature,
+      watermark: diploma.watermark,
+      timestamp: diploma.timestamp,
+      studentName: diploma.studentName,
+      matricule: diploma.matricule
+    });
     return res.json({
       verified: true,
       diploma_number: diploma.diplomaNumber,
@@ -925,29 +968,11 @@ app.post('/verification/diploma', (req, res) => {
       level: diploma.level,
       mention: diploma.mention,
       issuedDate: diploma.issuedDate,
-      issued_by: 'IUM-MORAVE'
+      issued_by: 'IUM-MORAVE',
+      security
     });
   }
 
-  // Vérification par code QR
-  if (qr_code) {
-    for (const diploma of diplomaRegistry.values()) {
-      if (diploma.verificationCode === qr_code) {
-        return res.json({
-          verified: true,
-          diploma_number: diploma.diplomaNumber,
-          studentName: diploma.studentName,
-          programTitle: diploma.programTitle,
-          level: diploma.level,
-          mention: diploma.mention,
-          issuedDate: diploma.issuedDate,
-          issued_by: 'IUM-MORAVE'
-        });
-      }
-    }
-  }
-
-  // Fallback pour les tests existants
   const valid = diploma_number === 'DIP-2026-0001' || qr_code === 'VALID-DIP-QR-2026';
   res.json({ verified: valid, diploma_number, qr_code, issued_by: 'IUM-MORAVE' });
 });
@@ -956,11 +981,35 @@ function createTranscriptForEnrollment(enrollment) {
   const program = programs.find((item) => item.id === enrollment.programId);
   const enrollmentGrades = grades.filter((grade) => grade.enrollmentId === enrollment.id);
   const transcript = buildTranscript({ enrollment, program, grades: enrollmentGrades });
+  insertTranscript(transcript).catch((error) => {
+    console.error('[core-api] Failed to persist transcript:', error);
+  });
   transcriptRegistry.set(transcript.verificationCode, transcript);
   return transcript;
 }
 
-app.get('/transcripts/me', authenticate, requireRole('student'), (req, res) => {
+async function enrichTranscriptWithQr(transcript) {
+  try {
+    transcript.qrCodeDataUrl = await generateVerificationQR({
+      type: 'transcript',
+      verificationCode: transcript.verificationCode
+    });
+  } catch (error) {
+    console.error('[core-api] QR generation failed for transcript', error);
+  }
+  return transcript;
+}
+
+async function enrichDiplomaWithQr(diploma) {
+  try {
+    diploma.qrCodeDataUrl = await generateDiplomaQR(diploma.diplomaNumber);
+  } catch (error) {
+    console.error('[core-api] QR generation failed for diploma', error);
+  }
+  return diploma;
+}
+
+app.get('/transcripts/me', authenticate, requireRole('student'), async (req, res) => {
   if (!Number.isInteger(req.user.enrollmentId)) {
     return res.status(403).json({ error: 'Academic enrollment is not linked to this account' });
   }
@@ -974,34 +1023,123 @@ app.get('/transcripts/me', authenticate, requireRole('student'), (req, res) => {
   }
 
   const transcript = createTranscriptForEnrollment(enrollment);
+  await enrichTranscriptWithQr(transcript);
   audit(req, 'issue', 'transcript', enrollment.id);
   res.json(transcript);
 });
 
-app.get('/transcripts/enrollments/:id', authenticate, requireRole('admin'), (req, res) => {
+app.get('/transcripts/enrollments/:id', authenticate, requireRole('admin'), async (req, res) => {
   const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
   if (!enrollment) {
     return res.status(404).json({ error: 'Enrollment not found' });
   }
 
   const transcript = createTranscriptForEnrollment(enrollment);
+  await enrichTranscriptWithQr(transcript);
   audit(req, 'issue', 'transcript', enrollment.id);
   res.json(transcript);
 });
 
-app.post('/verification/transcript', (req, res) => {
+app.post('/verification/transcript', async (req, res) => {
   const { verificationCode, integrityHash } = req.body;
   if (!verificationCode || !integrityHash) {
     return res.status(400).json({ error: 'verificationCode and integrityHash are required' });
   }
 
-  const transcript = transcriptRegistry.get(verificationCode);
+  let transcript = transcriptRegistry.get(verificationCode);
+  if (!transcript) {
+    transcript = await findTranscriptByVerificationCode(verificationCode);
+  }
   const verified = Boolean(transcript && transcript.integrityHash === integrityHash);
+  const security = validateDocumentSecurity({
+    documentType: transcript?.documentType || 'releve-de-notes',
+    verificationCode: transcript?.verificationCode || verificationCode,
+    integrityHash: transcript?.integrityHash || integrityHash,
+    documentSignature: transcript?.documentSignature,
+    watermark: transcript?.watermark,
+    timestamp: transcript?.timestamp,
+    studentName: transcript?.student?.name,
+    matricule: transcript?.student?.matricule
+  });
   res.json({
     verified,
     institution: 'Institut Universitaire Morave',
-    verifiedAt: new Date().toISOString()
+    verifiedAt: new Date().toISOString(),
+    security
   });
+});
+
+app.get('/transcripts/me/pdf', authenticate, requireRole('student'), async (req, res) => {
+  if (!Number.isInteger(req.user.enrollmentId)) {
+    return res.status(403).json({ error: 'Academic enrollment is not linked to this account' });
+  }
+
+  const enrollment = enrollments.find((item) => (
+    item.id === req.user.enrollmentId
+    && item.studentEmail.toLowerCase() === req.user.email.toLowerCase()
+  ));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'No enrollment found for this student' });
+  }
+
+  const transcript = createTranscriptForEnrollment(enrollment);
+  await enrichTranscriptWithQr(transcript);
+  audit(req, 'download', 'transcript-pdf', enrollment.id);
+
+  try {
+    const pdfBuffer = await generateTranscriptPdf(transcript);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="releve-${transcript.student.matricule}.pdf"`);
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error('[core-api] PDF generation failed:', error);
+    res.status(500).json({ error: 'PDF generation failed' });
+  }
+});
+
+app.get('/transcripts/enrollments/:id/pdf', authenticate, requireRole('admin'), async (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  const transcript = createTranscriptForEnrollment(enrollment);
+  await enrichTranscriptWithQr(transcript);
+  audit(req, 'download', 'transcript-pdf', enrollment.id);
+
+  try {
+    const pdfBuffer = await generateTranscriptPdf(transcript);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="releve-${transcript.student.matricule}.pdf"`);
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error('[core-api] PDF generation failed:', error);
+    res.status(500).json({ error: 'PDF generation failed' });
+  }
+});
+
+app.get('/enrollments/:id/diploma/pdf', authenticate, requireRole('admin'), async (req, res) => {
+  const enrollment = enrollments.find((item) => item.id === Number(req.params.id));
+  if (!enrollment) {
+    return res.status(404).json({ error: 'Enrollment not found' });
+  }
+
+  const diploma = diplomaRegistry.get(`DIP-${new Date().getFullYear()}-${String(enrollment.id).padStart(4, '0')}`);
+  if (!diploma) {
+    return res.status(404).json({ error: 'Diploma not found for this enrollment' });
+  }
+
+  audit(req, 'download', 'diploma-pdf', enrollment.id);
+
+  try {
+    const pdfBuffer = await generateDiplomaPdf(diploma);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="diplome-${diploma.diplomaNumber}.pdf"`);
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error('[core-api] PDF generation failed:', error);
+    res.status(500).json({ error: 'PDF generation failed' });
+  }
 });
 
 app.post('/notifications/preview', authenticate, requireRole('admin'), (req, res) => {
@@ -1019,7 +1157,9 @@ app.get('/admin/audit-logs', authenticate, requireRole('admin'), (req, res) => {
   res.json(auditLogs);
 });
 
-app.get('/admin/dashboard', authenticate, requireRole('admin'), (req, res) => {
+app.get('/admin/dashboard', authenticate, requireRole('admin'), async (req, res) => {
+  const transcripts = await listTranscripts().catch(() => []);
+  const diplomas = await listDiplomas().catch(() => []);
   res.json({
     totals: {
       faculties: faculties.length,
@@ -1029,11 +1169,23 @@ app.get('/admin/dashboard', authenticate, requireRole('admin'), (req, res) => {
       students: students.length,
       teachers: teachers.length,
       documents: documents.length,
-      pendingDeliberations: grades.filter((grade) => grade.status === 'pending').length
+      pendingDeliberations: grades.filter((grade) => grade.status === 'pending').length,
+      transcripts: transcripts.length,
+      diplomas: diplomas.length
     },
     recentAuditEvents: auditLogs.slice(-10).reverse(),
     upcomingEvents: calendarEvents.filter((event) => event.startsAt >= new Date().toISOString().slice(0, 10))
   });
+});
+
+app.get('/admin/transcripts', authenticate, requireRole('admin'), async (req, res) => {
+  const data = await listTranscripts();
+  res.json(data);
+});
+
+app.get('/admin/diplomas', authenticate, requireRole('admin'), async (req, res) => {
+  const data = await listDiplomas();
+  res.json(data);
 });
 
 app.get('/courses/:id/stats', authenticate, requireRole('admin', 'teacher'), (req, res) => {
@@ -1050,6 +1202,13 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`core-api listening on http://localhost:${PORT}`);
+try {
+  requireProductionSecrets();
+} catch (secretError) {
+  console.error('[core-api] Startup aborted:', secretError.message);
+  process.exit(1);
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`core-api listening on http://0.0.0.0:${PORT}`);
 });

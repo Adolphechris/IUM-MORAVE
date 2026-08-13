@@ -1,6 +1,6 @@
 import Header from '../../../shared/src/Header';
 import Footer from '../../../shared/src/Footer';
-import React, { FormEvent, useEffect, useState } from 'react';;
+import React, { FormEvent, useEffect, useState } from 'react';
 
 type Session = {
   token: string;

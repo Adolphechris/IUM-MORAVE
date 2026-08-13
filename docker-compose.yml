@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ium_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ium_morave
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ium_admin -d ium_morave"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: .
+    restart: always
+    ports:
+      - "4001:4001"
+    environment:
+      NODE_ENV: production
+      PORT: 4001
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_SECRET: ${REFRESH_SECRET}
+      RESET_SECRET: ${RESET_SECRET}
+      EMAIL_VERIFY_SECRET: ${EMAIL_VERIFY_SECRET}
+      WEB_ORIGIN: ${WEB_ORIGIN:-https://ium-morave.vercel.app}
+      DATABASE_URL: postgresql://ium_admin:${DB_PASSWORD}@postgres:5432/ium_morave
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  core-api:
+    build: .
+    restart: always
+    ports:
+      - "4002:4002"
+    environment:
+      NODE_ENV: production
+      PORT: 4002
+      JWT_SECRET: ${JWT_SECRET}
+      TRANSCRIPT_SIGNING_SECRET: ${TRANSCRIPT_SIGNING_SECRET}
+      WATERMARK_SECRET: ${WATERMARK_SECRET}
+      TIMESTAMP_SECRET: ${TIMESTAMP_SECRET}
+      ADVANCED_SIGN_SECRET: ${ADVANCED_SIGN_SECRET}
+      DOCUMENT_SECURITY_SECRET: ${DOCUMENT_SECURITY_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://ium-morave.vercel.app}
+      DATABASE_URL: postgresql://ium_admin:${DB_PASSWORD}@postgres:5432/ium_morave
+      PUBLIC_VERIFICATION_URL: ${PUBLIC_VERIFICATION_URL:-https://ium-morave.vercel.app/verify}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  finance-service:
+    build: .
+    restart: always
+    ports:
+      - "4003:4003"
+    environment:
+      NODE_ENV: production
+      PORT: 4003
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://ium-morave.vercel.app}
+      DATABASE_URL: postgresql://ium_admin:${DB_PASSWORD}@postgres:5432/ium_morave
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  notification-service:
+    build: .
+    restart: always
+    ports:
+      - "4004:4004"
+    environment:
+      NODE_ENV: production
+      PORT: 4004
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://ium-morave.vercel.app}
+      DATABASE_URL: postgresql://ium_admin:${DB_PASSWORD}@postgres:5432/ium_morave
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

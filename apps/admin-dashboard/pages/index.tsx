@@ -54,6 +54,32 @@ type AdminUser = {
   type: 'student' | 'teacher';
 };
 
+type Deliberation = {
+  id: number;
+  enrollmentId: number;
+  decision: string;
+  finalizedAt: string;
+  enrollment?: { studentName: string; matricule: string };
+};
+
+type TranscriptDocument = {
+  verificationCode: string;
+  studentName: string;
+  programTitle: string;
+  academicYear: string;
+  weightedAverage: number;
+  decision: string;
+};
+
+type DiplomaDocument = {
+  diplomaNumber: string;
+  studentName: string;
+  programTitle: string;
+  level: string;
+  mention: string;
+  issuedDate: string;
+};
+
 const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
@@ -67,6 +93,8 @@ export default function AdminDashboard() {
   const [adminDocuments, setAdminDocuments] = useState<AdminDocument[] | null>(null);
   const [adminUsers, setAdminUsers] = useState<AdminUser[] | null>(null);
   const [deliberations, setDeliberations] = useState<Array<{ id: number; enrollmentId: number; decision: string; finalizedAt: string; enrollment?: { studentName: string; matricule: string } }> | null>(null);
+  const [transcripts, setTranscripts] = useState<TranscriptDocument[] | null>(null);
+  const [diplomas, setDiplomas] = useState<DiplomaDocument[] | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -179,6 +207,72 @@ export default function AdminDashboard() {
     }
   }
 
+  async function loadTranscripts() {
+    if (!session) return;
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/transcripts`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Relevés indisponibles.');
+      setTranscripts(result);
+    } catch (transcriptsError) {
+      setError(transcriptsError instanceof Error ? transcriptsError.message : 'Relevés indisponibles.');
+    }
+  }
+
+  async function loadDiplomas() {
+    if (!session) return;
+    try {
+      const response = await fetch(`${coreApiUrl}/admin/diplomas`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Diplômes indisponibles.');
+      setDiplomas(result);
+    } catch (diplomasError) {
+      setError(diplomasError instanceof Error ? diplomasError.message : 'Diplômes indisponibles.');
+    }
+  }
+
+  async function loadTranscriptPdf(enrollmentId: number) {
+    if (!session) return;
+    try {
+      const response = await fetch(`${coreApiUrl}/transcripts/enrollments/${enrollmentId}/pdf`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      if (!response.ok) throw new Error('Impossible de générer le PDF du relevé.');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `releve-${enrollmentId}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Erreur lors du téléchargement du relevé.');
+    }
+  }
+
+  async function loadDiplomaPdf(enrollmentId: number) {
+    if (!session) return;
+    try {
+      const response = await fetch(`${coreApiUrl}/enrollments/${enrollmentId}/diploma/pdf`, {
+        headers: { Authorization: `Bearer ${session.token}` }
+      });
+      if (!response.ok) throw new Error('Impossible de générer le PDF du diplôme.');
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `diplome-${enrollmentId}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Erreur lors du téléchargement du diplôme.');
+    }
+  }
+
   async function logout() {
     await fetch(`${authApiUrl}/auth/logout`, {
       method: 'POST',
@@ -194,6 +288,8 @@ export default function AdminDashboard() {
     setAdminDocuments(null);
     setAdminUsers(null);
     setDeliberations(null);
+    setTranscripts(null);
+    setDiplomas(null);
     setError(null);
   }
 
@@ -232,13 +328,15 @@ export default function AdminDashboard() {
               <button type="button" onClick={loadDocuments}>Documents</button>
               <button type="button" onClick={loadUsers}>Utilisateurs</button>
               <button type="button" onClick={loadDeliberations}>Délibérations</button>
+              <button type="button" onClick={loadTranscripts}>Relevés</button>
+              <button type="button" onClick={loadDiplomas}>Diplômes</button>
               <button type="button" onClick={logout}>Déconnexion</button>
             </div>
           </div>
         )}
         {session ? (
           <Tabs
-            labels={['Tableau de bord', 'Journal', 'Inscriptions', 'Documents', 'Utilisateurs', 'Délibérations']}
+            labels={['Tableau de bord', 'Journal', 'Inscriptions', 'Documents', 'Utilisateurs', 'Délibérations', 'Relevés', 'Diplômes']}
             active={activeTab}
             onChange={setActiveTab}
           >
@@ -335,15 +433,63 @@ export default function AdminDashboard() {
                     { key: 'enrollmentId', label: 'Inscription' },
                     { key: 'studentName', label: 'Étudiant', render: (value) => (value as { studentName?: string })?.studentName || '' },
                     { key: 'decision', label: 'Décision' },
-                    { key: 'finalizedAt', label: 'Finalisé le' }
+                    { key: 'finalizedAt', label: 'Finalisé le' },
+                    {
+                      key: 'actions',
+                      label: 'Actions',
+                      render: (_value, item) => (
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          <button type="button" onClick={() => loadTranscriptPdf(item.enrollmentId)}>Relevé PDF</button>
+                          <button type="button" onClick={() => loadDiplomaPdf(item.enrollmentId)}>Diplôme PDF</button>
+                        </div>
+                      )
+                    }
                   ]}
                   data={deliberations.map((item) => ({ ...item, studentName: item.enrollment?.studentName }))}
                   keyExtractor={(item) => item.id}
                 />
               </article>
             ) : (
-              <p>Aucune donnée. Cliquez sur &quot;Délibérations&quot; pour charger.</p>
+              <p>Aucune donnée. Cliquez sur "Délibérations" pour charger.</p>
             )}
+            {transcripts ? (
+              <article className="panel">
+                <h2>Relevés de notes</h2>
+                <Table
+                  columns={[
+                    { key: 'studentName', label: 'Étudiant' },
+                    { key: 'programTitle', label: 'Programme' },
+                    { key: 'academicYear', label: 'Année' },
+                    { key: 'weightedAverage', label: 'Moyenne' },
+                    { key: 'decision', label: 'Décision' }
+                  ]}
+                  data={transcripts}
+                  keyExtractor={(item) => item.verificationCode}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur "Relevés" pour charger.</p>
+            )}
+            {diplomas ? (
+              <article className="panel">
+                <h2>Diplômes</h2>
+                <Table
+                  columns={[
+                    { key: 'studentName', label: 'Étudiant' },
+                    { key: 'diplomaNumber', label: 'Numéro' },
+                    { key: 'programTitle', label: 'Programme' },
+                    { key: 'level', label: 'Niveau' },
+                    { key: 'mention', label: 'Mention' },
+                    { key: 'issuedDate', label: 'Date' }
+                  ]}
+                  data={diplomas}
+                  keyExtractor={(item) => item.diplomaNumber}
+                />
+              </article>
+            ) : (
+              <p>Aucune donnée. Cliquez sur "Diplômes" pour charger.</p>
+            )}
+
           </Tabs>
         ) : null}
         {error ? <p role="alert" className="alert">{error}</p> : null}
