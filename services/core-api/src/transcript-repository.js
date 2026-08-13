@@ -1,14 +1,16 @@
-const { from, initDatabase } = require('./db');
+const { from, usePostgres } = require('./db');
 
 async function findTranscriptByVerificationCode(verificationCode) {
-  if (!initDatabase()) return null;
+  // usePostgres() is synchronous — safe to use without await.
+  // initDatabase() is async (returns a Promise) so !initDatabase() is always false.
+  if (!usePostgres()) return null;
   const db = await from('transcripts');
   const { data } = await db.selectEq('verification_code', verificationCode);
   return data || null;
 }
 
 async function insertTranscript(payload) {
-  if (!initDatabase()) return { data: payload, error: null };
+  if (!usePostgres()) return { data: payload, error: null };
   const db = await from('transcripts');
   const { data } = await db.insert({
     verification_code: payload.verificationCode,
@@ -30,7 +32,7 @@ async function insertTranscript(payload) {
 }
 
 async function listTranscripts() {
-  if (!initDatabase()) return [];
+  if (!usePostgres()) return [];
   const db = await from('transcripts');
   const { data } = await db.select('verification_code, student_name, program_title, academic_year, weighted_average, decision');
   return (data || []).map((item) => ({

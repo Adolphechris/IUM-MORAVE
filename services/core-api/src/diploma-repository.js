@@ -1,14 +1,16 @@
-const { from, initDatabase } = require('./db');
+const { from, usePostgres } = require('./db');
 
 async function findDiplomaByNumber(diplomaNumber) {
-  if (!initDatabase()) return null;
+  // usePostgres() is synchronous — safe to use without await.
+  // initDatabase() is async (returns a Promise) so !initDatabase() is always false.
+  if (!usePostgres()) return null;
   const db = await from('diplomas');
   const { data } = await db.selectEq('diploma_number', diplomaNumber);
   return data || null;
 }
 
 async function insertDiploma(payload) {
-  if (!initDatabase()) return { data: payload, error: null };
+  if (!usePostgres()) return { data: payload, error: null };
   const db = await from('diplomas');
   const { data } = await db.insert({
     user_id: null,
@@ -34,7 +36,7 @@ async function insertDiploma(payload) {
 }
 
 async function listDiplomas() {
-  if (!initDatabase()) return [];
+  if (!usePostgres()) return [];
   const db = await from('diplomas');
   const { data } = await db.select('diploma_number, student_name, program_title, program_level, mention, issued_date');
   return (data || []).map((item) => ({

@@ -1,7 +1,9 @@
-const { from, initDatabase } = require('./db');
+const { from, usePostgres } = require('./db');
 
 async function insertDeliberation(payload) {
-  if (!initDatabase()) return { data: { id: Date.now(), ...payload }, error: null };
+  // usePostgres() is synchronous — safe to use without await.
+  // initDatabase() is async (returns a Promise) so !initDatabase() is always false.
+  if (!usePostgres()) return { data: { id: Date.now(), ...payload }, error: null };
   const db = await from('deliberations');
   const { data } = await db.insert({
     enrollment_id: payload.enrollmentId,
@@ -16,7 +18,7 @@ async function insertDeliberation(payload) {
 }
 
 async function listDeliberations() {
-  if (!initDatabase()) return [];
+  if (!usePostgres()) return [];
   const db = await from('deliberations');
   const { data } = await db.select('id, enrollment_id, decision, finalized_by, finalized_at');
   return (data || []).map((item) => ({
