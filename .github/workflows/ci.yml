@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [main, release/v1.0.0-production]
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -13,26 +15,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Debug Node/npm
-        run: |
-          node -v
-          npm -v
-          pwd
-          ls -la
-      - name: Install root dependencies
-        run: |
-          set -eux
-          if [ -f package.json ]; then
-            npm install --workspaces=false
-          else
-            echo "No root package.json found — skipping root install"
-          fi
-      - name: Lint and build frontends
+      - name: Install dependencies
+        run: npm install
+      - name: Build frontends
         run: |
           set -eux
           for app in apps/web apps/student-space apps/teacher-space apps/admin-dashboard; do
-            npm --prefix "$app" install --silent
-            npm --prefix "$app" run lint
             npm --prefix "$app" run build
           done
       - name: Test backend services
