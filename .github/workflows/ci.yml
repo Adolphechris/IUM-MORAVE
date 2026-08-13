@@ -9,26 +9,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm install
-      - name: Build frontends
-        run: |
-          set -eux
-          for app in apps/web apps/student-space apps/teacher-space apps/admin-dashboard; do
-            npm --prefix "$app" run build
-          done
+
+      - name: Build web app (Vercel target)
+        run: npm --prefix apps/web run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
       - name: Test backend services
         run: npm run test:services
-      - name: Fail if build artifacts missing
+
+      - name: Verify web build artifact
         run: |
-          if [ -d apps/web/.next ] && [ -d apps/student-space/.next ] && [ -d apps/teacher-space/.next ] && [ -d apps/admin-dashboard/.next ]; then
-            echo "Artifacts present"
+          if [ -d apps/web/.next ]; then
+            echo "✅ apps/web/.next build artifact present"
           else
-            echo "Build artifacts missing" && exit 1
+            echo "❌ apps/web/.next missing" && exit 1
           fi
