@@ -26,7 +26,7 @@ type Dashboard = {
   upcomingEvents: Array<{ id: number; title: string; startsAt: string }>;
 };
 
-const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:4001';
+const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || '';
 const coreApiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
 export default function Espace() {
@@ -93,8 +93,9 @@ export default function Espace() {
   }
 
   async function loadRoleWorkspace() {
+    if (!session) return;
     try {
-      if (session.user.role === 'admin') {
+      if (session.user?.role === 'admin') {
         const response = await fetch(`${coreApiUrl}/admin/dashboard`, {
           headers: { Authorization: `Bearer ${session.token}` }
         });
