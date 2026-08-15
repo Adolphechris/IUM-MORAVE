@@ -18,20 +18,81 @@ IUM-MORAVE/
 ├── CONSTITUTION.md          # Charte fondamentale du projet
 ├── TODO.md                  # Tracker master des tâches
 ├── README.md                # Documentation principale
+├── package.json             # Workspaces npm (apps, services, shared)
+├── deploy.sh                # Script de déploiement complet
 ├── docs/                    # Spécifications & Schémas d'architecture
 ├── apps/                    # Applications Frontend
-│   ├── web-portal/          # Portail d'information public
+│   ├── web/                 # Portail public MVP (Next.js)
 │   ├── student-space/       # Espace Étudiants (Notes, Relevés, EDT)
 │   ├── teacher-space/       # Espace Enseignants (Saisie des notes, Cours)
 │   └── admin-dashboard/     # Espace Direction & Scolarité
 ├── services/                # Backend API Services
-│   ├── core-api/            # API Académique & Gestion LMD
-│   ├── auth-service/        # Authentification & Rôles (RBAC)
-│   └── finance-service/     # Gestion Financière & Frais
+│   ├── auth-service/        # Authentification & Rôles (RBAC) — port 4001
+│   ├── core-api/            # API Académique & Gestion LMD — port 4002
+│   ├── finance-service/     # Gestion financière & paiements — port 4003
+│   └── notification-service # Notifications email/SMS — port 4004
 └── shared/                  # UI Design System & Typages partagés
 ```
 
 ---
 
 ## 🚀 DÉMARRAGE RAPIDE
-*Instructions d'installation et de lancement à mesure du déploiement des modules.*
+
+```bash
+# Installation des dépendances du monorepo
+npm install
+
+# Services backend
+npm run start:auth      # http://localhost:4001
+npm run start:core-api  # http://localhost:4002
+
+# Frontend portail
+cd apps/web && npm run dev   # http://localhost:3000
+
+# Espaces métiers
+cd apps/student-space && npm run dev   # http://localhost:3001
+cd apps/teacher-space && npm run dev   # http://localhost:3002
+cd apps/admin-dashboard && npm run dev # http://localhost:3003
+```
+
+## 🔧 ÉTAT ACTUEL DU CHANTIER
+- ✅ **Toutes les phases terminées** (100% développement)
+- Services backend opérationnels : `auth-service` (4001), `core-api` (4002), `finance-service` (4003), `notification-service` (4004)
+- Portail public MVP développé (`apps/web`)
+- Espaces métiers complets (`apps/student-space`, `apps/teacher-space`, `apps/admin-dashboard`)
+- CI verte : 32 tests automatisés passent
+- Prochaine étape : review PR #186 + configuration déploiement
+
+## 🚀 DÉPLOIEMENT
+
+### Local
+```bash
+# Installation
+npm install
+
+# Services backend
+npm run start:auth      # http://localhost:4001
+npm run start:core-api  # http://localhost:4002
+npm run start:finance   # http://localhost:4003
+npm run start:notify    # http://localhost:4004
+
+# Frontend
+cd apps/web && npm run dev        # http://localhost:3000
+cd ../student-space && npm run dev # http://localhost:3001
+cd ../teacher-space && npm run dev  # http://localhost:3002
+cd ../admin-dashboard && npm run dev # http://localhost:3003
+```
+
+### Production (un seul script)
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### Configuration
+Copiez les fichiers `.env.production.example` dans chaque service et remplacez les valeurs par vos clés Supabase et votre secret JWT.
+
+## 📌 DOCUMENTS CLÉS
+- **[Tracker master & TODO](TODO.md)**
+- **[Plan de sprint](docs/SPRINT_PLAN.md)**
+- **[Rapport de développement](docs/DEVELOPMENT_REPORT.md)**

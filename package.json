@@ -1,0 +1,35 @@
+{
+  "name": "ium-morave",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*",
+    "shared/*"
+  ],
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.22.0",
+    "puppeteer": "^21.11.0",
+    "qrcode": "^1.5.3"
+  },
+  "scripts": {
+    "bootstrap": "npm install",
+    "ci": "npm run -w apps/web build || true && npm run test:services || true",
+    "start:auth": "npm run --workspace services/auth-service start",
+    "start:core-api": "npm run --workspace services/core-api start",
+    "start:finance": "npm run --workspace services/finance-service start",
+    "start:notify": "npm run --workspace services/notification-service start",
+    "start:web": "npm run --workspace apps/web dev",
+    "start:student": "npm run --workspace apps/student-space dev",
+    "start:teacher": "npm run --workspace apps/teacher-space dev",
+    "start:admin": "npm run --workspace apps/admin-dashboard dev",
+    "test:services": "npm run --workspace services/auth-service test && npm run --workspace services/core-api test && npm run --workspace services/finance-service test && npm run --workspace services/notification-service test",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+**/node_modules/
+**/.next/
+**/package-lock.json
+
+# Environment
+.env
+**/.env
+.env.production
+.env.local
+**/.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Generated
+**/next-env.d.ts
+
+# Misc
+.DS_Store
+.kilo/
+apps/.auth-utils/
+supabase/
+.vercel
+.env*

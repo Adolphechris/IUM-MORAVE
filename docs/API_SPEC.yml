@@ -1,0 +1,86 @@
+openapi: 3.0.1
+info:
+  title: IUM-MORAVE Public API
+  version: 0.1.0
+  description: API minimale pour le portail institutionnel (V1)
+servers:
+  - url: https://api.universitemorave.cd
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /faculties:
+    get:
+      summary: Liste des facultés
+      responses:
+        '200':
+          description: Liste JSON
+    post:
+      summary: Créer une faculté (admin)
+      responses:
+        '201':
+          description: Créée
+  /programs:
+    get:
+      summary: Liste des programmes
+      parameters:
+        - in: query
+          name: level
+          schema:
+            type: string
+          description: Filtrer par niveau (licence/master/doctorat)
+      responses:
+        '200':
+          description: OK
+  /programs/{id}:
+    get:
+      summary: Détail d'un programme
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Programme
+  /news:
+    get:
+      summary: Actualités publiques
+      responses:
+        '200':
+          description: Liste d'articles
+  /documents:
+    get:
+      summary: Documents publics
+      responses:
+        '200':
+          description: Liste de documents
+  /verification/diploma:
+    post:
+      summary: Vérifier un diplôme par numéro ou QR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                diploma_number:
+                  type: string
+                qr_code:
+                  type: string
+      responses:
+        '200':
+          description: Résultat de vérification
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

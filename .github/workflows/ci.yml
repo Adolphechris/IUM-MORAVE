@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, release/v1.0.0-production]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build web app (Vercel target)
+        run: npm --prefix apps/web run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+
+      - name: Test backend services
+        run: npm run test:services
+
+      - name: Verify web build artifact
+        run: |
+          if [ -d apps/web/.next ]; then
+            echo "✅ apps/web/.next build artifact present"
+          else
+            echo "❌ apps/web/.next missing" && exit 1
+          fi

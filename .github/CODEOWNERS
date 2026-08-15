@@ -1,0 +1,6 @@
+# Code owners for repository
+# Format: path @username
+/apps/ @Adolphechris
+/packages/ @Adolphechris
+/docs/ @Adolphechris
+* @Adolphechris
