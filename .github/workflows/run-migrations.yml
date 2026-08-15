@@ -46,6 +46,15 @@ jobs:
             fi
           else
             echo "No IPv4 address found for $host; using original DB_URL"
+            # Supabase direct hosts (db.<ref>.supabase.co) are IPv6-only (AAAA).
+            # GitHub runners do not have IPv6, so fall back to the IPv4 pooler.
+            if echo "$host" | grep -qE '^db\.[a-z0-9]+\.supabase\.co$'; then
+              pooler_host="aws-0-eu-west-1.pooler.supabase.com"
+              if getent hosts "$pooler_host" >/dev/null 2>&1; then
+                echo "Retrying with Supabase pooler (IPv4): $pooler_host"
+                DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$pooler_host/")
+              fi
+            fi
           fi
 
           echo "Running SQL migrations from db/migrations"
