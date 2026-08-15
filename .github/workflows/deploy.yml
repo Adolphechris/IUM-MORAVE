@@ -26,6 +26,6 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
-          JWT_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
-          TRANSCRIPT_SIGNING_SECRET: ${{ secrets.TRANSCRIPT_SIGNING_SECRET || 'default-transcript-secret' }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL || secrets.SUPABASE_DB_URL || '' }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET || secrets.SUPABASE_ANON_KEY }}
+          TRANSCRIPT_SIGNING_SECRET: ${{ secrets.TRANSCRIPT_SIGNING_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL || secrets.SUPABASE_DB_URL }}
