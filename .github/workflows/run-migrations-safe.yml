@@ -50,7 +50,7 @@ jobs:
               pooler_host="aws-0-eu-west-1.pooler.supabase.com"
               if getent hosts "$pooler_host" >/dev/null 2>&1; then
                 echo "Switching to Supabase IPv4 pooler $pooler_host with user postgres.$ref"
-                DB_URL=$(echo "$DB_URL" | sed -E "s|^([a-zA-Z][a-zA-Z0-9+.-]*://)postgres:|\\1postgres.${ref}:|")
+                DB_URL=$(echo "$DB_URL" | sed -E "s|^([a-zA-Z][a-zA-Z0-9+.-]*://)[^:]+:|\\1postgres.${ref}:|")
                 DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$pooler_host/")
               fi
             fi
