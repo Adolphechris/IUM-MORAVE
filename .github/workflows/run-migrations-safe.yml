@@ -42,11 +42,15 @@ jobs:
           else
             echo "No IPv4 A record found for $host — will attempt default resolution (may be IPv6)"
             # Supabase direct hosts (db.<ref>.supabase.co) are IPv6-only (AAAA).
-            # GitHub runners do not have IPv6, so fall back to the IPv4 pooler.
+            # GitHub runners do not have IPv6, so fall back to the IPv4 pgbouncer
+            # pooler. The pooler authenticates with user postgres.<ref> (NOT plain
+            # postgres); the database password in DB_URL stays valid.
             if echo "$host" | grep -qE '^db\.[a-z0-9]+\.supabase\.co$'; then
+              ref=$(printf '%s' "$host" | sed -n 's/^db\.\([a-z0-9]*\)\.supabase\.co$/\1/p')
               pooler_host="aws-0-eu-west-1.pooler.supabase.com"
               if getent hosts "$pooler_host" >/dev/null 2>&1; then
-                echo "Retrying with Supabase pooler (IPv4): $pooler_host"
+                echo "Switching to Supabase IPv4 pooler $pooler_host with user postgres.$ref"
+                DB_URL=$(echo "$DB_URL" | sed -E "s|^([a-zA-Z][a-zA-Z0-9+.-]*://)postgres:|\\1postgres.${ref}:|")
                 DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$pooler_host/")
               fi
             fi
