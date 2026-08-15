@@ -28,31 +28,23 @@ jobs:
           host=$(echo "$DB_URL" | sed -n 's/.*@\([^:\/]*\).*/\1/p')
           port=$(echo "$DB_URL" | sed -n 's/.*:\([0-9]\+\)\/.*$/\1/p' || echo "5432")
 
-          echo "Resolving IPv4 for $host"
-          ipv4=$(dig +short A "$host" | head -n1 || true)
-
-          if [ -n "$ipv4" ]; then
-            echo "IPv4 found: $ipv4 — testing TCP connection to $ipv4:$port"
-            if timeout 5 bash -c "</dev/tcp/$ipv4/$port" 2>/dev/null; then
-              echo "IPv4 reachable — replacing host with IPv4 in DB_URL"
-              DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$ipv4/")
-            else
-              echo "IPv4 not reachable. Attempting to connect to host using default resolution (may be IPv6)"
-            fi
-          else
-            echo "No IPv4 A record found for $host — will attempt default resolution (may be IPv6)"
-            # Supabase direct hosts (db.<ref>.supabase.co) are IPv6-only (AAAA).
-            # GitHub runners do not have IPv6, so fall back to the IPv4 pgbouncer
-            # pooler. The pooler authenticates with user postgres.<ref> (NOT plain
-            # postgres); the database password in DB_URL stays valid.
-            if echo "$host" | grep -qE '^db\.[a-z0-9]+\.supabase\.co$'; then
+          # Supabase direct hosts (db.<ref>.supabase.co) expose only IPv6 (AAAA).
+          # GitHub runners have no IPv6, so route the connection through the IPv4
+          # pgbouncer pooler and authenticate as postgres.<ref>. The real pooler
+          # hostname is kept (never a bare IP) so the TLS/SNI handshake stays valid.
+          if printf '%s' "$host" | grep -qE '(db\.[a-z0-9]+\.supabase\.co|pooler\.supabase\.com)$'; then
+            ref=$(printf '%s' "$DB_URL" | sed -n 's/.*@postgres\.\([a-z0-9]*\):.*/\1/p')
+            if [ -z "$ref" ]; then
               ref=$(printf '%s' "$host" | sed -n 's/^db\.\([a-z0-9]*\)\.supabase\.co$/\1/p')
-              pooler_host="aws-0-eu-west-1.pooler.supabase.com"
-              if getent hosts "$pooler_host" >/dev/null 2>&1; then
-                echo "Switching to Supabase IPv4 pooler $pooler_host with user postgres.$ref"
-                DB_URL=$(echo "$DB_URL" | sed -E "s|^([a-zA-Z][a-zA-Z0-9+.-]*://)[^:]+:|\\1postgres.${ref}:|")
-                DB_URL=$(echo "$DB_URL" | sed "s/@$host/@$pooler_host/")
-              fi
+            fi
+            if [ -z "$ref" ]; then
+              ref=$(cat supabase/.temp/project-ref 2>/dev/null || true)
+            fi
+            pooler_host="aws-0-eu-west-1.pooler.supabase.com"
+            if getent hosts "$pooler_host" >/dev/null 2>&1; then
+              echo "Routing Supabase connection through IPv4 pooler $pooler_host (user postgres.$ref)"
+              DB_URL=$(printf '%s' "$DB_URL" | sed -E "s|^([a-zA-Z][a-zA-Z0-9+.-]*://)[^:]+:|\\1postgres.${ref}:|")
+              DB_URL=$(printf '%s' "$DB_URL" | sed -E "s|@[^:@/]+|@${pooler_host}|")
             fi
           fi
 
