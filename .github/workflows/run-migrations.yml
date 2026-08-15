@@ -34,7 +34,7 @@ jobs:
           # pgbouncer pooler and authenticate as postgres.<ref>. The real pooler
           # hostname is kept (never a bare IP) so the TLS/SNI handshake stays valid.
           if printf '%s' "$host" | grep -qE '(db\.[a-z0-9]+\.supabase\.co|pooler\.supabase\.com)$'; then
-            ref=$(printf '%s' "$DB_URL" | sed -n 's/.*@postgres\.\([a-z0-9]*\):.*/\1/p')
+            ref=$(printf '%s' "$DB_URL" | sed -n 's,^[a-zA-Z][a-zA-Z0-9+.-]*://postgres\.\([a-z0-9]*\):.*,\1,p')
             if [ -z "$ref" ]; then
               ref=$(printf '%s' "$host" | sed -n 's/^db\.\([a-z0-9]*\)\.supabase\.co$/\1/p')
             fi
