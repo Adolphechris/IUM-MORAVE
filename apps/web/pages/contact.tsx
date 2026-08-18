@@ -14,7 +14,7 @@ export default function ContactPage() {
     setError(null);
     const form = new FormData(event.currentTarget);
     try {
-      const response = await fetch(`${apiUrl}/contact`, {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
