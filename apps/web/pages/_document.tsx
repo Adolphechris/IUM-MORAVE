@@ -24,8 +24,8 @@ export default function Document() {
         <meta property="og:site_name" content="Institut Universitaire Morave (IUM-MORAVE)" />
         <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
         <meta property="og:description" content="Établissement d'enseignement supérieur agréé par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Programmes LMD en Droit, Sciences, Médecine, Économie. Mwene-Ditu, RDC." />
-        <meta property="og:url" content="https://ium-morave.vercel.app" />
-        <meta property="og:image" content="https://ium-morave.vercel.app/images/logo-crest.jpg" />
+        <meta property="og:url" content="https://iumorave-ac.org" />
+        <meta property="og:image" content="https://iumorave-ac.org/images/logo-crest.jpg" />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="800" />
         <meta property="og:locale" content="fr_CD" />
@@ -34,7 +34,7 @@ export default function Document() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Institut Universitaire Morave (IUM-MORAVE) | Mwene-Ditu, RDC" />
         <meta name="twitter:description" content="Université agréée ESU en RDC — Formations LMD, excellence académique, Province de Lomami." />
-        <meta name="twitter:image" content="https://ium-morave.vercel.app/images/logo-crest.jpg" />
+        <meta name="twitter:image" content="https://iumorave-ac.org/images/logo-crest.jpg" />
 
         {/* ── DONNÉES STRUCTURÉES JSON-LD (Google Knowledge Panel) */}
         <script
@@ -46,9 +46,9 @@ export default function Document() {
               "name": "Institut Universitaire Morave de Mwene-Ditu",
               "alternateName": ["IUM-MORAVE", "IUM", "Institut Universitaire Morave"],
               "description": "Établissement d'enseignement supérieur privé agréé par le Ministère de l'Enseignement Supérieur et Universitaire (ESU) de la République Démocratique du Congo. Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 avril 2018.",
-              "url": "https://ium-morave.vercel.app",
-              "logo": "https://ium-morave.vercel.app/images/logo-crest.jpg",
-              "image": "https://ium-morave.vercel.app/images/logo-crest.jpg",
+              "url": "https://iumorave-ac.org",
+              "logo": "https://iumorave-ac.org/images/logo-crest.jpg",
+              "image": "https://iumorave-ac.org/images/logo-crest.jpg",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "B.P. 126",
@@ -60,7 +60,7 @@ export default function Document() {
               "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "admissions",
-                "url": "https://ium-morave.vercel.app/contact"
+                "url": "https://iumorave-ac.org/contact"
               },
               "foundingDate": "2018",
               "legalName": "Institut Universitaire Morave de Mwene-Ditu",
@@ -88,7 +88,7 @@ export default function Document() {
                 }
               },
               "sameAs": [
-                "https://ium-morave.vercel.app"
+                "https://iumorave-ac.org"
               ]
             })
           }}

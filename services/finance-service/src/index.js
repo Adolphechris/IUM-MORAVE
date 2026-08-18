@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 4003;
 const CORE_API_URL = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'https://ium-morave.vercel.app' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'https://iumorave-ac.org' }));
 app.use(express.json());
 
 const financeRateLimiter = rateLimit({

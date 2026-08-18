@@ -30,7 +30,7 @@ function parseQrPayload(encoded) {
 async function generateVerificationQR({ type, verificationCode, ttlMs = 365 * 24 * 60 * 60 * 1000 }) {
   const expiresAt = Date.now() + ttlMs;
   const encoded = buildQrPayload({ type, verificationCode, expiresAt });
-  const baseUrl = process.env.PUBLIC_VERIFICATION_URL || 'https://ium-morave.vercel.app/verify';
+  const baseUrl = process.env.PUBLIC_VERIFICATION_URL || 'https://iumorave-ac.org/verify';
   const url = `${baseUrl}?payload=${encodeURIComponent(encoded)}`;
 
   try {

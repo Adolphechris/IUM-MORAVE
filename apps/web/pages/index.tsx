@@ -116,9 +116,9 @@ export default function Home() {
       <Head>
         <title>Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE — Enseignement Supérieur en RDC</title>
         <meta name="description" content="Bienvenue à l'Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE). Université agréée par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Formations LMD : Licence, Master, Doctorat. Province de Lomami, République Démocratique du Congo." />
-        <link rel="canonical" href="https://ium-morave.vercel.app/" />
+        <link rel="canonical" href="https://iumorave-ac.org/" />
         <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
-        <meta property="og:url" content="https://ium-morave.vercel.app/" />
+        <meta property="og:url" content="https://iumorave-ac.org/" />
       </Head>
       {/* ─── NAVIGATION AVEC BLASON OFFICIEL ───────────────────── */}
       <header className="navbar">
