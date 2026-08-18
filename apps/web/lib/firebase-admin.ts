@@ -1,9 +1,7 @@
 import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
-import { getAuth, Auth } from 'firebase-admin/auth';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 let adminApp: App;
-let adminAuth: Auth;
 let db: Firestore;
 
 export function getFirebaseAdmin() {
@@ -25,7 +23,6 @@ export function getFirebaseAdmin() {
         }),
       });
     } else {
-      // Fallback initialization if private key environment variable is not passed directly (e.g. build step)
       adminApp = initializeApp({
         projectId: projectId || 'iumorave',
       });
@@ -34,8 +31,15 @@ export function getFirebaseAdmin() {
     adminApp = getApps()[0];
   }
 
-  adminAuth = getAuth(adminApp);
   db = getFirestore(adminApp);
+
+  let adminAuth = null;
+  try {
+    const { getAuth } = require('firebase-admin/auth');
+    adminAuth = getAuth(adminApp);
+  } catch (e) {
+    // Auth subpackage optional fallback
+  }
 
   return { adminApp, adminAuth, db };
 }
