@@ -1,6 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import AdminMessaging from '../components/AdminMessaging';
 
 type UserSession = {
   token: string;
@@ -91,7 +92,7 @@ export default function AdminPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [adminData, setAdminData] = useState<AdminData | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'generator' | 'enrollments' | 'deliberations' | 'diplomas'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'messages' | 'generator' | 'enrollments' | 'deliberations' | 'diplomas'>('overview');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -306,7 +307,7 @@ export default function AdminPage() {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {(['overview', 'generator', 'enrollments', 'deliberations', 'diplomas'] as const).map((tab) => (
+                  {(['overview', 'messages', 'generator', 'enrollments', 'deliberations', 'diplomas'] as const).map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
@@ -322,6 +323,7 @@ export default function AdminPage() {
                       }}
                     >
                       {tab === 'overview' && '📊 Vue globale'}
+                      {tab === 'messages' && '📬 Messagerie Gmail'}
                       {tab === 'generator' && '📄 Générateur de Relevés'}
                       {tab === 'enrollments' && '🎓 Inscriptions'}
                       {tab === 'deliberations' && '⚖️ Délibérations'}
@@ -330,6 +332,11 @@ export default function AdminPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Onglet Messagerie Gmail-Style */}
+              {activeTab === 'messages' && (
+                <AdminMessaging token={session.token} />
+              )}
 
               {/* Contenu Onglet 1 : Vue Globale */}
               {activeTab === 'overview' && adminData && (
