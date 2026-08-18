@@ -42,6 +42,14 @@ export default function ContactPage() {
         <p className="eyebrow">Nous contacter</p>
         <h1>Contact institutionnel</h1>
         <p>Adressez vos questions à l&apos;IUM-MORAVE. Les champs marqués sont nécessaires au traitement de votre demande.</p>
+        <div className="contact-info-box">
+          <p><strong>E-mails officiels :</strong></p>
+          <ul>
+            <li>✉️ Secrétariat : <a href="mailto:secretariat@iumorave-ac.org">secretariat@iumorave-ac.org</a></li>
+            <li>✉️ Contact général : <a href="mailto:contact@iumorave-ac.org">contact@iumorave-ac.org</a></li>
+          </ul>
+          <p><strong>Siège social :</strong> Mwene-Ditu, Province de Lomami, RDC — B.P. 126</p>
+        </div>
         <form onSubmit={submit}>
           <label htmlFor="name">Nom complet</label>
           <input id="name" name="name" required autoComplete="name" />
@@ -67,6 +75,9 @@ export default function ContactPage() {
         a { color: #07588e; font-weight: 700; text-decoration: none; }
         section { padding-top: 3rem; }
         .eyebrow { color: #0a689f; font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+        .contact-info-box { background: #eef5fc; border: 1px solid #cbe0f2; border-radius: .7rem; padding: 1.25rem; margin-top: 1rem; }
+        .contact-info-box ul { list-style: none; padding: 0; margin: .5rem 0 1rem 0; }
+        .contact-info-box li { margin-bottom: .4rem; font-size: 1.05rem; }
         form { background: #fff; border: 1px solid #dce5ed; border-radius: .7rem; display: grid; gap: .75rem; margin-top: 1.5rem; padding: 1.5rem; }
         label { font-weight: 700; }
         input, textarea { border: 1px solid #9fb0bf; border-radius: .35rem; font: inherit; padding: .75rem; }
