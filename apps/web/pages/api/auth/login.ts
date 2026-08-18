@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_ium_morave_2026_super_secure_key';
-
 const defaultAdminPasswordHash = bcrypt.hashSync('ChangeMe123!', 10);
 
-const users = [
+const fallbackUsers = [
   {
     id: 1,
     email: 'admin@ium-morave.edu',
@@ -33,7 +33,7 @@ const users = [
   }
 ];
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Activer CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -55,16 +55,35 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'Adresse email et mot de passe requis.' });
   }
 
-  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  let user: any = null;
 
-  if (!user) {
-    return res.status(401).json({ error: 'Identifiants invalides (utilisateur non trouvé).' });
+  try {
+    const { db } = getFirebaseAdmin();
+    if (db) {
+      const usersRef = db.collection('users');
+      const snapshot = await usersRef.where('email', '==', email.toLowerCase()).get();
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        const data = doc.data();
+        if (data.passwordHash && bcrypt.compareSync(password, data.passwordHash)) {
+          user = { id: doc.id, ...data };
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[firebase-login] Firestore check fallback:', err);
   }
 
-  const isPasswordValid = bcrypt.compareSync(password, user.passwordHash);
+  // Fallback to initial seed users if not found in Firestore or during offline testing
+  if (!user) {
+    const foundFallback = fallbackUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+    if (foundFallback && bcrypt.compareSync(password, foundFallback.passwordHash)) {
+      user = foundFallback;
+    }
+  }
 
-  if (!isPasswordValid) {
-    return res.status(401).json({ error: 'Identifiants invalides (mot de passe incorrect).' });
+  if (!user) {
+    return res.status(401).json({ error: 'Identifiants invalides (email ou mot de passe incorrect).' });
   }
 
   const token = jwt.sign(

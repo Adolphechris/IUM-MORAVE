@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
+import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_ium_morave_2026_super_secure_key';
 
-const mockDashboardData = {
+const defaultMockDashboardData = {
   totals: {
     students: 3420,
     teachers: 148,
@@ -35,7 +36,7 @@ const mockDashboardData = {
   ]
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
@@ -60,5 +61,32 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).json({ error: 'Session expirée ou invalide. Veuillez vous reconnecter.' });
   }
 
-  return res.status(200).json(mockDashboardData);
+  let dashboardData = { ...defaultMockDashboardData };
+
+  try {
+    const { db } = getFirebaseAdmin();
+    if (db) {
+      const [enrollSnap, delibSnap, diploSnap] = await Promise.all([
+        db.collection('enrollments').get(),
+        db.collection('deliberations').get(),
+        db.collection('diplomas').get()
+      ]);
+
+      if (!enrollSnap.empty) {
+        dashboardData.enrollments = enrollSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any;
+      }
+
+      if (!delibSnap.empty) {
+        dashboardData.deliberations = delibSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any;
+      }
+
+      if (!diploSnap.empty) {
+        dashboardData.diplomas = diploSnap.docs.map(doc => ({ diplomaNumber: doc.id, ...doc.data() })) as any;
+      }
+    }
+  } catch (err) {
+    console.warn('[firebase-admin-data] Firestore fetch fallback:', err);
+  }
+
+  return res.status(200).json(dashboardData);
 }
