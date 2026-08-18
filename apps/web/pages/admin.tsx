@@ -563,7 +563,7 @@ export default function AdminPage() {
                             🔒 Document sécurisé certifié par signature d'intégrité HMAC-SHA256
                           </p>
                           <p style={{ fontSize: '0.75rem', color: '#64748b', margin: 0 }}>
-                            Vérification en ligne : <strong>https://ium-morave.vercel.app/verify</strong>
+                            Vérification en ligne : <strong>https://iumorave-ac.org/verify</strong>
                           </p>
                         </div>
 

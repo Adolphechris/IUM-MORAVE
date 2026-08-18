@@ -7,7 +7,7 @@ const { rateLimit } = require('../../../shared/rate-limiter');
 const app = express();
 const PORT = process.env.PORT || 4004;
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'https://ium-morave.vercel.app' }));
+app.use(cors({ origin: process.env.CORS_ORIGIN || 'https://iumorave-ac.org' }));
 app.use(express.json());
 
 const notificationRateLimiter = rateLimit({
