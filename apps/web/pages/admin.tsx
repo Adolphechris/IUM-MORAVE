@@ -105,6 +105,22 @@ export default function AdminPage() {
   const [grades, setGrades] = useState<GradeItem[]>(PRESETS[0].grades);
   const [generatedTranscript, setGeneratedTranscript] = useState<any | null>(null);
 
+  // Restauration automatique de session au rafraîchissement de la page (F5 / Reload)
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem('ium_admin_session');
+      if (saved) {
+        const parsedSession: UserSession = JSON.parse(saved);
+        if (parsedSession && parsedSession.token && parsedSession.user) {
+          setSession(parsedSession);
+          loadAdminData(parsedSession.token);
+        }
+      }
+    } catch (e) {
+      console.warn('Erreur lors de la restauration de la session admin:', e);
+    }
+  }, []);
+
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
@@ -124,6 +140,11 @@ export default function AdminPage() {
       }
 
       setSession(data);
+      try {
+        localStorage.setItem('ium_admin_session', JSON.stringify(data));
+      } catch (saveErr) {
+        console.warn('localStorage save failed:', saveErr);
+      }
       loadAdminData(data.token);
     } catch (err: any) {
       setError(err.message || 'Une erreur est survenue lors de la connexion.');
@@ -194,6 +215,9 @@ export default function AdminPage() {
   }
 
   function handleLogout() {
+    try {
+      localStorage.removeItem('ium_admin_session');
+    } catch (e) {}
     setSession(null);
     setAdminData(null);
     setEmail('');
@@ -330,6 +354,22 @@ export default function AdminPage() {
                       {tab === 'diplomas' && '📜 Diplômes'}
                     </button>
                   ))}
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      padding: '0.6rem 1rem',
+                      borderRadius: '0.5rem',
+                      border: '1px solid #991b1b',
+                      backgroundColor: '#450a0a',
+                      color: '#fca5a5',
+                      fontWeight: 700,
+                      fontSize: '0.875rem',
+                      cursor: 'pointer'
+                    }}
+                    title="Se déconnecter de la session d’administration"
+                  >
+                    🚪 Déconnexion
+                  </button>
                 </div>
               </div>
 
