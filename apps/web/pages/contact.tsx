@@ -9,10 +9,11 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formElement = event.currentTarget;
     setLoading(true);
     setStatus(null);
     setError(null);
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formElement);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -27,8 +28,8 @@ export default function ContactPage() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Votre message ne peut pas être envoyé.');
-      event.currentTarget.reset();
-      setStatus('Votre message a été reçu. L’administration vous répondra dès que possible.');
+      formElement.reset();
+      setStatus(result.message || 'Votre message a été reçu. L’administration vous répondra dès que possible.');
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Votre message ne peut pas être envoyé.');
     } finally {
