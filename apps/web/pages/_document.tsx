@@ -10,6 +10,7 @@ export default function Document() {
         <meta name="keywords" content="Institut Universitaire Morave, IUM, IUM-MORAVE, Mwene-Ditu, université RDC, université Congo, enseignement supérieur RDC, Lomami, ESU, LMD, licence master doctorat, université privée Congo, agrément ESU, formation universitaire Congo" />
         <meta name="author" content="Institut Universitaire Morave de Mwene-Ditu" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="google-site-verification" content="oXEc-8CKsWsLHbr9evojDZhrlSgjJSFUuyf4oLnoKcg" />
         <meta name="google-site-verification" content="T-Q3qt1mbofsJWPvUXY9yvZPtlq8TBf4sC_k9WTJTSE" />
         <meta name="googlebot" content="index, follow" />
         <meta name="language" content="French" />
