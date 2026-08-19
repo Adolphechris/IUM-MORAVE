@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import { fetchGistMessages, saveGistMessages } from '../../../lib/gist-db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_ium_morave_2026_super_secure_key';
@@ -124,7 +125,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
     if (smtpPass) {
       try {
-        const nodemailer = require('nodemailer');
         const transporter = nodemailer.createTransport({
           host: process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com',
           port: 465,

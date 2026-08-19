@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 import { fetchGistMessages, saveGistMessages } from '../../lib/gist-db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -52,7 +53,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
   if (smtpPass) {
     try {
-      const nodemailer = require('nodemailer');
       const transporter = nodemailer.createTransport({
         host: process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com',
         port: 465,
