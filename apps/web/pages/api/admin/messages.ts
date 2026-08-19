@@ -4,6 +4,14 @@ import { getFirebaseAdmin } from '../../../lib/firebase-admin';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_ium_morave_2026_super_secure_key';
 
+declare global {
+  var __inMemoryMessages: Array<any> | undefined;
+}
+
+if (!global.__inMemoryMessages) {
+  global.__inMemoryMessages = [];
+}
+
 export type InstitutionalMessage = {
   id: string;
   name: string;
@@ -47,16 +55,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: 'Session expirée ou token invalide.' });
   }
 
-  // 1. GET MESSAGES LIST & UNREAD STATS FROM FIRESTORE
+  if (!global.__inMemoryMessages) {
+    global.__inMemoryMessages = [];
+  }
+
+  // 1. GET MESSAGES LIST & UNREAD STATS FROM FIRESTORE + IN-MEMORY
   if (req.method === 'GET') {
-    let messages: InstitutionalMessage[] = [];
+    let firestoreMessages: InstitutionalMessage[] = [];
 
     try {
       const { db } = getFirebaseAdmin();
       if (db) {
         const snapshot = await db.collection('contact_messages').orderBy('createdAt', 'desc').get();
         if (!snapshot.empty) {
-          messages = snapshot.docs.map(doc => {
+          firestoreMessages = snapshot.docs.map(doc => {
             const data = doc.data();
             return {
               id: doc.id,
@@ -77,6 +89,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (err) {
       console.warn('[api/admin/messages] Firestore fetch warning:', err);
     }
+
+    // Merge Firestore with In-Memory store without duplicates
+    const allMap = new Map<string, InstitutionalMessage>();
+    firestoreMessages.forEach(m => allMap.set(m.id, m));
+    global.__inMemoryMessages.forEach(m => {
+      if (!allMap.has(m.id)) allMap.set(m.id, m);
+    });
+
+    const messages = Array.from(allMap.values()).sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
     const unreadCount = messages.filter(m => m.status === 'NOUVEAU' && m.folder !== 'trash').length;
     const starredCount = messages.filter(m => m.isStarred && m.folder !== 'trash').length;
@@ -105,23 +128,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const activeSender = senderAccount || 'secretariat@iumorave-ac.org';
 
-    const newMailDoc = {
+    const newMailDoc: InstitutionalMessage = {
+      id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
       name: 'Administration IUM-MORAVE',
       email: recipient.toLowerCase(),
-      senderAccount: activeSender,
+      recipientAccount: activeSender,
       subject: subject || 'Message Officiel de l’IUM-MORAVE',
       message,
       status: 'REPONDU',
       folder: 'sent',
-      replyToId: replyToId || null,
-      createdAt: new Date().toISOString()
+      replyToId: replyToId || undefined,
+      createdAt: new Date().toISOString(),
+      replies: []
     };
 
-    // 2a. Save to Firestore
+    // Save in memory
+    global.__inMemoryMessages.unshift(newMailDoc);
+
+    // Save in Firestore
     try {
       const { db } = getFirebaseAdmin();
       if (db) {
-        await db.collection('contact_messages').add(newMailDoc);
+        await db.collection('contact_messages').doc(newMailDoc.id).set(newMailDoc);
 
         if (replyToId) {
           const originalRef = db.collection('contact_messages').doc(replyToId);
@@ -145,7 +173,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.warn('[api/admin/messages] Firestore send warning:', err);
     }
 
-    // 2b. Dispatch real SMTP email via Zoho Mail (smtp.zoho.com)
+    // Dispatch real SMTP email via Zoho Mail (smtp.zoho.com)
     let emailDispatched = false;
     const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
     if (smtpPass) {
@@ -192,6 +220,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'ID du message requis.' });
     }
 
+    // Update in memory
+    const memMsg = global.__inMemoryMessages.find(m => m.id === id);
+    if (memMsg) {
+      if (status !== undefined) memMsg.status = status;
+      if (isStarred !== undefined) memMsg.isStarred = isStarred;
+      if (folder !== undefined) memMsg.folder = folder;
+    }
+
+    // Update in Firestore
     try {
       const { db } = getFirebaseAdmin();
       if (db) {
@@ -217,6 +254,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'ID du message à supprimer requis.' });
     }
 
+    // Delete from memory
+    global.__inMemoryMessages = global.__inMemoryMessages.filter(m => m.id !== id);
+
+    // Delete from Firestore
     try {
       const { db } = getFirebaseAdmin();
       if (db) {

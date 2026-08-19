@@ -1,6 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getFirebaseAdmin } from '../../lib/firebase-admin';
 
+declare global {
+  var __inMemoryMessages: Array<any> | undefined;
+}
+
+if (!global.__inMemoryMessages) {
+  global.__inMemoryMessages = [];
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,26 +35,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const messageDoc = {
+    id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
     name,
     email: email.toLowerCase(),
     recipientAccount: 'secretariat@iumorave-ac.org',
     subject,
     message,
     status: 'NOUVEAU',
-    createdAt: new Date().toISOString()
+    folder: 'inbox',
+    createdAt: new Date().toISOString(),
+    replies: []
   };
 
-  // 1. Save to Firestore DB
+  // 1. Save to in-memory store for instant guaranteed access in Admin tab
+  if (!global.__inMemoryMessages) global.__inMemoryMessages = [];
+  global.__inMemoryMessages.unshift(messageDoc);
+
+  // 2. Save to Firestore DB
   try {
     const { db } = getFirebaseAdmin();
     if (db) {
-      await db.collection('contact_messages').add(messageDoc);
+      await db.collection('contact_messages').doc(messageDoc.id).set(messageDoc);
     }
   } catch (err) {
     console.warn('[api/contact] Firestore save fallback:', err);
   }
 
-  // 2. SMTP Email Dispatch to Zoho Mail App on phone (if ZOHO_SMTP_PASSWORD set)
+  // 3. SMTP Email Dispatch to Zoho Mail App on phone (if ZOHO_SMTP_PASSWORD set)
   const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
   if (smtpPass) {
     try {
