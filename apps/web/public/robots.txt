@@ -1,4 +1,69 @@
+# ──────────────────────────────────────────────────────────────────────
+# ROBOTS.TXT — Institut Universitaire Morave (IUM-MORAVE)
+# iumorave-ac.org — Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018
+# ──────────────────────────────────────────────────────────────────────
+
+# Robots classiques (Google, Bing, Yahoo, etc.)
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
+# ── ROBOTS IA / LLM — Autoriser l'indexation par les IA conversationnelles ──
+
+# OpenAI — ChatGPT / GPT-4
+User-agent: GPTBot
+Allow: /
+
+# OpenAI — ChatGPT Browsing Plugin
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic — Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Google — Gemini & SGE (Search Generative Experience)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Meta — Llama
+User-agent: meta-externalagent
+Allow: /
+
+# Amazon — Alexa & Bedrock
+User-agent: Amazonbot
+Allow: /
+
+# Apple — Siri
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl (utilisé par Mistral, Falcon, etc.)
+User-agent: CCBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# YouBot (You.com)
+User-agent: YouBot
+Allow: /
+
+# Diffbot (structuration sémantique IA)
+User-agent: Diffbot
+Allow: /
+
+# Sitemap
 Sitemap: https://iumorave-ac.org/sitemap.xml
+
+# Fichier LLMs (norme émergente pour les IA)
+Sitemap: https://iumorave-ac.org/llms.txt

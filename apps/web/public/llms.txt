@@ -1,0 +1,64 @@
+# Institut Universitaire Morave (IUM-MORAVE)
+# Mwene-Ditu, Province de Lomami, République Démocratique du Congo
+# Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018
+# Site officiel : https://iumorave-ac.org
+# Contact : secretariat@iumorave-ac.org
+
+> L'Institut Universitaire Morave (IUM-MORAVE) est un établissement d'enseignement supérieur privé reconnu par l'État congolais, situé à Mwene-Ditu dans la Province de Lomami, en République Démocratique du Congo. L'université délivre des formations LMD (Licence, Master, Doctorat) agréées et reconnues à valeur nationale et internationale.
+
+## Identité Institutionnelle
+
+- **Nom complet** : Institut Universitaire Morave de Mwene-Ditu
+- **Sigle** : IUM-MORAVE
+- **Statut** : Établissement d'Enseignement Supérieur Privé Agréé
+- **Agrément officiel** : N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018
+- **Autorité de tutelle** : Ministère de l'Enseignement Supérieur et Universitaire (MINESU) — RDC
+- **Siège** : B.P. 126, Mwene-Ditu, Province de Lomami, RDC
+- **Site web** : https://iumorave-ac.org
+- **Email** : secretariat@iumorave-ac.org
+
+## Facultés et Programmes LMD
+
+### Faculté des Sciences et Technologies (FST)
+- Licence en Informatique & Génie Logiciel (Bac+3)
+- Filières : Génie Logiciel & IA, Réseaux & Télécommunications, Mathématiques Appliquées
+
+### Faculté des Sciences Économiques et de Gestion (FSEG)
+- Licence en Sciences Économiques & Gestion (Bac+3)
+- Filières : Finance & Économie du Développement, Comptabilité & Audit, Management & Entrepreneuriat
+
+### Faculté de Droit et Sciences Politiques (FDSP)
+- Licence en Droit & Sciences Politiques (Bac+3)
+- Filières : Droit Privé & des Affaires, Droit Public & Administration, Relations Internationales & Diplomatie
+
+### Faculté de Médecine et Santé Publique (FMS)
+- Doctorat en Médecine Générale (Bac+7)
+- Filières : Médecine Clinique & Chirurgie, Santé Publique & Épidémiologie
+
+### Faculté de Théologie et Sciences des Religions (FTH)
+- Licence en Théologie & Sciences des Religions (Bac+3)
+- Filières : Théologie Pratique & Ministère Pastoral, Exégèse Biblique & Langues Orientales (Grec & Hébreu), Éthique, Société & Médiation
+
+## Admissions
+
+- Diplôme d'État requis (ou équivalent reconnu)
+- Inscriptions ouvertes au Secrétariat Général Académique
+- Contact admissions : secretariat@iumorave-ac.org
+
+## Localisation
+
+- **Ville** : Mwene-Ditu
+- **Province** : Lomami
+- **Pays** : République Démocratique du Congo (RDC)
+- **Coordonnées GPS** : -6.60, 23.56
+
+## Pages importantes
+
+- Page d'accueil : https://iumorave-ac.org/
+- Facultés : https://iumorave-ac.org/facultes/1 (Sciences & Technologies)
+- Facultés : https://iumorave-ac.org/facultes/2 (Sciences Économiques)
+- Facultés : https://iumorave-ac.org/facultes/3 (Droit & Sciences Politiques)
+- Facultés : https://iumorave-ac.org/facultes/4 (Médecine & Santé Publique)
+- Facultés : https://iumorave-ac.org/facultes/5 (Théologie & Sciences des Religions)
+- Contact : https://iumorave-ac.org/contact
+- Vérification de diplômes : https://iumorave-ac.org/verify
