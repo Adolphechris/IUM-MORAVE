@@ -210,7 +210,7 @@ const FACULTIES_DATABASE: Record<string, FacultyData> = {
           {
             id: 9,
             code: 'DSP-RI',
-            title: 'Filière : Relations Internationales & Diplomasie',
+            title: 'Filière : Relations Internationales & Diplomatie',
             description: 'Droit international public, géopolitique, organisations internationales et négociation diplomatique.',
             careers: ['Diplomate', 'Analyste Géopolitique', 'Chargé de Mission ONG']
           }
@@ -270,8 +270,61 @@ const FACULTIES_DATABASE: Record<string, FacultyData> = {
       }
     ],
     allTracks: []
+  },
+
+  '5': {
+    id: 5,
+    code: 'FTH',
+    name: 'Faculté de Théologie et Sciences des Religions',
+    description: 'La Faculté de Théologie et Sciences des Religions de l\'IUM-MORAVE offre une formation académique, théologique, éthique et pastorale d\'excellence. Elle forme les leaders spirituels, exégètes, aumôniers, enseignants et cadres d\'organisations confessionnelles.',
+    dean: 'Prof. Dr. Samuel Ntumba',
+    heroImage: '/images/library-study.jpg',
+    globalCareers: ['Pasteur / Leader Spirituel', 'Aumônier Militaire & Hospitalier', 'Enseignant-Chercheur en Théologie', 'Conseiller Éthique & Médiateur', 'Directeur d\'Organisation Confessionnelle (ONG)', 'Expert en Dialogue Interreligieux'],
+    programs: [
+      {
+        id: 5,
+        code: 'LIC-THEO',
+        title: 'Licence en Théologie & Sciences des Religions',
+        level: 'Licence (Bac+3)',
+        durationMonths: 36,
+        description: 'Cursus complet couvrant la théologie systématique, l’exégèse biblique, l’histoire de l’Église, l’éthique chrétienne, le grec ancien et l’hébreu biblique.',
+        tracks: [
+          {
+            id: 14,
+            code: 'FT-PAST',
+            title: 'Filière : Théologie Pratique & Ministère Pastoral',
+            description: 'Direction ecclésiale, homilétique, accompagnement pastoral et leadership spirituel.',
+            careers: ['Pasteur Ministre', 'Aumônier', 'Responsable de Ministère']
+          },
+          {
+            id: 15,
+            code: 'FT-BIBL',
+            title: 'Filière : Exégèse Biblique & Langues Orientales',
+            description: 'Analyse textuelle approfondie, hébreu biblique, grec ancien et herméneutique.',
+            careers: ['Exégète', 'Traducteur Biblique', 'Professeur de Théologie']
+          },
+          {
+            id: 16,
+            code: 'FT-ETH',
+            title: 'Filière : Éthique, Société & Médiation',
+            description: 'Éthique appliquée, bioéthique, éthique sociale et médiation culturelle et confessionnelle.',
+            careers: ['Conseiller Éthique', 'Médiateur Interculturel', 'Cadre ONG Confessionnelle']
+          }
+        ],
+        courses: [
+          { id: 40, code: 'THO101', title: 'Introduction à la Théologie & Herméneutique', credits: 6, semester: 1 },
+          { id: 41, code: 'THO102', title: 'Grec Biblique & Hébreu Fondamental', credits: 6, semester: 1 },
+          { id: 42, code: 'THO201', title: 'Exégèse de l\'Ancien et du Nouveau Testament', credits: 6, semester: 2 },
+          { id: 43, code: 'THO202', title: 'Histoire Générale du Christianisme & des Religions', credits: 5, semester: 2 },
+          { id: 44, code: 'THO301', title: 'Théologie Systématique & Éthique Chrétienne', credits: 6, semester: 3 },
+          { id: 45, code: 'THO302', title: 'Mémoire de Licence & Stage Pastoral LMD', credits: 15, semester: 6 },
+        ]
+      }
+    ],
+    allTracks: []
   }
 };
+
 
 export default function FacultyDetailPage() {
   const router = useRouter();

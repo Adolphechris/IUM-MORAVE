@@ -10,8 +10,27 @@ const faculties = [
     code: 'FSEG',
     name: 'Faculté des Sciences Économiques et de Gestion',
     description: 'Économie, Management, Comptabilité'
+  },
+  {
+    id: 3,
+    code: 'FDSP',
+    name: 'Faculté de Droit et Sciences Politiques',
+    description: 'Droit Privé, Droit Public, Relations Internationales & Diplomatie'
+  },
+  {
+    id: 4,
+    code: 'FMS',
+    name: 'Faculté de Médecine et Santé Publique',
+    description: 'Médecine Générale, Santé Communautaire, Épidémiologie'
+  },
+  {
+    id: 5,
+    code: 'FTH',
+    name: 'Faculté de Théologie et Sciences des Religions',
+    description: 'Théologie Pratique, Exégèse Biblique, Éthique, Ministère Pastoral'
   }
 ];
+
 
 const programs = [
   {

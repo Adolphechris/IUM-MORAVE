@@ -373,6 +373,7 @@ export default function Home() {
                 { id: 2, code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement.' },
                 { id: 3, code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé, Droit Public, Relations Internationales.' },
                 { id: 4, code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Médecine Générale, Santé Communautaire, Épidémiologie.' },
+                { id: 5, code: 'FTH', name: 'Faculté de Théologie et Sciences des Religions', desc: 'Théologie Pratique, Exégèse Biblique, Éthique, Ministère Pastoral.' },
               ].map((f) => (
                 <article className="card faculty-card" key={f.code}>
                   <span className="card-badge">{f.code}</span>
