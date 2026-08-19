@@ -425,7 +425,8 @@ export default function FacultyDetailPage() {
               <span className="meta-icon">📜</span>
               <div>
                 <strong>Diplômes Homologués ESU</strong>
-                <span>Agrément N°83/MINESU/2018</span>
+                <span>Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018</span>
+
               </div>
             </div>
             {activeFaculty.dean && (

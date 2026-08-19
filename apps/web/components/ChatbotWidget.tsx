@@ -15,7 +15,7 @@ export default function ChatbotWidget() {
     {
       id: 'welcome',
       sender: 'bot',
-      text: 'Bonjour ! 🎓 Je suis l’Assistant Virtuel de l’**IUM-MORAVE** (Agrément ESU N°83/MINESU).\n\nComment puis-je vous aider aujourd’hui ?',
+      text: 'Bonjour ! 🎓 Je suis l’Assistant Virtuel de l’**IUM-MORAVE** (Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018).\n\nComment puis-je vous aider aujourd’hui ?',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -176,11 +176,12 @@ export default function ChatbotWidget() {
                 <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#f8fafc' }}>
                   Assistant IA IUM-MORAVE
                 </h3>
-                <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontWeight: 600 }}>
-                  ✓ Agrément ESU N°83/MINESU
+                <span style={{ fontSize: '0.72rem', color: '#38bdf8', fontWeight: 600 }}>
+                  ✓ Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018
                 </span>
               </div>
             </div>
+
             <button
               onClick={() => setIsOpen(false)}
               aria-label="Fermer le chat"

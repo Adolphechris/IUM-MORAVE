@@ -58,7 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (query.includes('bonjour') || query.includes('salut') || query.includes('coucou') || query.includes('hello')) {
     responseText = `Bonjour et bienvenue sur le portail de l'**Institut Universitaire Morave (IUM-MORAVE)** ! 🎓\n\nJe suis l'assistant virtuel académique de l'université. Comment puis-je vous aider aujourd'hui ? Vous pouvez me poser des questions sur nos facultés, les conditions d'admission, l'agrément ESU ou la localisation du campus.`;
   } else {
-    responseText = `Merci pour votre question ! L'**IUM-MORAVE** forme des cadres d'excellence en Sciences & Technologies, Économie, Droit, Médecine et Théologie sous l'Agrément ESU N°83/MINESU.\n\nVous pouvez nous contacter directement par e-mail à **secretariat@iumorave-ac.org** ou consulter la rubrique nos facultés pour plus de détails.`;
+    responseText = `Merci pour votre question ! L'**IUM-MORAVE** forme des cadres d'excellence en Sciences & Technologies, Économie, Droit, Médecine et Théologie sous l'Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018.\n\nVous pouvez nous contacter directement par e-mail à **secretariat@iumorave-ac.org** ou consulter la rubrique nos facultés pour plus de détails.`;
+
   }
 
   return res.status(200).json({

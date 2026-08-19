@@ -11,7 +11,7 @@ export default function Footer() {
       borderTop: '1px solid rgba(255,255,255,0.05)',
       marginTop: '3rem'
     }}>
-      <p>© {new Date().getFullYear()} Institut Universitaire Morave · Portail Officiel Institutionnel — Agrément ESU N°83/MINESU</p>
+      <p>© {new Date().getFullYear()} Institut Universitaire Morave · Portail Officiel Institutionnel — Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018</p>
     </footer>
   )
 }
