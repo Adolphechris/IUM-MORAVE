@@ -322,8 +322,138 @@ const FACULTIES_DATABASE: Record<string, FacultyData> = {
       }
     ],
     allTracks: []
+  },
+
+  '6': {
+    id: 6,
+    code: 'FSA',
+    name: 'Faculté des Sciences Agronomiques & Développement Rural',
+    description: 'La Faculté des Sciences Agronomiques forme des ingénieurs agronomes et experts en agro-économie pour soutenir la souveraineté alimentaire, la production agricole durable et le développement rural.',
+    dean: 'Prof. Dr. Kabamba wa Kabamba',
+    heroImage: '/images/student-campus.jpg',
+    globalCareers: ['Ingénieur Agronome', 'Conseiller en Agro-Développement', 'Gestionnaire d\'Exploitation Agricole', 'Expert en Sécurité Alimentaire', 'Chercheur en Agronomie'],
+    programs: [
+      {
+        id: 6,
+        code: 'LIC-AGRO',
+        title: 'Licence en Sciences Agronomiques',
+        level: 'Licence (Bac+3)',
+        durationMonths: 36,
+        description: 'Formation complète en phytotechnie, zootechnie, science du sol et gestion des entreprises agricoles.',
+        tracks: [
+          {
+            id: 17,
+            code: 'AGRO-PHYTO',
+            title: 'Filière : Production Végétale & Phytotechnie',
+            description: 'Cultures vivrières, gestion des sols, protection des végétaux et amélioration des semences.',
+            careers: ['Agronome Phytotechnicien', 'Chef de Culture']
+          },
+          {
+            id: 18,
+            code: 'AGRO-ECON',
+            title: 'Filière : Économie Agricole & Développement Rural',
+            description: 'Gestion des exploitations, commercialisation des produits agricoles et projets ruraux.',
+            careers: ['Agro-économiste', 'Chargé de Projet ONG Agricole']
+          }
+        ],
+        courses: [
+          { id: 50, code: 'AGR101', title: 'Botanique Générale & Pédologie', credits: 6, semester: 1 },
+          { id: 51, code: 'AGR102', title: 'Chimie Agricole & Biochimie Végétale', credits: 6, semester: 1 },
+          { id: 52, code: 'AGR201', title: 'Phytotechnie Générale & Cultures Tropicales', credits: 6, semester: 2 },
+          { id: 53, code: 'AGR301', title: 'Stage de Recherche de Terrain & Mémoire', credits: 15, semester: 6 },
+        ]
+      }
+    ],
+    allTracks: []
+  },
+
+  '7': {
+    id: 7,
+    code: 'FSIC',
+    name: 'Faculté des Sciences de l\'Information et de la Communication',
+    description: 'La Faculté des Sciences de l\'Information et de la Communication (SIC) forme des journalistes professionnels, communicants d\'entreprises et spécialistes des médias numériques.',
+    dean: 'Prof. Dr. Mutombo Kalengayi',
+    heroImage: '/images/student-arcade.jpg',
+    globalCareers: ['Journaliste Presse & Audiovisuel', 'Chargé de Communication', 'Attaché de Presse', 'Analyste Médias', 'Consultant en Stratégie Digitale'],
+    programs: [
+      {
+        id: 7,
+        code: 'LIC-SIC',
+        title: 'Licence en Sciences de l\'Information et de la Communication',
+        level: 'Licence (Bac+3)',
+        durationMonths: 36,
+        description: 'Cursus axé sur le journalisme, les théories de la communication, la communication des organisations et les médias numériques.',
+        tracks: [
+          {
+            id: 19,
+            code: 'SIC-JOURN',
+            title: 'Filière : Journalisme & Médias',
+            description: 'Collecte, vérification et traitement de l\'information pour la presse écrite, la radio, la télévision et le web.',
+            careers: ['Journaliste Reporter', 'Rédacteur en Chef', 'Présateur']
+          },
+          {
+            id: 20,
+            code: 'SIC-COMM',
+            title: 'Filière : Communication des Organisations & Relations Publiques',
+            description: 'Stratégies de communication interne et externe, gestion de la réputation et relations presse.',
+            careers: ['Directeur de Communication', 'Chargé de Relations Publiques']
+          }
+        ],
+        courses: [
+          { id: 60, code: 'SIC101', title: 'Introduction aux Sciences de la Communication', credits: 6, semester: 1 },
+          { id: 61, code: 'SIC102', title: 'Techniques de Rédaction Journalistique', credits: 6, semester: 1 },
+          { id: 62, code: 'SIC201', title: 'Sociologie des Médias & Éthique de la Presse', credits: 6, semester: 2 },
+          { id: 63, code: 'SIC301', title: 'Soutenance de Mémoire de Bachelier (ex: Travaux de Donat Sam Ngeleka)', credits: 15, semester: 6 },
+        ]
+      }
+    ],
+    allTracks: []
+  },
+
+  '8': {
+    id: 8,
+    code: 'FSE',
+    name: 'Faculté des Sciences de l\'Éducation',
+    description: 'La Faculté des Sciences de l\'Éducation forme les spécialistes en pédagogie, inspection scolaire, ingénierie de la formation et administration des établissements d\'enseignement.',
+    dean: 'Prof. Dr. Mbaya Tshimanga',
+    heroImage: '/images/amphitheater-class.jpg',
+    globalCareers: ['Inspecteur de l\'Enseignement', 'Conseiller Pédagogique', 'Directeur d\'Établissement Scolaire', 'Formateur de Formateurs', 'Ingénieur en Éducation'],
+    programs: [
+      {
+        id: 8,
+        code: 'LIC-SE',
+        title: 'Licence en Sciences de l\'Éducation',
+        level: 'Licence (Bac+3)',
+        durationMonths: 36,
+        description: 'Formation en psychopédagogie, didactique des disciplines, évaluation des apprentissages et gestion scolaire.',
+        tracks: [
+          {
+            id: 21,
+            code: 'SE-PEDAG',
+            title: 'Filière : Pédagogie & Didactique',
+            description: 'Méthodes d\'enseignement, conception de programmes scolaires et évaluation pédagogique.',
+            careers: ['Enseignant Spécialisé', 'Pédagogue']
+          },
+          {
+            id: 22,
+            code: 'SE-ADMIN',
+            title: 'Filière : Administration & Inspection Scolaire',
+            description: 'Pilotage des structures éducatives, législation scolaire et contrôle de qualité.',
+            careers: ['Administrateur Scolaire', 'Inspecteur Pédagogique']
+          }
+        ],
+        courses: [
+          { id: 70, code: 'EDU101', title: 'Psychologie de l\'Enfant & de l\'Adolescent', credits: 6, semester: 1 },
+          { id: 71, code: 'EDU102', title: 'Histoire & Philosophie de l\'Éducation', credits: 6, semester: 1 },
+          { id: 72, code: 'EDU201', title: 'Didactique Générale & Évaluation des Apprentissages', credits: 6, semester: 2 },
+          { id: 73, code: 'EDU301', title: 'Stage Pratique en Établissement & Mémoire LMD', credits: 15, semester: 6 },
+        ]
+      }
+    ],
+    allTracks: []
   }
 };
+
 
 
 export default function FacultyDetailPage() {

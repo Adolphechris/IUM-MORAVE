@@ -67,27 +67,39 @@ export default function Document() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "CollegeOrUniversity",
-              "name": "Institut Universitaire Morave de Mwene-Ditu",
-              "alternateName": ["IUM-MORAVE", "IUM", "Institut Universitaire Morave"],
+              "name": "Institut Universitaire Morave Willsamal",
+              "alternateName": ["IUM-MORAVE", "IUM", "Institut Universitaire Morave de Mwene-Ditu", "IUM Willsamal"],
               "description": "Établissement d'enseignement supérieur privé agréé par le Ministère de l'Enseignement Supérieur et Universitaire (ESU) de la République Démocratique du Congo. Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018.",
               "url": "https://iumorave-ac.org",
               "logo": "https://iumorave-ac.org/images/logo-crest.jpg",
               "image": "https://iumorave-ac.org/images/logo-crest.jpg",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "B.P. 126",
+                "streetAddress": "Avenue Aérodrome, Quartier Mandam, Commune de Bondoyi, B.P. 126",
                 "addressLocality": "Mwene-Ditu",
                 "addressRegion": "Province de Lomami",
                 "addressCountry": "CD",
                 "postalCode": "126"
               },
+              "founder": {
+                "@type": "Person",
+                "name": "Prof. Dr. Isaac Jean Claude Tshilumbayi",
+                "jobTitle": "Recteur & 1er Vice-Président de l'Assemblée Nationale"
+              },
+              "employee": {
+                "@type": "Person",
+                "name": "Dr. Marc Nsalanga Kayumba",
+                "jobTitle": "Directeur Général"
+              },
               "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "admissions",
+                "email": "secretariat@iumorave-ac.org",
                 "url": "https://iumorave-ac.org/contact"
               },
               "foundingDate": "2018",
-              "legalName": "Institut Universitaire Morave de Mwene-Ditu",
+              "legalName": "Institut Universitaire Morave Willsamal de Mwene-Ditu",
+
               "identifier": {
                 "@type": "PropertyValue",
                 "name": "Agrément ESU",

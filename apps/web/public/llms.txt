@@ -1,64 +1,73 @@
-# Institut Universitaire Morave (IUM-MORAVE)
+# Institut Universitaire Morave Willsamal (IUM-MORAVE)
 # Mwene-Ditu, Province de Lomami, République Démocratique du Congo
 # Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018
 # Site officiel : https://iumorave-ac.org
 # Contact : secretariat@iumorave-ac.org
 
-> L'Institut Universitaire Morave (IUM-MORAVE) est un établissement d'enseignement supérieur privé reconnu par l'État congolais, situé à Mwene-Ditu dans la Province de Lomami, en République Démocratique du Congo. L'université délivre des formations LMD (Licence, Master, Doctorat) agréées et reconnues à valeur nationale et internationale.
+> L'Institut Universitaire Morave Willsamal (IUM-MORAVE) est un établissement d'enseignement supérieur privé agréé et reconnu par l'État congolais, situé Avenue Aérodrome, Quartier Mandam, Commune de Bondoyi à Mwene-Ditu dans la Province de Lomami (RDC). L'université délivre des formations LMD (Licence, Master, Doctorat) homologuées.
 
-## Identité Institutionnelle
+## Identité Institutionnelle & Gouvernance
 
-- **Nom complet** : Institut Universitaire Morave de Mwene-Ditu
-- **Sigle** : IUM-MORAVE
-- **Statut** : Établissement d'Enseignement Supérieur Privé Agréé
+- **Nom officiel complet** : Institut Universitaire Morave Willsamal
+- **Sigle** : IUM-MORAVE / IUM
+- **Statut** : Établissement Privé d'Enseignement Supérieur Agréé
 - **Agrément officiel** : N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018
-- **Autorité de tutelle** : Ministère de l'Enseignement Supérieur et Universitaire (MINESU) — RDC
-- **Siège** : B.P. 126, Mwene-Ditu, Province de Lomami, RDC
+- **Autorité de tutelle** : Ministère de l'Enseignement Supérieur et Universitaire (ESU) — RDC
+- **Recteur** : Prof. Dr. Isaac Jean Claude Tshilumbayi (Professeur des Universités & 1er Vice-Président de l'Assemblée Nationale de la RDC)
+- **Directeur Général** : Dr. Marc Nsalanga Kayumba
+- **Établissement Partenaire** : ISTM (Institut Supérieur des Techniques Médicales)
+- **Adresse du Campus** : Avenue Aérodrome, Quartier Mandam, Commune de Bondoyi, Mwene-Ditu, Province de Lomami, RDC
+- **Boîte Postale** : B.P. 126 Mwene-Ditu
 - **Site web** : https://iumorave-ac.org
 - **Email** : secretariat@iumorave-ac.org
 
 ## Facultés et Programmes LMD
 
-### Faculté des Sciences et Technologies (FST)
+### 1. Faculté des Sciences et Technologies (FST)
 - Licence en Informatique & Génie Logiciel (Bac+3)
+- Informatique de Gestion
 - Filières : Génie Logiciel & IA, Réseaux & Télécommunications, Mathématiques Appliquées
 
-### Faculté des Sciences Économiques et de Gestion (FSEG)
+### 2. Faculté des Sciences Économiques et de Gestion (FSEG)
 - Licence en Sciences Économiques & Gestion (Bac+3)
 - Filières : Finance & Économie du Développement, Comptabilité & Audit, Management & Entrepreneuriat
 
-### Faculté de Droit et Sciences Politiques (FDSP)
+### 3. Faculté de Droit et Sciences Politiques (FDSP)
 - Licence en Droit & Sciences Politiques (Bac+3)
-- Filières : Droit Privé & des Affaires, Droit Public & Administration, Relations Internationales & Diplomatie
+- Filières : Droit Privé & des Affaires (OHADA), Droit Public & Administration, Relations Internationales & Diplomatie, Sciences Administratives
 
-### Faculté de Médecine et Santé Publique (FMS)
-- Doctorat en Médecine Générale (Bac+7)
+### 4. Faculté de Médecine et Santé Publique (FMS)
+- Doctorat en Médecine Générale (Bac+7) (en partenariat avec l'ISTM)
 - Filières : Médecine Clinique & Chirurgie, Santé Publique & Épidémiologie
 
-### Faculté de Théologie et Sciences des Religions (FTH)
+### 5. Faculté de Théologie et Sciences des Religions (FTH)
 - Licence en Théologie & Sciences des Religions (Bac+3)
-- Filières : Théologie Pratique & Ministère Pastoral, Exégèse Biblique & Langues Orientales (Grec & Hébreu), Éthique, Société & Médiation
+- Filières : Théologie Pratique & Ministère Pastoral, Exégèse Biblique & Langues Orientales, Éthique & Médiation
 
-## Admissions
+### 6. Faculté des Sciences Agronomiques & Développement Rural (FSA)
+- Licence en Agronomie (Bac+3)
+- Filières : Phytotechnie, Zootechnie, Économie Agricole & Sécurité Alimentaire
 
-- Diplôme d'État requis (ou équivalent reconnu)
-- Inscriptions ouvertes au Secrétariat Général Académique
-- Contact admissions : secretariat@iumorave-ac.org
+### 7. Faculté des Sciences de l'Information et de la Communication (FSIC)
+- Licence en SIC (Bac+3)
+- Filières : Journalisme & Médias, Communication des Organisations & Relations Publiques
 
-## Localisation
+### 8. Faculté des Sciences de l'Éducation (FSE)
+- Licence en Sciences de l'Éducation (Bac+3)
+- Filières : Pédagogie, Didactique, Administration & Inspection Scolaire
 
-- **Ville** : Mwene-Ditu
-- **Province** : Lomami
-- **Pays** : République Démocratique du Congo (RDC)
-- **Coordonnées GPS** : -6.60, 23.56
+## Chronologie des Jalons Académiques
 
-## Pages importantes
+- **Août 2026** : Cérémonie de collation des grades pour 120 nouveaux diplômés (IUM & ISTM).
+- **Octobre 2025** : Ouverture solennelle de l'année académique 2025-2026 par le Recteur Prof. Dr. Isaac Jean Claude Tshilumbayi.
+- **Août 2025** : Soutenance de mémoire de bachelier en SIC par Donat Sam Ngeleka ("Le désintérêt des jeunes pour les médias traditionnels").
+- **Mai 2025** : Journée Scientifique conjointe IUM-ISTM.
+- **Mai 2024** : Élection du Recteur Prof. Dr. Isaac Jean Claude Tshilumbayi au poste de 1er Vice-Président de l'Assemblée Nationale de la RDC.
+- **Novembre 2022** : Collation des grades pour 88 lauréats gradués et licenciés.
 
-- Page d'accueil : https://iumorave-ac.org/
-- Facultés : https://iumorave-ac.org/facultes/1 (Sciences & Technologies)
-- Facultés : https://iumorave-ac.org/facultes/2 (Sciences Économiques)
-- Facultés : https://iumorave-ac.org/facultes/3 (Droit & Sciences Politiques)
-- Facultés : https://iumorave-ac.org/facultes/4 (Médecine & Santé Publique)
-- Facultés : https://iumorave-ac.org/facultes/5 (Théologie & Sciences des Religions)
-- Contact : https://iumorave-ac.org/contact
-- Vérification de diplômes : https://iumorave-ac.org/verify
+## Admissions & Contact
+
+- Conditions : Diplôme d'État ou équivalent reconnu.
+- Inscriptions : Secrétariat Général Académique sur le campus ou par email.
+- Contact : secretariat@iumorave-ac.org / contact@iumorave-ac.org
+- Vérification publique de diplômes : https://iumorave-ac.org/verify

@@ -369,11 +369,14 @@ export default function Home() {
           ) : (
             <div className="cards-grid">
               {[
-                { id: 1, code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Mathematiques Appliquées.' },
-                { id: 2, code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement.' },
-                { id: 3, code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé, Droit Public, Relations Internationales.' },
-                { id: 4, code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Médecine Générale, Santé Communautaire, Épidémiologie.' },
+                { id: 1, code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Informatique de Gestion, Mathématiques.' },
+                { id: 2, code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement, Gestion d\'Entreprises.' },
+                { id: 3, code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé (OHADA), Droit Public, Relations Internationales, Sciences Administratives.' },
+                { id: 4, code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Doctorat en Médecine Générale, Santé Communautaire, Épidémiologie (en partenariat avec l\'ISTM).' },
                 { id: 5, code: 'FTH', name: 'Faculté de Théologie et Sciences des Religions', desc: 'Théologie Pratique, Exégèse Biblique, Éthique, Ministère Pastoral.' },
+                { id: 6, code: 'FSA', name: 'Faculté des Sciences Agronomiques & Développement Rural', desc: 'Phytotechnie, Zootechnie, Économie Agricole, Sécurité Alimentaire.' },
+                { id: 7, code: 'FSIC', name: 'Faculté des Sciences de l\'Information et de la Communication', desc: 'Journalisme, Médias, Communication des Organisations & Relations Publiques.' },
+                { id: 8, code: 'FSE', name: 'Faculté des Sciences de l\'Éducation', desc: 'Psychopédagogie, Didactique, Administration & Inspection Scolaire.' },
               ].map((f) => (
                 <article className="card faculty-card" key={f.code}>
                   <span className="card-badge">{f.code}</span>
@@ -384,6 +387,80 @@ export default function Home() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ─── SECTION DIRECTION & AUTORITÉS ACADÉMIQUES ──────────── */}
+      <section className="section" id="direction">
+        <div className="section-inner">
+          <p className="eyebrow">Gouvernance &amp; Leadership</p>
+          <h2>Direction &amp; Autorités Académiques</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
+            <div style={{ backgroundColor: '#0f172a', padding: '1.5rem', borderRadius: '16px', border: '1px solid #1e293b' }}>
+              <span style={{ fontSize: '2rem' }}>🏛️</span>
+              <h3 style={{ color: '#f8fafc', fontSize: '1.1rem', margin: '0.5rem 0' }}>Recteur de l&apos;Université</h3>
+              <p style={{ color: '#38bdf8', fontWeight: 700, fontSize: '1rem' }}>Prof. Dr. Isaac Jean Claude Tshilumbayi</p>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                Professeur des Universités &amp; 1er Vice-Président de l&apos;Assemblée Nationale de la RDC.
+              </p>
+            </div>
+            <div style={{ backgroundColor: '#0f172a', padding: '1.5rem', borderRadius: '16px', border: '1px solid #1e293b' }}>
+              <span style={{ fontSize: '2rem' }}>🎓</span>
+              <h3 style={{ color: '#f8fafc', fontSize: '1.1rem', margin: '0.5rem 0' }}>Directeur Général</h3>
+              <p style={{ color: '#38bdf8', fontWeight: 700, fontSize: '1rem' }}>Dr. Marc Nsalanga Kayumba</p>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                Directeur Général de l&apos;Institut Universitaire Morave Willsamal (IUM-MORAVE).
+              </p>
+            </div>
+            <div style={{ backgroundColor: '#0f172a', padding: '1.5rem', borderRadius: '16px', border: '1px solid #1e293b' }}>
+              <span style={{ fontSize: '2rem' }}>🏥</span>
+              <h3 style={{ color: '#f8fafc', fontSize: '1.1rem', margin: '0.5rem 0' }}>Partenaire Réseau Médical</h3>
+              <p style={{ color: '#38bdf8', fontWeight: 700, fontSize: '1rem' }}>ISTM (Institut Supérieur des Techniques Médicales)</p>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                Partenariat académique pour les stages hospitaliers, travaux scientifiques et séances de collation des grades.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SECTION ACTUALITÉS & JALONS ACADÉMIQUES ────────────── */}
+      <section className="section section-alt" id="actualites">
+        <div className="section-inner">
+          <p className="eyebrow">Vie académique &amp; Événements</p>
+          <h2>Actualités &amp; Travaux de Recherche</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Août 2026</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Collation des Grades : 120 Nouveaux Diplômés</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Cérémonie solennelle conjointe de remise de diplômes pour 120 lauréats gradués et licenciés de l&apos;IUM et de l&apos;ISTM.</p>
+            </article>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Octobre 2025</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Lancement Année Académique 2025-2026</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Ouverture solennelle de l&apos;année académique par le Recteur Prof. Dr. Isaac Jean Claude Tshilumbayi sur le campus de Mwene-Ditu.</p>
+            </article>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Août 2025</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Travail Académique Modèle en SIC</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Soutenance remarquable de mémoire de bachelier par Donat Sam Ngeleka (SIC) sur &quot;Le désintérêt des jeunes pour les médias traditionnels&quot;.</p>
+            </article>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Mai 2025</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Journée Scientifique Conjointe IUM - ISTM</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Organisation d&apos;une grande journée d&apos;échanges scientifiques et de présentations de travaux de recherche appliquée.</p>
+            </article>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Mai 2024</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Hommage Académique au Recteur</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Félicitations de la communauté universitaire au Recteur Prof. Dr. Isaac Jean Claude Tshilumbayi pour son élection à la vice-présidence de l&apos;Assemblée nationale.</p>
+            </article>
+            <article style={{ backgroundColor: '#071e38', padding: '1.25rem', borderRadius: '16px', border: '1px solid #1a365d' }}>
+              <span style={{ backgroundColor: '#1e3a8a', color: '#60a5fa', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700 }}>Novembre 2022</span>
+              <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Collation de Grades (88 Lauréats)</h3>
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Cérémonie solennelle de remise de diplômes pour 88 gradués et licenciés en sciences universitaires et médicales.</p>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -427,7 +504,7 @@ export default function Home() {
           <div className="footer-brand">
             <img src="/images/logo-crest.jpg" alt="Blason IUM-MORAVE" className="footer-crest-img" />
             <div>
-              <strong>Institut Universitaire Morave</strong>
+              <strong>Institut Universitaire Morave Willsamal</strong>
               <p>IUM‑MORAVE — L&apos;Excellence de l&apos;Enseignement Supérieur</p>
             </div>
           </div>
@@ -435,19 +512,21 @@ export default function Home() {
             <div>
               <strong>Académique</strong>
               <a href="#formations">Formations LMD</a>
+              <a href="#direction">Direction &amp; Recteur</a>
+              <a href="#actualites">Actualités &amp; Recherche</a>
               <a href="#campus">Campus en Images</a>
-              <a href="#diplomes">Diplômes &amp; Réussite</a>
             </div>
             <div>
               <strong>Institution</strong>
               <a href="/contact">Contact &amp; Admissions</a>
               <a href="/espace">Portail Numérique</a>
+              <a href="/verify">Vérification de Diplômes</a>
             </div>
             <div>
-              <strong>Coordonnées</strong>
-              <span>Mwene-Ditu, Province de Lomami</span>
-              <span>République Démocratique du Congo</span>
-              <span>B.P. 126 — Mwene-Ditu</span>
+              <strong>Coordonnées du Campus</strong>
+              <span>Avenue Aérodrome, Quartier Mandam</span>
+              <span>Commune de Bondoyi, Mwene-Ditu</span>
+              <span>Province de Lomami, RDC · B.P. 126</span>
             </div>
           </div>
         </div>
@@ -472,8 +551,8 @@ export default function Home() {
                 </div>
                 <div className="legal-divider" />
                 <div className="legal-item">
-                  <span className="legal-label">SIÈGE SOCIAL &amp; BOÎTE POSTALE</span>
-                  <span className="legal-value">Institut Universitaire Morave de Mwene-Ditu — B.P. 126 — Mwene-Ditu, Province de Lomami, RDC</span>
+                  <span className="legal-label">SIÈGE SOCIAL &amp; ADRESSE DU CAMPUS</span>
+                  <span className="legal-value">Institut Universitaire Morave Willsamal — Avenue Aérodrome, Q. Mandam, C. Bondoyi — B.P. 126 — Mwene-Ditu, Lomami, RDC</span>
                 </div>
               </div>
             </div>
@@ -482,11 +561,12 @@ export default function Home() {
 
         <div className="footer-bottom">
           <p>
-            © {new Date().getFullYear()} Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE) — Tous droits réservés.
-            &nbsp;|&nbsp; Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 &nbsp;|&nbsp; B.P. 126, Mwene-Ditu, Lomami, RDC
+            © {new Date().getFullYear()} Institut Universitaire Morave Willsamal (IUM-MORAVE) — Tous droits réservés.
+            &nbsp;|&nbsp; Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 &nbsp;|&nbsp; B.P. 126, Mwene-Ditu, Lomami, RDC
           </p>
         </div>
       </footer>
+
 
       <style jsx global>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

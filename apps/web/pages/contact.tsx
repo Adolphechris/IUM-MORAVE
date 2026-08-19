@@ -49,7 +49,11 @@ export default function ContactPage() {
             <li>✉️ Secrétariat : <a href="mailto:secretariat@iumorave-ac.org">secretariat@iumorave-ac.org</a></li>
             <li>✉️ Contact général : <a href="mailto:contact@iumorave-ac.org">contact@iumorave-ac.org</a></li>
           </ul>
-          <p><strong>Siège social :</strong> Mwene-Ditu, Province de Lomami, RDC — B.P. 126</p>
+          <p><strong>Adresse du Campus :</strong> Avenue Aérodrome, Quartier Mandam, Commune de Bondoyi, Mwene-Ditu, Province de Lomami, RDC — B.P. 126</p>
+          <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#475569' }}>
+            <strong>Recteur :</strong> Prof. Dr. Isaac Jean Claude Tshilumbayi &nbsp;|&nbsp; <strong>Directeur Général :</strong> Dr. Marc Nsalanga Kayumba
+          </p>
+
         </div>
         <form onSubmit={submit}>
           <label htmlFor="name">Nom complet</label>
