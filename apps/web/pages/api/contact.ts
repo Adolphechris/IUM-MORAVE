@@ -1,13 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getFirebaseAdmin } from '../../lib/firebase-admin';
-
-declare global {
-  var __inMemoryMessages: Array<any> | undefined;
-}
-
-if (!global.__inMemoryMessages) {
-  global.__inMemoryMessages = [];
-}
+import { fetchGistMessages, saveGistMessages } from '../../lib/gist-db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -47,21 +39,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     replies: []
   };
 
-  // 1. Save to in-memory store for instant guaranteed access in Admin tab
-  if (!global.__inMemoryMessages) global.__inMemoryMessages = [];
-  global.__inMemoryMessages.unshift(messageDoc);
-
-  // 2. Save to Firestore DB
+  // 1. Save to cloud storage (Gist DB) for 100% Vercel serverless persistence
   try {
-    const { db } = getFirebaseAdmin();
-    if (db) {
-      await db.collection('contact_messages').doc(messageDoc.id).set(messageDoc);
-    }
+    const existing = await fetchGistMessages();
+    existing.unshift(messageDoc);
+    await saveGistMessages(existing);
   } catch (err) {
-    console.warn('[api/contact] Firestore save fallback:', err);
+    console.warn('[api/contact] Gist save warning:', err);
   }
 
-  // 3. SMTP Email Dispatch to Zoho Mail App on phone (if ZOHO_SMTP_PASSWORD set)
+  // 2. SMTP Email Dispatch to Zoho Mail App on phone (if ZOHO_SMTP_PASSWORD set)
   const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
   if (smtpPass) {
     try {

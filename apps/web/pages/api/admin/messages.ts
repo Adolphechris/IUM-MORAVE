@@ -1,16 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
-import { getFirebaseAdmin } from '../../../lib/firebase-admin';
+import { fetchGistMessages, saveGistMessages } from '../../../lib/gist-db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_jwt_secret_ium_morave_2026_super_secure_key';
-
-declare global {
-  var __inMemoryMessages: Array<any> | undefined;
-}
-
-if (!global.__inMemoryMessages) {
-  global.__inMemoryMessages = [];
-}
 
 export type InstitutionalMessage = {
   id: string;
@@ -55,54 +47,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: 'Session expirée ou token invalide.' });
   }
 
-  if (!global.__inMemoryMessages) {
-    global.__inMemoryMessages = [];
-  }
-
-  // 1. GET MESSAGES LIST & UNREAD STATS FROM FIRESTORE + IN-MEMORY
+  // 1. GET MESSAGES FROM CLOUD PERSISTENT DB (GIST)
   if (req.method === 'GET') {
-    let firestoreMessages: InstitutionalMessage[] = [];
-
+    let messages: InstitutionalMessage[] = [];
     try {
-      const { db } = getFirebaseAdmin();
-      if (db) {
-        const snapshot = await db.collection('contact_messages').orderBy('createdAt', 'desc').get();
-        if (!snapshot.empty) {
-          firestoreMessages = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              name: data.name || 'Expéditeur',
-              email: data.email || '',
-              recipientAccount: data.recipientAccount || 'secretariat@iumorave-ac.org',
-              subject: data.subject || '(Sans objet)',
-              message: data.message || '',
-              status: data.status || 'NOUVEAU',
-              isStarred: Boolean(data.isStarred),
-              folder: data.folder || 'inbox',
-              createdAt: data.createdAt || new Date().toISOString(),
-              replies: data.replies || []
-            };
-          });
-        }
-      }
+      messages = await fetchGistMessages();
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore fetch warning:', err);
+      console.warn('[api/admin/messages] Gist fetch error:', err);
     }
 
-    // Merge Firestore with In-Memory store without duplicates
-    const allMap = new Map<string, InstitutionalMessage>();
-    firestoreMessages.forEach(m => allMap.set(m.id, m));
-    global.__inMemoryMessages.forEach(m => {
-      if (!allMap.has(m.id)) allMap.set(m.id, m);
-    });
-
-    const messages = Array.from(allMap.values()).sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-
-    const unreadCount = messages.filter(m => m.status === 'NOUVEAU' && m.folder !== 'trash').length;
-    const starredCount = messages.filter(m => m.isStarred && m.folder !== 'trash').length;
+    const unreadCount = messages.filter(m => m.status === 'NOUVEAU' && m.folder !== 'archive').length;
+    const starredCount = messages.filter(m => m.isStarred && m.folder !== 'archive').length;
 
     return res.status(200).json({
       messages,
@@ -118,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
-  // 2. COMPOSE NEW EMAIL OR SEND REPLY (POST)
+  // 2. COMPOSE NEW EMAIL OR REPLY (POST)
   if (req.method === 'POST') {
     const { action, recipient, subject, message, senderAccount, replyToId } = req.body || {};
 
@@ -142,35 +97,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       replies: []
     };
 
-    // Save in memory
-    global.__inMemoryMessages.unshift(newMailDoc);
-
-    // Save in Firestore
+    // Save to Cloud Gist DB
     try {
-      const { db } = getFirebaseAdmin();
-      if (db) {
-        await db.collection('contact_messages').doc(newMailDoc.id).set(newMailDoc);
-
-        if (replyToId) {
-          const originalRef = db.collection('contact_messages').doc(replyToId);
-          const originalSnap = await originalRef.get();
-          if (originalSnap.exists) {
-            const currentReplies = originalSnap.data()?.replies || [];
-            currentReplies.push({
-              id: 'rep-' + Date.now(),
-              sender: activeSender,
-              message,
-              sentAt: new Date().toISOString()
-            });
-            await originalRef.update({
-              status: 'REPONDU',
-              replies: currentReplies
-            });
-          }
+      const messages = await fetchGistMessages();
+      if (replyToId) {
+        const orig = messages.find(m => m.id === replyToId);
+        if (orig) {
+          if (!orig.replies) orig.replies = [];
+          orig.replies.push({
+            id: 'rep-' + Date.now(),
+            sender: activeSender,
+            message,
+            sentAt: new Date().toISOString()
+          });
+          orig.status = 'REPONDU';
         }
       }
+      messages.unshift(newMailDoc);
+      await saveGistMessages(messages);
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore send warning:', err);
+      console.warn('[api/admin/messages] Gist save error:', err);
     }
 
     // Dispatch real SMTP email via Zoho Mail (smtp.zoho.com)
@@ -198,14 +144,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         emailDispatched = true;
       } catch (smtpErr: any) {
-        console.warn('[api/admin/messages] Real SMTP email send error:', smtpErr);
+        console.warn('[api/admin/messages] SMTP send error:', smtpErr);
       }
     }
 
     return res.status(200).json({
       success: true,
       message: emailDispatched
-        ? `E-mail rédigé et transmis directement par serveur SMTP depuis ${activeSender} vers ${recipient}.`
+        ? `E-mail transmis directement par serveur SMTP depuis ${activeSender} vers ${recipient}.`
         : `Message enregistré dans le dossier Envoyés (${activeSender} ➔ ${recipient}).`,
       sentMail: newMailDoc,
       emailDispatched
@@ -220,27 +166,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'ID du message requis.' });
     }
 
-    // Update in memory
-    const memMsg = global.__inMemoryMessages.find(m => m.id === id);
-    if (memMsg) {
-      if (status !== undefined) memMsg.status = status;
-      if (isStarred !== undefined) memMsg.isStarred = isStarred;
-      if (folder !== undefined) memMsg.folder = folder;
-    }
-
-    // Update in Firestore
     try {
-      const { db } = getFirebaseAdmin();
-      if (db) {
-        const updateData: Record<string, any> = {};
-        if (status !== undefined) updateData.status = status;
-        if (isStarred !== undefined) updateData.isStarred = isStarred;
-        if (folder !== undefined) updateData.folder = folder;
-
-        await db.collection('contact_messages').doc(id).update(updateData);
+      const messages = await fetchGistMessages();
+      const target = messages.find(m => m.id === id);
+      if (target) {
+        if (status !== undefined) target.status = status;
+        if (isStarred !== undefined) target.isStarred = isStarred;
+        if (folder !== undefined) target.folder = folder;
+        await saveGistMessages(messages);
       }
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore patch warning:', err);
+      console.warn('[api/admin/messages] Gist patch error:', err);
     }
 
     return res.status(200).json({ success: true, message: 'Statut du message mis à jour.' });
@@ -254,17 +190,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'ID du message à supprimer requis.' });
     }
 
-    // Delete from memory
-    global.__inMemoryMessages = global.__inMemoryMessages.filter(m => m.id !== id);
-
-    // Delete from Firestore
     try {
-      const { db } = getFirebaseAdmin();
-      if (db) {
-        await db.collection('contact_messages').doc(id).delete();
-      }
+      let messages = await fetchGistMessages();
+      messages = messages.filter(m => m.id !== id);
+      await saveGistMessages(messages);
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore delete warning:', err);
+      console.warn('[api/admin/messages] Gist delete error:', err);
     }
 
     return res.status(200).json({ success: true, message: 'Message supprimé définitivement.' });
