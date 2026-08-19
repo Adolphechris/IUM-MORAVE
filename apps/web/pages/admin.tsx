@@ -42,7 +42,7 @@ type PresetTemplate = {
 
 const PRESETS: PresetTemplate[] = [
   {
-    name: 'Exemplaire 1 : Licence 3 Sciences Informatiques (Jean Kabamba)',
+    name: 'Modèle Certifié 1 : Licence 3 Sciences Informatiques',
     studentName: 'Jean Kabamba Mukendi',
     matricule: '2026-SINT-042',
     programTitle: 'Licence en Sciences Informatiques & Nouvelles Technologies',
@@ -57,7 +57,7 @@ const PRESETS: PresetTemplate[] = [
     ]
   },
   {
-    name: 'Exemplaire 2 : Doctorat en Médecine Générale (Marie Tshilombo)',
+    name: 'Modèle Certifié 2 : Doctorat en Médecine Générale',
     studentName: 'Marie Tshilombo Kankolongo',
     matricule: '2026-MED-018',
     programTitle: 'Doctorat en Médecine Générale & Chirurgie',
@@ -71,13 +71,14 @@ const PRESETS: PresetTemplate[] = [
     ]
   },
   {
-    name: 'Exemplaire 3 : Licence 3 Droit Privé (Patrick Mwamba)',
+    name: 'Modèle Certifié 3 : Licence 3 Droit Privé',
     studentName: 'Patrick Mwamba Ilunga',
     matricule: '2026-DROIT-099',
     programTitle: 'Licence en Droit Privé et Judiciaire',
     level: 'Licence 3 (LMD)',
     academicYear: '2025-2026',
     grades: [
+
       { code: 'DRT-301', title: 'Droit des Obligations & des Contrats', credits: 6, score: 14.5 },
       { code: 'DRT-302', title: 'Procédure Civile & Voies d\'Exécution', credits: 6, score: 15 },
       { code: 'DRT-303', title: 'Droit Pénal Spécial & Procédure Pénale', credits: 6, score: 14 },
@@ -418,14 +419,15 @@ export default function AdminPage() {
                       📄 Générateur Officiel de Relevés de Notes Certifiés LMD
                     </h2>
                     <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: '0 0 1.5rem 0' }}>
-                      Choisissez un modèle d'exemplaire pré-rempli ou saisissez les informations de l'étudiant pour générer un relevé officiel avec QR Code.
+                      Choisissez un modèle certifié ou saisissez les informations de l'étudiant pour générer un relevé officiel avec QR Code.
                     </p>
 
-                    {/* Modèles d'exemplaires en 1 clic */}
+                    {/* Modèles certifiés en 1 clic */}
                     <div style={{ marginBottom: '1.5rem' }}>
                       <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '0.5rem' }}>
-                        ⚡ Charger un Exemplaire Exemple en 1-Clic :
+                        ⚡ Charger un Modèle Officiel Certifié :
                       </label>
+
                       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                         {PRESETS.map((preset, idx) => (
                           <button
