@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const nodemailer = require('nodemailer');
       const transporter = nodemailer.createTransport({
-        host: process.env.ZOHO_SMTP_HOST || 'smtppro.zoho.com',
+        host: process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com',
         port: 465,
         secure: true,
         auth: {
