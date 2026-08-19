@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         {/* ── IDENTITÉ & SEO DE BASE ─────────────────────────────── */}
         <meta charSet="UTF-8" />
-        <meta name="description" content="Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE) — Établissement d'enseignement supérieur reconnu par l'État congolais. Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Formations LMD : Licence, Master, Doctorat. Province de Lomami, République Démocratique du Congo." />
+        <meta name="description" content="Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE) — Établissement d'enseignement supérieur reconnu par l'État congolais. Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018. Formations LMD : Licence, Master, Doctorat. Province de Lomami, République Démocratique du Congo." />
         <meta name="keywords" content="Institut Universitaire Morave, IUM, IUM-MORAVE, Mwene-Ditu, université RDC, université Congo, enseignement supérieur RDC, Lomami, ESU, LMD, licence master doctorat, université privée Congo, agrément ESU, formation universitaire Congo" />
         <meta name="author" content="Institut Universitaire Morave de Mwene-Ditu" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -22,11 +22,18 @@ export default function Document() {
         <meta name="geo.position" content="-6.60;23.56" />
         <meta name="ICBM" content="-6.60, 23.56" />
 
+        {/* ── ICÔNES ET FAVICON DU DOMAINE (BLASON IUM-MORAVE POUR GOOGLE & NAVIGATEURS) ── */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/images/logo-crest.jpg" type="image/jpeg" />
+        <link rel="shortcut icon" href="/images/logo-crest.jpg" type="image/jpeg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/logo-crest.jpg" />
+
         {/* ── OPEN GRAPH (partage Facebook, WhatsApp, LinkedIn) ─── */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Institut Universitaire Morave (IUM-MORAVE)" />
         <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
-        <meta property="og:description" content="Établissement d'enseignement supérieur agréé par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Programmes LMD en Droit, Sciences, Médecine, Économie. Mwene-Ditu, RDC." />
+        <meta property="og:description" content="Établissement d'enseignement supérieur agréé par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018. Programmes LMD en Droit, Sciences, Médecine, Économie, Théologie. Mwene-Ditu, RDC." />
         <meta property="og:url" content="https://iumorave-ac.org" />
         <meta property="og:image" content="https://iumorave-ac.org/images/logo-crest.jpg" />
         <meta property="og:image:width" content="800" />
@@ -39,6 +46,20 @@ export default function Document() {
         <meta name="twitter:description" content="Université agréée ESU en RDC — Formations LMD, excellence académique, Province de Lomami." />
         <meta name="twitter:image" content="https://iumorave-ac.org/images/logo-crest.jpg" />
 
+        {/* ── NOM DU SITE GOOGLE SEARCH (WebSite Schema) ─────── */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Institut Universitaire Morave",
+              "alternateName": ["IUM-MORAVE", "IUM MORAVE", "Institut Universitaire Morave de Mwene-Ditu"],
+              "url": "https://iumorave-ac.org/"
+            })
+          }}
+        />
+
         {/* ── DONNÉES STRUCTURÉES JSON-LD (Google Knowledge Panel) */}
         <script
           type="application/ld+json"
@@ -48,7 +69,7 @@ export default function Document() {
               "@type": "CollegeOrUniversity",
               "name": "Institut Universitaire Morave de Mwene-Ditu",
               "alternateName": ["IUM-MORAVE", "IUM", "Institut Universitaire Morave"],
-              "description": "Établissement d'enseignement supérieur privé agréé par le Ministère de l'Enseignement Supérieur et Universitaire (ESU) de la République Démocratique du Congo. Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 avril 2018.",
+              "description": "Établissement d'enseignement supérieur privé agréé par le Ministère de l'Enseignement Supérieur et Universitaire (ESU) de la République Démocratique du Congo. Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018.",
               "url": "https://iumorave-ac.org",
               "logo": "https://iumorave-ac.org/images/logo-crest.jpg",
               "image": "https://iumorave-ac.org/images/logo-crest.jpg",
@@ -70,7 +91,7 @@ export default function Document() {
               "identifier": {
                 "@type": "PropertyValue",
                 "name": "Agrément ESU",
-                "value": "N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018"
+                "value": "N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018"
               },
               "numberOfStudents": {
                 "@type": "QuantitativeValue",
@@ -101,14 +122,9 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
-
-        {/* ── FAVICON & ICÔNES ─────────────────────────────────── */}
-        <link rel="icon" type="image/jpg" href="/images/logo-crest.jpg" />
-        <link rel="apple-touch-icon" href="/images/logo-crest.jpg" />
-        <meta name="theme-color" content="#071e38" />
       </Head>
       <body>
         <Main />
