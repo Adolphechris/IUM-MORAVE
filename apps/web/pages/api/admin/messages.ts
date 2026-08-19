@@ -24,45 +24,6 @@ export type InstitutionalMessage = {
   }>;
 };
 
-const defaultSampleMessages: InstitutionalMessage[] = [
-  {
-    id: 'msg-sample-101',
-    name: 'Jean Kabamba Mukendi',
-    email: 'jean.kabamba@ium-morave.edu',
-    recipientAccount: 'secretariat@iumorave-ac.org',
-    subject: 'Demande d’authentification officielle de relevé L3 Informatique (WES)',
-    message: 'Bonjour Monsieur le Secrétaire Général,\n\nJe sollicite par la présente l’émission de l’attestation officielle d’authenticité de mon relevé de notes de Licence 3 en Sciences Informatiques pour transmission à l’organisme d’évaluation WES.\n\nMatricule : 2026-SINT-042.\n\nCordialement,\nJean Kabamba',
-    status: 'NOUVEAU',
-    isStarred: true,
-    folder: 'inbox',
-    createdAt: new Date(Date.now() - 1000 * 60 * 25).toISOString()
-  },
-  {
-    id: 'msg-sample-102',
-    name: 'Dr. Marie Tshilombo',
-    email: 'marie.tshilombo@ium-morave.edu',
-    recipientAccount: 'secretariat@iumorave-ac.org',
-    subject: 'Transmissions des Procès-Verbaux de délibération de Médecine',
-    message: 'Chers membres du Secrétariat Académique,\n\nLes délibérations de la 5ème année de Doctorat en Médecine Générale se sont clôturées avec succès. Vous trouverez ci-joint la validation du jury pour l’émission des diplômes.\n\nAvec mes salutations respectueuses,\nDr. Marie Tshilombo',
-    status: 'NOUVEAU',
-    isStarred: false,
-    folder: 'inbox',
-    createdAt: new Date(Date.now() - 1000 * 60 * 180).toISOString()
-  },
-  {
-    id: 'msg-sample-103',
-    name: 'Service des Admissions Internationales',
-    email: 'admissions.global@unesco-edu.org',
-    recipientAccount: 'contact@iumorave-ac.org',
-    subject: 'Demande de vérification d’accréditation ESU N°83/MINESU',
-    message: 'Madame, Monsieur,\n\nDans le cadre de l’enregistrement de votre établissement auprès du réseau d’échanges académiques, merci de nous confirmer l’adresse officielle de votre rectorat ainsi que le duplicata de l’Agrément Ministériel ESU.\n\nCordialement,\nService d’accréditation',
-    status: 'LU',
-    isStarred: true,
-    folder: 'inbox',
-    createdAt: new Date(Date.now() - 1000 * 60 * 600).toISOString()
-  }
-];
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -86,16 +47,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: 'Session expirée ou token invalide.' });
   }
 
-  // 1. GET MESSAGES LIST & UNREAD STATS
+  // 1. GET MESSAGES LIST & UNREAD STATS FROM FIRESTORE
   if (req.method === 'GET') {
-    let messages: InstitutionalMessage[] = [...defaultSampleMessages];
+    let messages: InstitutionalMessage[] = [];
 
     try {
       const { db } = getFirebaseAdmin();
       if (db) {
         const snapshot = await db.collection('contact_messages').orderBy('createdAt', 'desc').get();
         if (!snapshot.empty) {
-          const dbMessages: InstitutionalMessage[] = snapshot.docs.map(doc => {
+          messages = snapshot.docs.map(doc => {
             const data = doc.data();
             return {
               id: doc.id,
@@ -111,15 +72,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               replies: data.replies || []
             };
           });
-
-          // Merge DB messages with defaults ensuring no duplicates
-          const dbIds = new Set(dbMessages.map(m => m.id));
-          const filteredDefaults = defaultSampleMessages.filter(m => !dbIds.has(m.id));
-          messages = [...dbMessages, ...filteredDefaults];
         }
       }
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore fetch fallback:', err);
+      console.warn('[api/admin/messages] Firestore fetch warning:', err);
     }
 
     const unreadCount = messages.filter(m => m.status === 'NOUVEAU' && m.folder !== 'trash').length;
@@ -139,21 +95,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 
-  // 2. SEND OR REPLY EMAIL (POST)
+  // 2. COMPOSE NEW EMAIL OR SEND REPLY (POST)
   if (req.method === 'POST') {
     const { action, recipient, subject, message, senderAccount, replyToId } = req.body || {};
 
     if (!recipient || !message) {
-      return res.status(400).json({ error: 'Destinataire et message requis.' });
+      return res.status(400).json({ error: 'Adresse destinataire et contenu du message requis.' });
     }
 
     const activeSender = senderAccount || 'secretariat@iumorave-ac.org';
 
     const newMailDoc = {
-      name: 'IUM-MORAVE Administration',
+      name: 'Administration IUM-MORAVE',
       email: recipient.toLowerCase(),
       senderAccount: activeSender,
-      subject: subject || 'Réponse de l’Administration IUM-MORAVE',
+      subject: subject || 'Message Officiel de l’IUM-MORAVE',
       message,
       status: 'REPONDU',
       folder: 'sent',
@@ -161,6 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       createdAt: new Date().toISOString()
     };
 
+    // 2a. Save to Firestore
     try {
       const { db } = getFirebaseAdmin();
       if (db) {
@@ -185,13 +142,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore send fallback:', err);
+      console.warn('[api/admin/messages] Firestore send warning:', err);
+    }
+
+    // 2b. Dispatch real SMTP email via Zoho Mail (smtp.zoho.com)
+    let emailDispatched = false;
+    const smtpPass = process.env.ZOHO_SMTP_PASSWORD || process.env.SMTP_PASSWORD;
+    if (smtpPass) {
+      try {
+        const nodemailer = require('nodemailer');
+        const transporter = nodemailer.createTransport({
+          host: process.env.ZOHO_SMTP_HOST || 'smtp.zoho.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: activeSender,
+            pass: smtpPass
+          }
+        });
+
+        await transporter.sendMail({
+          from: `"Administration IUM-MORAVE" <${activeSender}>`,
+          to: recipient,
+          replyTo: activeSender,
+          subject: subject || 'Message Officiel IUM-MORAVE',
+          text: message
+        });
+        emailDispatched = true;
+      } catch (smtpErr: any) {
+        console.warn('[api/admin/messages] Real SMTP email send error:', smtpErr);
+      }
     }
 
     return res.status(200).json({
       success: true,
-      message: `E-mail transmis avec succès depuis ${activeSender} vers ${recipient}.`,
-      sentMail: newMailDoc
+      message: emailDispatched
+        ? `E-mail rédigé et transmis directement par serveur SMTP depuis ${activeSender} vers ${recipient}.`
+        : `Message enregistré dans le dossier Envoyés (${activeSender} ➔ ${recipient}).`,
+      sentMail: newMailDoc,
+      emailDispatched
     });
   }
 
@@ -214,10 +203,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await db.collection('contact_messages').doc(id).update(updateData);
       }
     } catch (err) {
-      console.warn('[api/admin/messages] Firestore patch fallback:', err);
+      console.warn('[api/admin/messages] Firestore patch warning:', err);
     }
 
     return res.status(200).json({ success: true, message: 'Statut du message mis à jour.' });
+  }
+
+  // 4. DELETE MESSAGE (DELETE)
+  if (req.method === 'DELETE') {
+    const { id } = req.query || req.body || {};
+
+    if (!id || typeof id !== 'string') {
+      return res.status(400).json({ error: 'ID du message à supprimer requis.' });
+    }
+
+    try {
+      const { db } = getFirebaseAdmin();
+      if (db) {
+        await db.collection('contact_messages').doc(id).delete();
+      }
+    } catch (err) {
+      console.warn('[api/admin/messages] Firestore delete warning:', err);
+    }
+
+    return res.status(200).json({ success: true, message: 'Message supprimé définitivement.' });
   }
 
   return res.status(405).json({ error: 'Méthode non autorisée' });

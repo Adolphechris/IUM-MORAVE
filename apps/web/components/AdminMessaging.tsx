@@ -61,7 +61,28 @@ export default function AdminMessaging({ token }: Props) {
 
   useEffect(() => {
     fetchMessages();
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 10000);
+    return () => clearInterval(interval);
   }, [token]);
+
+  async function deleteMessage(id: string) {
+    if (!confirm('Voulez-vous vraiment supprimer définitivement ce message ?')) return;
+    try {
+      const res = await fetch(`/api/admin/messages?id=${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        addToast('info', 'Message supprimé définitivement.');
+        setMessages(prev => prev.filter(m => m.id !== id));
+        if (activeMessage?.id === id) setActiveMessage(null);
+      }
+    } catch (err) {
+      addToast('warning', 'Erreur lors de la suppression.');
+    }
+  }
 
   async function updateStatus(id: string, updates: Partial<InstitutionalMessage>) {
     try {
@@ -312,6 +333,13 @@ export default function AdminMessaging({ token }: Props) {
                     }}
                   >
                     📁 Archiver
+                  </button>
+                  <button
+                    className="btn-archive"
+                    style={{ backgroundColor: '#7f1d1d', color: '#fca5a5', border: '1px solid #991b1b' }}
+                    onClick={() => deleteMessage(activeMessage.id)}
+                  >
+                    🗑️ Supprimer
                   </button>
                 </div>
               </div>
