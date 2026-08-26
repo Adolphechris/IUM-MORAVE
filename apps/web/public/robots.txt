@@ -59,11 +59,10 @@ User-agent: YouBot
 Allow: /
 
 # Diffbot (structuration sémantique IA)
-User-agent: Diffbot
+User-agent: *
 Allow: /
-
-# Sitemap
 Sitemap: https://iumorave-ac.org/sitemap.xml
+
 
 # Fichier LLMs (norme émergente pour les IA)
 Sitemap: https://iumorave-ac.org/llms.txt

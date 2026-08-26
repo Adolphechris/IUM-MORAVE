@@ -114,12 +114,44 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE — Enseignement Supérieur en RDC</title>
-        <meta name="description" content="Bienvenue à l'Institut Universitaire Morave de Mwene-Ditu (IUM-MORAVE). Université agréée par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018. Formations LMD : Licence, Master, Doctorat. Province de Lomami, République Démocratique du Congo." />
+        <title>Institut Universitaire Morave | IUM-MORAVE — Mwene-Ditu, RDC</title>
+        <meta name="description" content="Bienvenue à l'Institut Universitaire Morave Willsamal (IUM-MORAVE). Université privée agréée par l'État congolais — Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018. 8 Facultés, Formations LMD. Mwene-Ditu, Province de Lomami, République Démocratique du Congo." />
         <link rel="canonical" href="https://iumorave-ac.org/" />
-        <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
+        <meta property="og:title" content="Institut Universitaire Morave | IUM-MORAVE — Mwene-Ditu, RDC" />
         <meta property="og:url" content="https://iumorave-ac.org/" />
+        <meta property="og:site_name" content="Institut Universitaire Morave" />
+
+        {/* ── SCHEMA WEBSITE : NOM OFFICIEL DU SITE POUR GOOGLE ──
+            Ce schéma est OBLIGATOIREMENT sur la page d'accueil uniquement.
+            Il indique à Google d'afficher "Institut Universitaire Morave"
+            au lieu de "iumorave-ac.org" dans les résultats de recherche. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Institut Universitaire Morave",
+              "alternateName": [
+                "IUM-MORAVE",
+                "IUM MORAVE",
+                "Institut Universitaire Morave Willsamal",
+                "Institut Universitaire Morave de Mwene-Ditu"
+              ],
+              "url": "https://iumorave-ac.org/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://iumorave-ac.org/?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
       </Head>
+
       {/* ─── NAVIGATION AVEC BLASON OFFICIEL ───────────────────── */}
       <header className="navbar">
         <div className="navbar-inner">
