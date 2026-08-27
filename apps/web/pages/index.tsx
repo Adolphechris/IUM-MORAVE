@@ -640,7 +640,7 @@ export default function Home() {
               <img src="/images/logo-crest.jpg" alt="Sceau Officiel IUM-MORAVE" className="legal-seal-img" />
             </div>
             <div className="legal-content">
-              <p className="legal-title">⚖️ Existence Légalement Reconnue par l&apos;État Congolais</p>
+              <p className="legal-title">⚖️ Statut Légal &amp; Accréditation Ministérielle</p>
               <div className="legal-items">
                 <div className="legal-item">
                   <span className="legal-label">AGRÉMENT OFFICIEL ESU</span>
