@@ -190,13 +190,60 @@ function generateDeliberationPV({ enrollment, program, grades, decision, finaliz
  * @param {number} average - Moyenne pondérée
  * @returns {string} Mention
  */
+/**
+ * Détermine la mention académique selon le barème officiel LMD du Ministère de l'ESU en RDC.
+ * @param {number} average - Moyenne pondérée
+ * @returns {string} Mention officielle ESU
+ */
 function getMention(average) {
-  if (average >= 16) return 'Très Bien';
-  if (average >= 14) return 'Bien';
-  if (average >= 12) return 'Assez Bien';
-  if (average >= 10) return 'Passable';
-  if (average >= 8) return 'Rachat';
-  return 'Ajourné';
+  if (average >= 18) return 'EXCELLENT (Mention A)';
+  if (average >= 16) return 'TRÈS BIEN (Mention B)';
+  if (average >= 14) return 'BIEN (Mention C)';
+  if (average >= 12) return 'SATISFACTION (Mention D)';
+  if (average >= 10) return 'PASSABLE (Mention E)';
+  if (average >= 8) return 'RACHAT (Mention FX)';
+  return 'AJOURNÉ (Mention F)';
+}
+
+/**
+ * Calcule la synthèse d'un Master 2 ans (4 Semestres, 120 ECTS)
+ * @param {object} semestrialResults - Objet contenant { s1, s2, s3, s4 } avec { grades, weightedAverage }
+ * @returns {object} Synthèse Master (120 ECTS, moyenne générale, points totaux, mention)
+ */
+function calculateMasterGpa(semestrialResults) {
+  const semKeys = ['s1', 's2', 's3', 's4'];
+  let totalPoints = 0;
+  let totalCredits = 0;
+  const breakdown = {};
+
+  for (const semKey of semKeys) {
+    const sem = semestrialResults[semKey];
+    if (sem && Array.isArray(sem.grades)) {
+      const semCredits = sem.grades.reduce((sum, g) => sum + (g.credits || 0), 0);
+      const semPoints = sem.grades.reduce((sum, g) => sum + ((g.score !== undefined ? g.score : 0) * (g.credits || 0)), 0);
+      const semAvg = semCredits > 0 ? Number((semPoints / semCredits).toFixed(2)) : 0;
+      totalPoints += semPoints;
+      totalCredits += semCredits;
+      breakdown[semKey] = {
+        credits: semCredits,
+        points: semPoints,
+        weightedAverage: semAvg,
+        validated: semAvg >= 10
+      };
+    }
+  }
+
+  const masterAverage = totalCredits > 0 ? Number((totalPoints / totalCredits).toFixed(2)) : 0;
+
+  return {
+    totalCredits,
+    targetCredits: 120,
+    totalPoints,
+    masterAverage,
+    mention: getMention(masterAverage),
+    isMasterCompleted: totalCredits >= 120 && masterAverage >= 10,
+    breakdown
+  };
 }
 
 function generateDiplomaData({ enrollment, program, deliberation }) {
@@ -231,5 +278,6 @@ module.exports = {
   evaluateDeliberation,
   generateDeliberationPV,
   generateDiplomaData,
-  getMention
+  getMention,
+  calculateMasterGpa
 };

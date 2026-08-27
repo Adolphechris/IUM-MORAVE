@@ -19,9 +19,12 @@ gantt
     Auth, RBAC, Core API & Moteur LMD (40 Tests OK)   :done, 2026-08-02, 1d
     section Phase 4 & 5
     Design System & 4 Apps Next.js (4 Builds OK)      :done, 2026-08-02, 1d
+    section Master ISI ESU
+    Maquette Nationale Master ISI 120 ECTS            :active, 2026-08-27, 1d
     section Déploiement
-    Mise en Production (Render / Vercel / Docker)     :active, 2026-08-02, 2d
+    Mise en Production (Render / Vercel / Docker)     :done, 2026-08-26, 2d
 ```
+
 
 ---
 
@@ -59,7 +62,12 @@ gantt
   - [x] **Génération de diplômes** (`/enrollments/:id/diploma`) après délibération validée.
   - [x] **Vérification de diplômes** (`/verification/diploma`) par numéro ou QR code.
   - [x] Générateur de relevés de notes signés (HMAC-SHA-256).
-  - [x] **20 tests automatisés** couvrant API académique, LMD, PV, diplômes, RBAC.
+  - [x] **Master en Ingénierie Sécurité Informatique (ISI — 120 ECTS / 4 Semestres)** :
+  - [x] Document de référence officiel ESU enregistré dans `docs/curriculum-master-isi-lmd.md`.
+  - [ ] Support du calcul semestriel (30 ECTS/semestre) et récapitulatif 120 ECTS dans `services/core-api/src/lmd-engine.js`.
+  - [ ] Intégration des modèles certifiés Master 1 & Master 2 ISI avec UE officielles dans `apps/web/pages/admin.tsx`.
+  - [ ] Rendu PDF multi-semestriel sécurisé (HMAC + QR Code) dans `services/core-api/src/pdf-service.js`.
+
 
 ---
 

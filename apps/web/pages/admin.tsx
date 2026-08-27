@@ -42,6 +42,52 @@ type PresetTemplate = {
 
 const PRESETS: PresetTemplate[] = [
   {
+    name: '🎓 Modèle Officiel ESU : Master 1 Ingénierie Sécurité Informatique (ISI)',
+    studentName: 'Elengo Dungu Samuel',
+    matricule: '2026-M1-ISI-001',
+    programTitle: 'Master en Sciences et Technologie — Mention Ingénierie Sécurité Informatique',
+    level: 'Master 1 (60 ECTS / S1+S2)',
+    academicYear: '2026-2027',
+    grades: [
+      { code: 'ROI2111', title: 'Recherche opérationnelle pour ingénieur informaticien', credits: 4, score: 14 },
+      { code: 'TPI2111', title: 'Théories de probabilités pour ingénieur informaticien', credits: 4, score: 13 },
+      { code: 'AGT2111', title: 'Anglais technique-1', credits: 3, score: 15 },
+      { code: 'LFS2111', title: 'Langage formel et compilation', credits: 5, score: 12 },
+      { code: 'LAS2111', title: 'Langage système', credits: 5, score: 14 },
+      { code: 'ALG2111', title: 'Algorithmes et structures de données avancées', credits: 5, score: 16 },
+      { code: 'SOR2111', title: 'Système d\'objets répartis', credits: 4, score: 13 },
+      { code: 'TCO2121', title: 'Théorie du codage', credits: 4, score: 15 },
+      { code: 'SSE2122', title: 'Sécurité des systèmes d\'exploitation', credits: 4, score: 14 },
+      { code: 'CRY2121', title: 'Cryptologie', credits: 4, score: 16 },
+      { code: 'MSD2121', title: 'Méthodes de sécurisation des données', credits: 4, score: 13 },
+      { code: 'SAR2121', title: 'Sécurité des applications et des réseaux', credits: 4, score: 15 },
+      { code: 'PRP2121', title: 'Programmation parallèle', credits: 4, score: 14 },
+      { code: 'INFA11', title: 'Projet-4 & Application pratique', credits: 6, score: 16 }
+    ]
+  },
+  {
+    name: '🛡️ Modèle Officiel ESU : Master 2 Ingénierie Sécurité Informatique (ISI)',
+    studentName: 'Elengo Dungu Samuel',
+    matricule: '2027-M2-ISI-001',
+    programTitle: 'Master en Sciences et Technologie — Mention Ingénierie Sécurité Informatique',
+    level: 'Master 2 (60 ECTS / S3+S4)',
+    academicYear: '2027-2028',
+    grades: [
+      { code: 'DLC2131', title: 'Développement de logiciels cryptographiques', credits: 4, score: 15 },
+      { code: 'CRA2131', title: 'Cryptologie avancée', credits: 6, score: 16 },
+      { code: 'PRR2131', title: 'Programmation réseaux', credits: 6, score: 14 },
+      { code: 'MTR2131', title: 'Méthodes et techniques de rédaction scientifique en informatique', credits: 4, score: 15 },
+      { code: 'DIR2131', title: 'Détection des intrusions et réponses aux incidents', credits: 5, score: 16 },
+      { code: 'IRD2131', title: 'Interconnexion et routage dynamique', credits: 5, score: 14 },
+      { code: 'CEI2141', title: 'Contrôle d\'accès et extraction d\'information', credits: 3, score: 15 },
+      { code: 'APS2141', title: 'Audit et plan de la sécurité informatique', credits: 2, score: 16 },
+      { code: 'SSL2141', title: 'Sécurité des services en ligne', credits: 3, score: 14 },
+      { code: 'ENT2141', title: 'Entrepreneuriat-2', credits: 2, score: 15 },
+      { code: 'ISI2141', title: 'Stage académique en entreprise', credits: 10, score: 17 },
+      { code: 'PTS2141', title: 'Projet tutoré & Soutenance de Mémoire', credits: 10, score: 16 }
+    ]
+  },
+  {
     name: 'Modèle Certifié 1 : Licence 3 Sciences Informatiques',
     studentName: 'Jean Kabamba Mukendi',
     matricule: '2026-SINT-042',
@@ -78,7 +124,6 @@ const PRESETS: PresetTemplate[] = [
     level: 'Licence 3 (LMD)',
     academicYear: '2025-2026',
     grades: [
-
       { code: 'DRT-301', title: 'Droit des Obligations & des Contrats', credits: 6, score: 14.5 },
       { code: 'DRT-302', title: 'Procédure Civile & Voies d\'Exécution', credits: 6, score: 15 },
       { code: 'DRT-303', title: 'Droit Pénal Spécial & Procédure Pénale', credits: 6, score: 14 },
@@ -87,6 +132,7 @@ const PRESETS: PresetTemplate[] = [
     ]
   }
 ];
+
 
 export default function AdminPage() {
   const [session, setSession] = useState<UserSession | null>(null);
