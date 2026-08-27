@@ -381,46 +381,116 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── FACULTÉS & FORMATIONS ───────────────────────────── */}
+      {/* ─── FACULTÉS & FORMATIONS LMD ───────────────────────────── */}
       <section className="section section-alt" id="formations">
         <div className="section-inner">
-          <p className="eyebrow">Offre académique</p>
-          <h2>Facultés &amp; Formations LMD</h2>
+          <div className="section-header">
+            <p className="eyebrow">Offre Académique Officielle</p>
+            <h2>Les 8 Facultés &amp; Filières d&apos;Excellence LMD</h2>
+            <p className="section-desc">
+              L&apos;IUM-MORAVE propose 8 facultés agréées par l&apos;État Congolais (Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018), 
+              délivrant des diplômes homologués en système LMD (Licence 3 ans, Master 2 ans, Doctorat).
+            </p>
+          </div>
 
-          {faculties.length > 0 ? (
-            <div className="cards-grid">
-              {faculties.map((faculty) => (
-                <article className="card faculty-card" key={faculty.id}>
-                  <span className="card-badge">{faculty.code}</span>
-                  <h3>{faculty.name}</h3>
-                  <p>{faculty.description}</p>
-                  <a className="card-link" href={`/facultes/${faculty.id}`}>Explorer la faculté →</a>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="cards-grid">
-              {[
-                { id: 1, code: 'FST', name: 'Faculté des Sciences et Technologies', desc: 'Informatique, Génie Logiciel, Réseaux, Informatique de Gestion, Mathématiques.' },
-                { id: 2, code: 'FSEG', name: 'Faculté des Sciences Économiques et de Gestion', desc: 'Finance, Comptabilité, Management, Économie de Développement, Gestion d\'Entreprises.' },
-                { id: 3, code: 'FDSP', name: 'Faculté de Droit et Sciences Politiques', desc: 'Droit Privé (OHADA), Droit Public, Relations Internationales, Sciences Administratives.' },
-                { id: 4, code: 'FMS', name: 'Faculté de Médecine et Santé Publique', desc: 'Doctorat en Médecine Générale, Santé Communautaire, Épidémiologie (en partenariat avec l\'ISTM).' },
-                { id: 5, code: 'FTH', name: 'Faculté de Théologie et Sciences des Religions', desc: 'Théologie Pratique, Exégèse Biblique, Éthique, Ministère Pastoral.' },
-                { id: 6, code: 'FSA', name: 'Faculté des Sciences Agronomiques & Développement Rural', desc: 'Phytotechnie, Zootechnie, Économie Agricole, Sécurité Alimentaire.' },
-                { id: 7, code: 'FSIC', name: 'Faculté des Sciences de l\'Information et de la Communication', desc: 'Journalisme, Médias, Communication des Organisations & Relations Publiques.' },
-                { id: 8, code: 'FSE', name: 'Faculté des Sciences de l\'Éducation', desc: 'Psychopédagogie, Didactique, Administration & Inspection Scolaire.' },
-              ].map((f) => (
-                <article className="card faculty-card" key={f.code}>
-                  <span className="card-badge">{f.code}</span>
-                  <h3>{f.name}</h3>
-                  <p>{f.desc}</p>
-                  <a className="card-link" href={`/facultes/${f.id}`}>Explorer tous les programmes &amp; filières →</a>
-                </article>
-              ))}
-            </div>
-          )}
+          <div className="cards-grid">
+            {[
+              {
+                id: 1,
+                code: 'FST',
+                icon: '💻',
+                name: 'Faculté des Sciences et Technologies',
+                desc: 'Formation de pointe en génie logiciel, intelligence artificielle, réseaux informatiques, gestion des données et mathématiques appliquées.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Génie Logiciel & IA', 'Réseaux & Télécoms', 'Informatique de Gestion', 'Maths Appliquées']
+              },
+              {
+                id: 2,
+                code: 'FSEG',
+                icon: '📊',
+                name: 'Faculté des Sciences Économiques et de Gestion',
+                desc: 'Excellence en gestion financière, comptabilité analytique, entrepreneuriat et économie du développement.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Finance & Banque', 'Comptabilité & Audit', 'Management & RH', 'Économie Internationale']
+              },
+              {
+                id: 3,
+                code: 'FDSP',
+                icon: '⚖️',
+                name: 'Faculté de Droit et Sciences Politiques',
+                desc: 'Formation rigoureuse aux métiers de la justice, au droit des affaires OHADA, aux sciences politiques et à la diplomatie.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Droit Privé & OHADA', 'Droit Public & Admin.', 'Relations Internationales', 'Sciences Politiques']
+              },
+              {
+                id: 4,
+                code: 'FMS',
+                icon: '🩺',
+                name: 'Faculté de Médecine et Santé Publique',
+                desc: 'Formation médicale d\'excellence avec stages hospitaliers cliniques intégrés en partenariat avec l\'ISTM.',
+                degree: 'Doctorat en Médecine (M5) • Santé Publique',
+                filieres: ['Médecine Générale', 'Santé Communautaire', 'Épidémiologie', 'Stages Cliniques ISTM']
+              },
+              {
+                id: 5,
+                code: 'FTH',
+                icon: '📖',
+                name: 'Faculté de Théologie et Sciences des Religions',
+                desc: 'Études approfondies en théologie pratique, éthique sociale, langues bibliques (Grec & Hébreu) et médiation.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Théologie Pratique', 'Exégèse Biblique & Langues', 'Éthique & Société', 'Ministère Pastoral']
+              },
+              {
+                id: 6,
+                code: 'FSA',
+                icon: '🌱',
+                name: 'Faculté des Sciences Agronomiques & Dev. Rural',
+                desc: 'Solutions durables pour l\'agriculture moderne, la production animale, la gestion des sols et la sécurité alimentaire.',
+                degree: 'Licence (3 ans) • Ingéniorat',
+                filieres: ['Phytotechnie & Cultures', 'Zootechnie & Élevage', 'Économie Agricole', 'Sécurité Alimentaire']
+              },
+              {
+                id: 7,
+                code: 'FSIC',
+                icon: '📰',
+                name: 'Faculté des Sciences de l\'Information & Com.',
+                desc: 'Maîtrise des nouveaux médias, du journalisme d\'investigation, de la communication stratégique d\'entreprise et des relations publiques.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Journalisme & Presse', 'Médias Numériques', 'Communication Orga.', 'Relations Publiques']
+              },
+              {
+                id: 8,
+                code: 'FSE',
+                icon: '🎓',
+                name: 'Faculté des Sciences de l\'Éducation',
+                desc: 'Formation des cadres de l\'enseignement, spécialistes en psychopédagogie, ingénierie de la formation et inspection scolaire.',
+                degree: 'Licence (3 ans) • Master (2 ans)',
+                filieres: ['Psychopédagogie', 'Didactique des Disciplines', 'Administration Scolaire', 'Mesure & Évaluation']
+              }
+            ].map((f) => (
+              <article className="card faculty-card" key={f.code}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                  <span className="card-badge">{f.icon} {f.code}</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--sky)', background: '#e0f2fe', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>
+                    {f.degree}
+                  </span>
+                </div>
+                <h3>{f.name}</h3>
+                <p>{f.desc}</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
+                  {f.filieres.map((filiere) => (
+                    <span key={filiere} style={{ fontSize: '0.72rem', background: '#f1f5f9', color: '#334155', padding: '0.2rem 0.5rem', borderRadius: '6px', fontWeight: 600, border: '1px solid #e2e8f0' }}>
+                      ✓ {filiere}
+                    </span>
+                  ))}
+                </div>
+                <a className="card-link" href={`/facultes/${f.id}`}>Explorer tous les programmes &amp; filières →</a>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
+
 
       {/* ─── SECTION DIRECTION & AUTORITÉS ACADÉMIQUES ──────────── */}
       <section className="section" id="direction">
