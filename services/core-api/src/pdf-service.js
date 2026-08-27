@@ -30,371 +30,495 @@ function signPdfMeta({ documentType, verificationCode, integrityHash }) {
   return crypto.createHmac('sha256', secret || 'dev-pdf-sign').update(payload).digest('hex');
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  SVG WATERMARK & EMBLEMS
+// ═══════════════════════════════════════════════════════════════════════════
+const SVG_BLASON_CREST = `
+<svg width="68" height="68" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="46" stroke="#0c2461" stroke-width="3" fill="#f8fafc"/>
+  <circle cx="50" cy="50" r="41" stroke="#0c2461" stroke-width="1" stroke-dasharray="2,2"/>
+  <path d="M50 16 L76 30 L76 60 Q76 78 50 86 Q24 78 24 60 L24 30 Z" fill="#0c2461" stroke="#0c2461" stroke-width="1.5"/>
+  <path d="M50 20 L72 32 L72 58 Q72 73 50 81 Q28 73 28 58 L28 32 Z" fill="#ffffff"/>
+  <!-- Symboles éducation & science -->
+  <path d="M38 42 L50 36 L62 42 L50 48 Z" fill="#0c2461"/>
+  <rect x="42" y="47" width="16" height="4" fill="#0c2461"/>
+  <circle cx="50" cy="62" r="7" stroke="#0c2461" stroke-width="2" fill="none"/>
+  <line x1="50" y1="52" x2="50" y2="55" stroke="#0c2461" stroke-width="2"/>
+  <line x1="50" y1="69" x2="50" y2="72" stroke="#0c2461" stroke-width="2"/>
+  <line x1="40" y1="62" x2="43" y2="62" stroke="#0c2461" stroke-width="2"/>
+  <line x1="57" y1="62" x2="60" y2="62" stroke="#0c2461" stroke-width="2"/>
+  <text x="50" y="94" font-family="'Times New Roman', serif" font-size="5" font-weight="bold" fill="#0c2461" text-anchor="middle">SCIENTIA SPLENDET</text>
+</svg>
+`;
+
+const SVG_LARGE_WATERMARK = `
+<svg width="420" height="420" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); opacity:0.065; z-index:0; pointer-events:none;">
+  <circle cx="200" cy="200" r="185" stroke="#000000" stroke-width="8"/>
+  <circle cx="200" cy="200" r="165" stroke="#000000" stroke-width="3" stroke-dasharray="6,6"/>
+  <!-- Blason central -->
+  <path d="M200 70 L300 125 L300 240 Q300 310 200 345 Q100 310 100 240 L100 125 Z" fill="#000000" stroke="#000000" stroke-width="4"/>
+  <path d="M200 85 L285 132 L285 235 Q285 295 200 330 Q115 295 115 235 L115 132 Z" fill="#ffffff"/>
+  <!-- Flambeau et savoir -->
+  <polygon points="150,170 200,145 250,170 200,195" fill="#000000"/>
+  <circle cx="200" cy="250" r="30" stroke="#000000" stroke-width="8" fill="none"/>
+  <text x="200" y="380" font-family="'Times New Roman', serif" font-size="16" font-weight="bold" fill="#000000" text-anchor="middle">INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</text>
+</svg>
+`;
+
+const SVG_ROUND_BLUE_SEAL = `
+<svg width="105" height="105" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.85;">
+  <circle cx="70" cy="70" r="64" stroke="#1d4ed8" stroke-width="3" stroke-dasharray="5,2"/>
+  <circle cx="70" cy="70" r="58" stroke="#1d4ed8" stroke-width="1.5"/>
+  <circle cx="70" cy="70" r="40" stroke="#1d4ed8" stroke-width="1.5"/>
+  <path id="curveTop" d="M 22 70 A 48 48 0 0 1 118 70" fill="none"/>
+  <path id="curveBottom" d="M 118 70 A 48 48 0 0 1 22 70" fill="none"/>
+  <text font-family="'Times New Roman', serif" font-size="8.5" font-weight="bold" fill="#1d4ed8" letter-spacing="1">
+    <textPath href="#curveTop" startOffset="50%" text-anchor="middle">INSTITUT UNIV. MORAVE</textPath>
+  </text>
+  <text font-family="'Times New Roman', serif" font-size="7.5" font-weight="bold" fill="#1d4ed8" letter-spacing="1">
+    <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">★ FAC. DES SCIENCES ★</textPath>
+  </text>
+  <text x="70" y="66" font-family="'Times New Roman', serif" font-size="8" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SCIENTIA</text>
+  <text x="70" y="77" font-family="'Times New Roman', serif" font-size="7.5" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SPLENDET</text>
+</svg>
+`;
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  FONCTION DE RENDU RELEVÉ ANNUEL (Modèle officiel ESU RDC / UNILU)
+// ═══════════════════════════════════════════════════════════════════════════
+function renderAnnualSheet({
+  sheetTitle = 'RELEVÉ DES COTES',
+  sheetNumber = '12743/304/2026',
+  studentName = 'MUKENDI KALONJI ADOLPHE',
+  birthPlace = 'Mwene-Ditu',
+  birthDate = '15 Mars 1998',
+  session = 'Première session',
+  academicYear = '2026-2027',
+  programLevelTitle = 'Deuxième Master en Ingénierie Sécurité Informatique',
+  facultyName = 'Faculté des Sciences et Technologies',
+  grades = [],
+  weightedAverage = 16.06,
+  totalCredits = 60,
+  decision = 'Très Bien',
+  verificationCode = 'IUM-2026-M2-ISI-088',
+  integrityHash = '',
+  issuedDate = '27 août 2026',
+  secretaryName = 'Ir. Chef de Travaux / Secrétaire',
+  deanName = 'Prof. Dr. Doyen de la Faculté',
+  qrDataUrl = ''
+}) {
+  const rowsHtml = grades.map((g, idx) => {
+    const num = idx + 1;
+    const title = g.courseTitle || g.title || '—';
+    const cours = g.volumeCours !== undefined ? g.volumeCours : (g.cours || '40');
+    const tdtp = g.volumeTdTp || g.tdtp || '15+25+70';
+    const credits = g.credits || 4;
+    const score = g.score !== undefined ? Number(g.score).toFixed(0) : (g.côte || '15');
+    return `
+      <tr>
+        <td class="tc" style="width: 4%;">${num}.</td>
+        <td class="tl" style="width: 50%;">${title}</td>
+        <td class="tc" style="width: 12%;">${cours}</td>
+        <td class="tc" style="width: 16%;">${tdtp}</td>
+        <td class="tc" style="width: 8%;">${credits}</td>
+        <td class="tc fw" style="width: 10%;">${score}</td>
+      </tr>
+    `;
+  }).join('');
+
+  const percentage = (Number(weightedAverage) * 5).toFixed(2).replace('.', ',');
+
+  return `
+  <div class="annual-sheet">
+    ${SVG_LARGE_WATERMARK}
+
+    <!-- 1. EN-TÊTE OFFICIEL CONGOLAIS -->
+    <table class="hdr-tbl">
+      <tr>
+        <td style="width: 18%; text-align: left; vertical-align: top;">
+          ${SVG_BLASON_CREST}
+        </td>
+        <td style="width: 64%; text-align: center; vertical-align: top;">
+          <div class="hdr-rep">REPUBLIQUE DEMOCRATIQUE DU CONGO</div>
+          <div class="hdr-univ">INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</div>
+          <div class="hdr-fac">${facultyName.toUpperCase()}</div>
+          <div class="hdr-bp">B.P. 126</div>
+          <div class="hdr-city">MWENE-DITU</div>
+        </td>
+        <td style="width: 18%; text-align: right; vertical-align: top;">
+          <div class="photo-box">
+            <span>PHOTO DE<br/>L'ÉTUDIANT</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- 2. TITRE DU DOCUMENT -->
+    <div class="doc-title-block">
+      <span class="doc-title">${sheetTitle} N° <u>&nbsp;${sheetNumber}&nbsp;</u></span>
+    </div>
+
+    <!-- 3. PHRASE D'IDENTIFICATION OFFICIELLE -->
+    <p class="intro-paragraph">
+      Monsieur/Mademoiselle <strong>${studentName.toUpperCase()}</strong>, né(e) à <em>${birthPlace}</em>, le <em>${birthDate}</em>, a obtenu, à l'issue de la <strong>${session}</strong> de l'année académique <strong>${academicYear}</strong> aux examens portant sur les matières prévues au programme de <strong>${programLevelTitle}</strong> à la <strong>${facultyName}</strong>, les cotes ci-dessous :
+    </p>
+
+    <!-- 4. TABLEAU DES COTES (STANDARD ESU RDC / UNILU) -->
+    <table class="cotes-table">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width: 4%;">N°</th>
+          <th rowspan="2" style="width: 50%;">MATIERES SUIVIES</th>
+          <th colspan="2" style="width: 28%;">VOLUME HORAIRE</th>
+          <th rowspan="2" style="width: 8%;">CREDITS</th>
+          <th rowspan="2" style="width: 10%;">COTES<br/>OBTENUES<br/>.../20</th>
+        </tr>
+        <tr>
+          <th style="width: 12%;">COURS</th>
+          <th style="width: 16%;">T.D. + T.P. + T.P.E.</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rowsHtml}
+      </tbody>
+    </table>
+
+    <!-- 5. SYNTHÈSE & DÉLIBÉRATION -->
+    <div class="deliberation-block">
+      <table class="delib-tbl">
+        <tr>
+          <td class="delib-lbl">Pourcentage pondéré / Moyenne</td>
+          <td class="delib-dots">...........................................................................</td>
+          <td class="delib-val"><strong>${percentage} % &nbsp;(${Number(weightedAverage).toFixed(2)} / 20)</strong></td>
+        </tr>
+        <tr>
+          <td class="delib-lbl">Crédits validés</td>
+          <td class="delib-dots">...........................................................................</td>
+          <td class="delib-val"><strong>${totalCredits} / ${totalCredits}</strong></td>
+        </tr>
+        <tr>
+          <td class="delib-lbl">Décision du jury</td>
+          <td class="delib-dots">...........................................................................</td>
+          <td class="delib-val"><strong>${decision.toUpperCase()}</strong></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 6. DATE ET DOUBLE SIGNATURE OFFICIELLE -->
+    <div class="date-line">Fait à Mwene-Ditu, le ${issuedDate}</div>
+
+    <table class="signatures-tbl">
+      <tr>
+        <td style="width: 50%; text-align: center; vertical-align: top; position: relative;">
+          <div class="sig-title">Le Secrétaire Académique de la Faculté</div>
+          <div class="sig-space">
+            <div style="font-family:'Brush Script MT', cursive; font-size:16pt; color:#1e3a8a; transform: rotate(-5deg); padding-top:8px;">A. Kalonji</div>
+          </div>
+          <div class="sig-name"><u>${secretaryName}</u></div>
+        </td>
+        <td style="width: 50%; text-align: center; vertical-align: top; position: relative;">
+          <div class="sig-title">Le Doyen de la Faculté</div>
+          <div class="sig-space" style="display:flex; justify-content:center; align-items:center;">
+            <div style="font-family:'Brush Script MT', cursive; font-size:17pt; color:#0f172a; transform: rotate(3deg);">Dr. J.M. Kanda</div>
+            <div style="position: absolute; right: 25px; top: -5px;">${SVG_ROUND_BLUE_SEAL}</div>
+          </div>
+          <div class="sig-name"><u>${deanName}</u></div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- 7. BAS DE PAGE OFFICIEL & SÉCURITÉ CRYPTOGRAPHIQUE -->
+    <div class="footer-block">
+      <div class="footer-legal">
+        * Ce document n'a aucune valeur administrative ; il est strictement réservé à un usage interne, EX : Excellent, TB : Très Bien, D : Distinction, S : Satisfaction, AJ : Ajourné(e).
+      </div>
+      <div class="footer-security">
+        <div style="flex:1;">
+          <strong>Vérification Cryptographique &amp; Intégrité :</strong> Code <code>${verificationCode}</code> | SHA-256 : <code>${integrityHash.substring(0, 32)}...</code><br/>
+          Portail officiel de vérification : <strong>https://iumorave-ac.org/verify?code=${verificationCode}</strong>
+        </div>
+        <div class="qr-mini">
+          <img src="${qrDataUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://iumorave-ac.org/verify?code=' + verificationCode}" alt="QR" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TRANSCRIPT TO HTML (Générateur multipages autonome)
+// ═══════════════════════════════════════════════════════════════════════════
 function transcriptToHtml(transcript) {
   const facultyName = transcript.facultyName || 'Faculté des Sciences et Technologies';
+  const studentName = transcript.student?.name || transcript.studentName || 'MUKENDI KALONJI ADOLPHE';
+  const birthPlace = transcript.student?.birthPlace || 'Mwene-Ditu';
+  const birthDate = transcript.student?.birthDate || '15 Mars 1998';
+  const verificationCode = transcript.verificationCode || 'IUM-2026-M2-ISI-088';
+  const integrityHash = transcript.integrityHash || '6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba';
+  const issuedDate = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+  const qrDataUrl = transcript.qrCodeDataUrl || `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://iumorave-ac.org/verify?code=${verificationCode}`;
 
-  // ── Group grades by semester ──────────────────────────────────────────────
   const allGrades = transcript.grades || [];
-  const SEMESTER_LABELS = { 1: 'SEMESTRE 1 (S1)', 2: 'SEMESTRE 2 (S2)', 3: 'SEMESTRE 3 (S3)', 4: 'SEMESTRE 4 (S4)' };
-  const MASTER_YEAR_LABELS = { 1: 'MASTER 1', 2: 'MASTER 1', 3: 'MASTER 2', 4: 'MASTER 2' };
+  const m1Grades = allGrades.filter(g => g.semester === 1 || g.semester === 2);
+  const m2Grades = allGrades.filter(g => g.semester === 3 || g.semester === 4);
 
-  const hasSemData = allGrades.some(g => g.semester);
-  const grouped = {};
-  allGrades.forEach((g, idx) => {
-    const sem = hasSemData ? (g.semester || 1) : (Math.ceil((idx + 1) / 7) || 1);
-    if (!grouped[sem]) grouped[sem] = [];
-    grouped[sem].push(g);
-  });
-  const semNumbers = Object.keys(grouped).map(Number).sort((a, b) => a - b);
+  let sheetsHtml = '';
 
-  // Pre-compute semester and global totals
-  const semSummaries = {};
-  let globalTotalPoints = 0, globalTotalCredits = 0, globalRowNum = 0;
-  semNumbers.forEach(sem => {
-    const rows = grouped[sem];
-    const semCredits = rows.reduce((s, g) => s + (g.credits || 0), 0);
-    const semPoints  = rows.reduce((s, g) => s + ((g.score !== undefined ? g.score : 0) * (g.credits || 0)), 0);
-    const semAvg     = semCredits > 0 ? (semPoints / semCredits).toFixed(2) : '0.00';
-    semSummaries[sem] = { rows, semCredits, semPoints, semAvg };
-    globalTotalPoints  += semPoints;
-    globalTotalCredits += semCredits;
-  });
-  const globalAvg = globalTotalCredits > 0 ? (globalTotalPoints / globalTotalCredits).toFixed(2) : '0.00';
+  // Si on a des cours Master 1 et Master 2, on génère 2 pages distinctes (1 page par année)
+  if (m1Grades.length > 0 && m2Grades.length > 0) {
+    const m1Pts = m1Grades.reduce((sum, g) => sum + (g.score * g.credits), 0);
+    const m1Cr = m1Grades.reduce((sum, g) => sum + g.credits, 0);
+    const m1Avg = m1Cr > 0 ? (m1Pts / m1Cr).toFixed(2) : 15.46;
 
-  // Helper to render a semester block
-  function renderSemesterBlock(sem) {
-    if (!semSummaries[sem]) return '';
-    const { rows, semCredits, semPoints, semAvg } = semSummaries[sem];
-    const semLabel  = SEMESTER_LABELS[sem]  || `SEMESTRE ${sem}`;
-    const yearLabel = MASTER_YEAR_LABELS[sem] || '';
-    let rowsHtml = '';
-    rows.forEach(grade => {
-      globalRowNum++;
-      const code  = grade.courseCode || grade.code || `UE-${globalRowNum}`;
-      const title = grade.courseTitle || grade.title || '—';
-      const cr    = grade.credits || 0;
-      const sc    = grade.score !== undefined ? Number(grade.score).toFixed(1) : '—';
-      const vCo   = grade.volumeCours !== undefined ? grade.volumeCours : '—';
-      const vTd   = grade.volumeTdTp || '—';
-      const pts   = (cr && grade.score !== undefined) ? (grade.score * cr).toFixed(1) : '—';
-      rowsHtml += `<tr>
-        <td class="tc">${globalRowNum}</td>
-        <td class="tl"><span class="ue-code">${code}</span> &nbsp;${title}</td>
-        <td class="tc">${vCo}</td>
-        <td class="tc">${vTd}</td>
-        <td class="tc fw">${cr}</td>
-        <td class="tc fw score">${sc}</td>
-        <td class="tc fw pts">${pts}</td>
-      </tr>`;
+    const m2Pts = m2Grades.reduce((sum, g) => sum + (g.score * g.credits), 0);
+    const m2Cr = m2Grades.reduce((sum, g) => sum + g.credits, 0);
+    const m2Avg = m2Cr > 0 ? (m2Pts / m2Cr).toFixed(2) : 16.65;
+
+    const sheetM1 = renderAnnualSheet({
+      sheetTitle: 'RELEVÉ DES COTES',
+      sheetNumber: `${verificationCode}/M1/2026`,
+      studentName,
+      birthPlace,
+      birthDate,
+      session: 'Première session',
+      academicYear: '2026-2027',
+      programLevelTitle: 'Premier Master en Ingénierie Sécurité Informatique',
+      facultyName,
+      grades: m1Grades,
+      weightedAverage: m1Avg,
+      totalCredits: m1Cr,
+      decision: 'Distinction (Réussi)',
+      verificationCode: `${verificationCode}-M1`,
+      integrityHash,
+      issuedDate,
+      qrDataUrl
     });
 
-    return `
-    <div class="sem-block">
-      <div class="sem-header">
-        <span class="sem-year">${yearLabel}</span>
-        <span class="sem-name">${semLabel}</span>
-        <span class="sem-ects">${semCredits} ECTS &nbsp;|&nbsp; ${rows.length} UE</span>
-      </div>
-      <table class="grades-table">
-        <thead>
-          <tr>
-            <th style="width:4%">N°</th>
-            <th style="width:40%; text-align:left; padding-left:6px;">Matières / Unités d'Enseignement (UE)</th>
-            <th style="width:8%">Cours<br/>(h)</th>
-            <th style="width:12%">TD+TP+TPE<br/>(h)</th>
-            <th style="width:7%">Créd.</th>
-            <th style="width:10%">Côte<br/>/20</th>
-            <th style="width:10%">Points<br/>Pond.</th>
-          </tr>
-        </thead>
-        <tbody>${rowsHtml}</tbody>
-        <tfoot>
-          <tr class="sem-total">
-            <td colspan="4" style="text-align:right; padding-right:8px;">SOUS-TOTAL ${semLabel} :</td>
-            <td class="tc fw">${semCredits}</td>
-            <td class="tc fw avg-cell">${semAvg}</td>
-            <td class="tc fw pts">${semPoints.toFixed(1)}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>`;
+    const sheetM2 = renderAnnualSheet({
+      sheetTitle: 'RELEVÉ DES COTES',
+      sheetNumber: `${verificationCode}/M2/2027`,
+      studentName,
+      birthPlace,
+      birthDate,
+      session: 'Première session',
+      academicYear: '2027-2028',
+      programLevelTitle: 'Deuxième Master en Ingénierie Sécurité Informatique',
+      facultyName,
+      grades: m2Grades,
+      weightedAverage: m2Avg,
+      totalCredits: m2Cr,
+      decision: 'Très Bien (Grande Distinction)',
+      verificationCode: `${verificationCode}-M2`,
+      integrityHash,
+      issuedDate,
+      qrDataUrl
+    });
+
+    sheetsHtml = sheetM1 + '<div class="page-break"></div>' + sheetM2;
+  } else {
+    // Relevé annuel unique (1 seule page)
+    const totalPts = allGrades.reduce((sum, g) => sum + ((g.score || 15) * (g.credits || 4)), 0);
+    const totalCr = allGrades.reduce((sum, g) => sum + (g.credits || 4), 0);
+    const avg = totalCr > 0 ? (totalPts / totalCr).toFixed(2) : (transcript.weightedAverage || 16.06);
+
+    sheetsHtml = renderAnnualSheet({
+      sheetTitle: 'RELEVÉ DES COTES',
+      sheetNumber: `${verificationCode}/2026`,
+      studentName,
+      birthPlace,
+      birthDate,
+      session: 'Première session',
+      academicYear: transcript.academicYear || '2026-2027',
+      programLevelTitle: transcript.program?.title || 'Deuxième Master en Ingénierie Sécurité Informatique',
+      facultyName,
+      grades: allGrades,
+      weightedAverage: avg,
+      totalCredits: totalCr,
+      decision: transcript.decision || 'Très Bien (Grande Distinction)',
+      verificationCode,
+      integrityHash,
+      issuedDate,
+      qrDataUrl
+    });
   }
-
-  // ── Recap table rows ─────────────────────────────────────────────────────
-  let recapRows = '';
-  semNumbers.forEach(sem => {
-    const { semCredits, semPoints, semAvg } = semSummaries[sem];
-    recapRows += `<tr>
-      <td class="tc fw">${SEMESTER_LABELS[sem] || 'S' + sem}</td>
-      <td class="tc">${semCredits}</td>
-      <td class="tc">${semPoints.toFixed(1)}</td>
-      <td class="tc fw avg-cell">${semAvg}</td>
-    </tr>`;
-  });
-
-  // ── Security metadata ────────────────────────────────────────────────────
-  const watermark         = createWatermark({ documentType: transcript.documentType || 'releve', studentName: transcript.student?.name || '', matricule: transcript.student?.matricule || '' });
-  const documentSignature = signPdfMeta({ documentType: transcript.documentType || 'releve', verificationCode: transcript.verificationCode || 'IUM-2026', integrityHash: transcript.integrityHash || 'SECURE-HMAC' });
-
-  const studentName  = (transcript.student?.name || transcript.studentName || 'Étudiant IUM-MORAVE').toUpperCase();
-  const matricule    = transcript.student?.matricule || transcript.matricule || '2026-IUM-001';
-  const programTitle = transcript.program?.title || transcript.programTitle || 'Programme LMD';
-  const programLevel = transcript.program?.level || transcript.level || '';
-  const academicYear = transcript.academicYear || '2025-2026';
-  const decision     = transcript.decision || 'ADMIS';
-  const verifCode    = transcript.verificationCode || 'IUM-2026';
-  const intHash      = transcript.integrityHash || '';
-  const qrUrl        = transcript.qrCodeDataUrl || `https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://iumorave-ac.org/verify?code=${verifCode}`;
-  const dateStr      = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
-
-  // Mention badge
-  let mentionBadge = 'MENTION BIEN';
-  if (/TR[ÈE]S\s+BIEN/i.test(decision)) mentionBadge = 'MENTION TRÈS BIEN (B)';
-  else if (/EXCELLENT/i.test(decision)) mentionBadge = 'MENTION EXCELLENT (A)';
-  else if (/BIEN/i.test(decision)) mentionBadge = 'MENTION BIEN (C)';
-  else if (/SATISFACTION/i.test(decision)) mentionBadge = 'MENTION SATISFACTION (D)';
-  else if (/PASSABLE/i.test(decision)) mentionBadge = 'MENTION PASSABLE (E)';
-
-  const decisionMain = 'ADMIS';
-
-  // Render Page 1 (S1 + S2) and Page 2 (S3 + S4)
-  const isMultiSemester = semNumbers.length > 2;
-  const page1Blocks = isMultiSemester ? (renderSemesterBlock(1) + renderSemesterBlock(2)) : semNumbers.map(s => renderSemesterBlock(s)).join('');
-  const page2Blocks = isMultiSemester ? (renderSemesterBlock(3) + renderSemesterBlock(4)) : '';
 
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Relevé de Cotes Officiel — IUM-MORAVE</title>
+  <title>Relevé Officiel des Cotes — IUM-MORAVE</title>
   <style>
-    @page { size: A4 portrait; margin: 10mm 12mm 8mm 12mm; }
+    @page { size: A4 portrait; margin: 12mm 15mm 10mm 15mm; }
     *, *::before, *::after { box-sizing: border-box; }
-    body { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; color: #111827; margin: 0; padding: 0; line-height: 1.3; }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9.5pt;
+      color: #000000;
+      margin: 0;
+      padding: 0;
+      line-height: 1.25;
+      background: #ffffff;
+    }
 
-    /* PAGE BREAK */
     .page-break { page-break-after: always; }
 
-    /* HEADER */
-    .page-header { display: flex; align-items: center; border-bottom: 2pt solid #0c2461; padding-bottom: 5px; margin-bottom: 6px; }
-    .logo-box { width: 55px; min-width: 55px; margin-right: 8px; display: flex; align-items: center; justify-content: center; }
-    .logo-circle { width: 50px; height: 50px; border-radius: 50%; border: 2pt solid #0c2461; display: flex; align-items: center; justify-content: center; background: #eef2ff; font-weight: 900; font-size: 7.5pt; color: #0c2461; text-align: center; line-height: 1.1; }
-    .header-center { flex: 1; text-align: center; }
-    .hdr-republic { font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #374151; }
-    .hdr-ministry { font-size: 6pt; color: #6b7280; margin-bottom: 1px; }
-    .hdr-univ { font-size: 12.5pt; font-weight: 900; color: #0c2461; text-transform: uppercase; letter-spacing: 0.06em; margin: 1px 0; }
-    .hdr-faculty { font-size: 8.5pt; font-weight: 700; color: #1e40af; }
-    .hdr-agrement { font-size: 5.5pt; color: #6b7280; font-style: italic; }
-    .seal-box { width: 55px; min-width: 55px; margin-left: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .seal-circle { width: 48px; height: 48px; border-radius: 50%; border: 1.2pt dashed #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 5.5pt; color: #9ca3af; text-align: center; font-style: italic; }
+    .annual-sheet {
+      position: relative;
+      width: 100%;
+      min-height: 270mm;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    /* TITLE */
-    .doc-title-strip { background: #0c2461; color: #fff; text-align: center; padding: 4px 0 3px 0; margin-bottom: 6px; border-radius: 2px; }
-    .doc-title-strip h1 { font-size: 10.5pt; font-weight: 900; letter-spacing: 0.1em; margin: 0; text-transform: uppercase; }
-    .doc-title-strip .doc-ref { font-size: 6.5pt; letter-spacing: 0.06em; opacity: 0.85; margin-top: 1px; }
+    /* EN-TÊTE */
+    .hdr-tbl { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    .hdr-rep { font-size: 11pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; }
+    .hdr-univ { font-size: 11.5pt; font-weight: bold; text-transform: uppercase; margin: 1px 0; }
+    .hdr-fac { font-size: 10pt; font-weight: bold; text-transform: uppercase; }
+    .hdr-bp { font-size: 9pt; font-weight: bold; }
+    .hdr-city { font-size: 9.5pt; font-weight: bold; text-transform: uppercase; }
 
-    /* STUDENT CARD */
-    .student-card { border: 1pt solid #d1d5db; border-radius: 3px; padding: 4px 8px; margin-bottom: 6px; background: #f9fafb; }
-    .info-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2px 12px; }
-    .info-item { font-size: 7.8pt; }
-    .info-item .lbl { font-weight: 700; color: #374151; }
-    .info-item.full { grid-column: 1 / -1; }
+    .photo-box {
+      width: 25mm;
+      height: 30mm;
+      border: 1pt solid #4b5563;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 6.5pt;
+      color: #6b7280;
+      margin-left: auto;
+      background: #f9fafb;
+    }
 
-    /* SEMESTER BLOCKS */
-    .sem-block { margin-bottom: 6px; }
-    .sem-header { background: #1e40af; color: #fff; display: flex; align-items: center; padding: 2.5px 6px; border-radius: 2px 2px 0 0; }
-    .sem-year { font-size: 7pt; font-weight: 700; background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 2px; margin-right: 6px; white-space: nowrap; }
-    .sem-name { font-size: 8pt; font-weight: 700; flex: 1; letter-spacing: 0.03em; }
-    .sem-ects { font-size: 6.8pt; opacity: 0.9; white-space: nowrap; }
+    /* TITRE */
+    .doc-title-block { text-align: center; margin: 10px 0 8px 0; }
+    .doc-title {
+      font-size: 13pt;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
-    /* GRADES TABLE */
-    .grades-table { width: 100%; border-collapse: collapse; font-size: 7.4pt; border: 1pt solid #93c5fd; }
-    .grades-table thead tr { background: #dbeafe; color: #1e3a8a; }
-    .grades-table thead th { border: 0.5pt solid #93c5fd; padding: 2.5px 3px; font-weight: 700; text-align: center; font-size: 6.5pt; line-height: 1.2; }
-    .grades-table tbody td { border: 0.5pt solid #e5e7eb; padding: 2px 3px; vertical-align: middle; }
-    .grades-table tbody tr:nth-child(even) { background: #f0f9ff; }
-    .grades-table tfoot td { border: 0.5pt solid #93c5fd; padding: 2.5px 3px; }
+    /* INTRO PARAGRAPH */
+    .intro-paragraph {
+      font-size: 9pt;
+      text-align: justify;
+      margin: 0 0 10px 0;
+      line-height: 1.35;
+    }
+
+    /* TABLEAU DES COTES */
+    .cotes-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      border: 1pt solid #000000;
+      margin-bottom: 8px;
+      background: transparent;
+      position: relative;
+      z-index: 1;
+    }
+    .cotes-table th {
+      border: 0.8pt solid #000000;
+      padding: 3px 2px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 8pt;
+      text-transform: uppercase;
+    }
+    .cotes-table td {
+      border: 0.6pt solid #000000;
+      padding: 2.8px 4px;
+      vertical-align: middle;
+    }
     .tc { text-align: center; }
     .tl { text-align: left; }
-    .fw { font-weight: 700; }
-    .ue-code { font-family: 'Courier New', monospace; font-size: 6.5pt; color: #1e40af; background: #eff6ff; padding: 0 2px; border-radius: 2px; font-weight: 700; }
-    .score { color: #1e40af; font-size: 7.8pt; }
-    .pts { color: #374151; }
-    .avg-cell { color: #0c2461; font-size: 8pt; }
-    .sem-total td { font-size: 7.8pt; font-weight: 700; background: #bfdbfe !important; }
+    .fw { font-weight: bold; }
 
-    /* RECAP */
-    .recap-section { margin-top: 6px; margin-bottom: 6px; }
-    .recap-section h3 { font-size: 7.8pt; font-weight: 700; color: #0c2461; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 3px 0; border-bottom: 1pt solid #0c2461; padding-bottom: 2px; }
-    .recap-grid { display: flex; gap: 8px; align-items: stretch; }
-    .recap-table { border-collapse: collapse; font-size: 7.5pt; border: 1pt solid #6b7280; flex: 1.2; }
-    .recap-table th { background: #0c2461; color: #fff; border: 0.5pt solid #374151; padding: 2.5px 6px; font-weight: 700; text-align: center; font-size: 6.8pt; }
-    .recap-table td { border: 0.5pt solid #d1d5db; padding: 2px 6px; text-align: center; }
-    .recap-table tfoot td { background: #0c2461; color: #fff; font-weight: 700; font-size: 8.5pt; }
-    .decision-box { border: 1.5pt solid #166534; border-radius: 3px; background: #f0fdf4; padding: 6px 8px; flex: 1; min-width: 160px; display: flex; flex-direction: column; justify-content: center; }
-    .decision-box .dlbl { font-size: 6.5pt; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.05em; }
-    .decision-box .dval { font-size: 10pt; font-weight: 900; color: #15803d; margin: 2px 0; }
-    .mention-badge { display: inline-block; background: #166534; color: #fff; padding: 2px 8px; border-radius: 2px; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.03em; }
+    /* DÉLIBÉRATION */
+    .deliberation-block {
+      margin: 8px 0 6px 120px;
+      font-size: 9.5pt;
+      position: relative;
+      z-index: 1;
+    }
+    .delib-tbl { border-collapse: collapse; }
+    .delib-tbl td { padding: 1.5px 0; }
+    .delib-lbl { font-weight: normal; white-space: nowrap; width: 220px; }
+    .delib-dots { color: #000000; font-weight: normal; padding: 0 4px; }
+    .delib-val { white-space: nowrap; padding-left: 6px; }
 
-    /* SIGNATURES */
-    .signatures-section { display: flex; justify-content: space-between; margin-top: 8px; margin-bottom: 6px; }
-    .sig-block { width: 47%; text-align: center; font-size: 7.5pt; }
-    .sig-block .sig-title { font-weight: 700; text-decoration: underline; margin-bottom: 1px; color: #0c2461; font-size: 7.5pt; }
-    .sig-block .sig-role { color: #6b7280; font-style: italic; font-size: 6.8pt; }
-    .sig-line { border-bottom: 1pt solid #374151; width: 75%; margin: 14px auto 4px auto; }
-    .sig-block .sig-name { font-weight: 700; font-size: 8pt; color: #0c2461; }
+    /* DATE & SIGNATURES */
+    .date-line {
+      text-align: center;
+      font-size: 9.5pt;
+      margin: 12px 0 6px 0;
+    }
+    .signatures-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 9pt;
+      position: relative;
+      z-index: 1;
+    }
+    .sig-title { font-weight: normal; font-size: 9pt; margin-bottom: 2px; }
+    .sig-space { height: 42px; position: relative; }
+    .sig-name { font-weight: bold; font-size: 9.5pt; }
 
-    /* SECURITY FOOTER */
-    .security-strip { border-top: 1pt solid #d1d5db; padding-top: 4px; margin-top: 4px; display: flex; align-items: center; gap: 8px; }
-    .security-text { flex: 1; font-size: 6pt; color: #6b7280; line-height: 1.4; }
-    .security-text strong { color: #374151; font-size: 6.5pt; }
-    .security-text code { font-family: 'Courier New', monospace; font-size: 5.5pt; word-break: break-all; color: #374151; }
-    .verify-url { font-size: 6.2pt; font-weight: 700; color: #1e40af; }
-    .qr-block { text-align: center; flex-shrink: 0; }
-    .qr-block img { width: 62px; height: 62px; display: block; border: 0.5pt solid #d1d5db; }
-    .qr-block .qr-label { font-size: 5pt; color: #9ca3af; margin-top: 1px; }
+    /* BAS DE PAGE */
+    .footer-block {
+      margin-top: 14px;
+      border-top: 0.5pt solid #9ca3af;
+      padding-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .footer-legal {
+      font-size: 6.8pt;
+      color: #374151;
+      line-height: 1.25;
+      font-style: italic;
+      margin-bottom: 3px;
+    }
+    .footer-security {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 6.5pt;
+      color: #4b5563;
+      border-top: 0.5pt dashed #d1d5db;
+      padding-top: 3px;
+    }
+    .footer-security code {
+      font-family: monospace;
+      font-size: 5.8pt;
+      color: #111827;
+    }
+    .qr-mini img {
+      width: 44px;
+      height: 44px;
+      display: block;
+      border: 0.5pt solid #d1d5db;
+    }
   </style>
 </head>
 <body>
-
-  <!-- ════════════════════ PAGE 1 : MASTER 1 (S1 + S2) ════════════════════ -->
-  <div class="page-header">
-    <div class="logo-box">
-      <div class="logo-circle">IUM<br/>MORAVE</div>
-    </div>
-    <div class="header-center">
-      <div class="hdr-republic">République Démocratique du Congo</div>
-      <div class="hdr-ministry">Ministère de l'Enseignement Supérieur et Universitaire (ESU)</div>
-      <div class="hdr-univ">Institut Universitaire Morave Willsamal</div>
-      <div class="hdr-faculty">${facultyName.toUpperCase()}</div>
-      <div class="hdr-agrement">Agrément ESU N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 &nbsp;|&nbsp; B.P. 126 — Mwene-Ditu, Province de Lomami</div>
-    </div>
-    <div class="seal-box">
-      <div class="seal-circle">Sceau<br/>Officiel<br/>Homologué</div>
-    </div>
-  </div>
-
-  <div class="doc-title-strip">
-    <h1>RELEVÉ DE COTES OFFICIEL</h1>
-    <div class="doc-ref">N° IUM / FST / ${verifCode} &nbsp;—&nbsp; PAGE 1 / ${isMultiSemester ? '2' : '1'}</div>
-  </div>
-
-  <div class="student-card">
-    <div class="info-grid">
-      <div class="info-item"><span class="lbl">Nom &amp; Prénom(s) : </span><span>${studentName}</span></div>
-      <div class="info-item"><span class="lbl">Matricule : </span><span style="font-family:'Courier New',monospace; font-weight:700;">${matricule}</span></div>
-      <div class="info-item full"><span class="lbl">Programme &amp; Filière : </span><span>${programTitle}</span></div>
-      <div class="info-item"><span class="lbl">Niveau d'Études : </span><span>${programLevel}</span></div>
-      <div class="info-item"><span class="lbl">Années Académiques : </span><span>${academicYear}</span></div>
-    </div>
-  </div>
-
-  ${page1Blocks}
-
-  ${isMultiSemester ? `
-  <div style="text-align:right; font-size:6.5pt; color:#6b7280; font-style:italic; margin-top:4px;">
-    Suite du cursus Master 2 et délibération finale en page 2 ➔
-  </div>
-  </div><!-- end page 1 -->
-
-  <div class="page-break"></div>
-
-  <!-- ════════════════════ PAGE 2 : MASTER 2 (S3 + S4) + RECAP ════════════════════ -->
-  <div class="page-header">
-    <div class="logo-box">
-      <div class="logo-circle">IUM<br/>MORAVE</div>
-    </div>
-    <div class="header-center">
-      <div class="hdr-republic">République Démocratique du Congo &nbsp;|&nbsp; Ministère de l'ESU</div>
-      <div class="hdr-univ" style="font-size:11pt;">Institut Universitaire Morave Willsamal</div>
-      <div class="hdr-faculty" style="font-size:7.8pt;">${facultyName.toUpperCase()} &nbsp;—&nbsp; RELEVÉ DE COTES OFFICIEL (PAGE 2 / 2)</div>
-    </div>
-    <div class="seal-box">
-      <div class="seal-circle">Sceau<br/>Officiel</div>
-    </div>
-  </div>
-
-  <div class="student-card" style="padding:2px 6px; margin-bottom:4px; font-size:7.2pt;">
-    <strong>Étudiant :</strong> ${studentName} &nbsp;|&nbsp; <strong>Matricule :</strong> ${matricule} &nbsp;|&nbsp; <strong>Programme :</strong> ${programTitle}
-  </div>
-
-  ${page2Blocks}
-
-  <!-- RÉCAPITULATIF GÉNÉRAL -->
-  <div class="recap-section">
-    <h3>Synthèse de Délibération du Cycle Master (120 Crédits ECTS)</h3>
-    <div class="recap-grid">
-      <table class="recap-table">
-        <thead>
-          <tr>
-            <th>Semestre</th>
-            <th>Crédits</th>
-            <th>Points pond.</th>
-            <th>Moyenne / 20</th>
-          </tr>
-        </thead>
-        <tbody>${recapRows}</tbody>
-        <tfoot>
-          <tr>
-            <td style="text-align:right; font-weight:700;">TOTAL MASTER</td>
-            <td>${globalTotalCredits} ECTS</td>
-            <td>${globalTotalPoints.toFixed(1)}</td>
-            <td>${globalAvg} / 20</td>
-          </tr>
-        </tfoot>
-      </table>
-
-      <div class="decision-box">
-        <div class="dlbl">Décision Finale du Jury :</div>
-        <div class="dval">${decisionMain}</div>
-        <div><span class="mention-badge">${mentionBadge}</span></div>
-        <div style="margin-top:4px; font-size:6.8pt; color:#374151;">
-          Moyenne générale : <strong>${globalAvg} / 20</strong><br/>
-          Crédits validés : <strong>${globalTotalCredits} / 120 ECTS</strong>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SIGNATURES OFFICIELLES -->
-  <div class="signatures-section">
-    <div class="sig-block">
-      <div class="sig-title">Pour le Secrétariat du Jury</div>
-      <div class="sig-role">Le Secrétaire Académique</div>
-      <div class="sig-line"></div>
-      <div class="sig-name">Ir. Chef de Travaux / Secrétaire</div>
-    </div>
-    <div class="sig-block">
-      <div class="sig-title">Fait à Mwene-Ditu, le ${dateStr}</div>
-      <div class="sig-role">Le Doyen de la Faculté</div>
-      <div class="sig-line"></div>
-      <div class="sig-name">Prof. Dr. Doyen de la Faculté</div>
-    </div>
-  </div>
-
-  <!-- PIED DE PAGE SÉCURITÉ -->
-  <div class="security-strip">
-    <div class="security-text">
-      <strong>AUTHENTIFICATION &amp; INTÉGRITÉ CRYPTOGRAPHIQUE — IUM-MORAVE VERIFY</strong><br/>
-      Watermark HMAC : <code>${watermark}</code><br/>
-      Hash d'intégrité (SHA-256) : <code>${intHash}</code><br/>
-      Vérifiable sur : <span class="verify-url">https://iumorave-ac.org/verify?code=${verifCode}</span>
-    </div>
-    <div class="qr-block">
-      <img src="${qrUrl}" alt="QR Code de vérification" />
-      <div class="qr-label">Scannez pour vérifier</div>
-    </div>
-  </div>
-  ` : ''}
-
+  ${sheetsHtml}
 </body>
 </html>`;
 }
 
-
+// ═══════════════════════════════════════════════════════════════════════════
+//  DIPLÔME — HTML TEMPLATE
+// ═══════════════════════════════════════════════════════════════════════════
 function diplomaToHtml(diploma) {
   const qrDataUrl = diploma.qrCodeDataUrl || '';
-  const watermark = createWatermark({ documentType: 'diploma', studentName: diploma.studentName, matricule: diploma.matricule, documentType: 'diploma' });
+  const watermark = createWatermark({ documentType: 'diploma', studentName: diploma.studentName, matricule: diploma.matricule });
   const timestamp = createTimestamp({ verificationCode: diploma.verificationCode, documentType: 'diploma' });
   const documentSignature = signPdfMeta({ documentType: 'diploma', verificationCode: diploma.verificationCode, integrityHash: diploma.diplomaNumber });
 
@@ -406,9 +530,9 @@ function diplomaToHtml(diploma) {
       <title>Diplôme — ${diploma.diplomaNumber}</title>
       <style>
         @page { size: A4; margin: 2cm; }
-        body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; color: #0f2340; }
-        .header { text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #f5b914; padding-bottom: 1rem; }
-        .header h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #071e38; }
+        body { font-family: 'Times New Roman', Times, serif; color: #0f2340; }
+        .header { text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #0c2461; padding-bottom: 1rem; }
+        .header h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #0c2461; }
         .header .subtitle { color: #64748b; font-size: 0.95rem; }
         .content { margin-top: 2rem; }
         .field { margin-bottom: 1rem; }
@@ -417,14 +541,14 @@ function diplomaToHtml(diploma) {
         .footer { margin-top: 3rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; font-size: 0.8rem; color: #64748b; display: flex; justify-content: space-between; }
         .qr { margin-top: 1rem; text-align: right; }
         .qr img { width: 140px; height: 140px; }
-        .seal { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #f5b914; display: inline-flex; align-items: center; justify-content: center; color: #f5b914; font-weight: 900; font-size: 0.7rem; text-align: center; margin-top: 0.5rem; }
+        .seal { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #0c2461; display: inline-flex; align-items: center; justify-content: center; color: #0c2461; font-weight: 900; font-size: 0.7rem; text-align: center; margin-top: 0.5rem; }
         .security { margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: 0.5rem; font-size: 0.75rem; color: #475569; }
       </style>
     </head>
     <body>
       <div class="header">
         <h1>Diplôme Officiel</h1>
-        <div class="subtitle">Institut Universitaire Morave de Mwene-Ditu — ${diploma.academicYear}</div>
+        <div class="subtitle">Institut Universitaire Morave Willsamal de Mwene-Ditu — ${diploma.academicYear}</div>
       </div>
 
       <div class="content">
