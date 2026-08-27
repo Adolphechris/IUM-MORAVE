@@ -33,11 +33,12 @@ type Track = {
 const apiUrl = process.env.NEXT_PUBLIC_CORE_API_URL || 'http://localhost:4002';
 
 const stats = [
-  { value: '8', label: 'Facultés Organisées' },
-  { value: '2018', label: 'Année d\'Agrément Officiel ESU' },
-  { value: 'LMD', label: 'Système Licence • Master • Doctorat' },
-  { value: 'Mwene-Ditu', label: 'Campus Principal (Lomami, RDC)' },
+  { value: '12+', label: 'Facultés & départements' },
+  { value: '3 000+', label: 'Étudiants inscrits' },
+  { value: '40+', label: 'Programmes LMD' },
+  { value: '2018', label: 'Agrément Officiel ESU' },
 ];
+
 
 
 const campusShowcase = [
