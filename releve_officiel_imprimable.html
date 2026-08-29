@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Relevé Officiel des Cotes — IUM-MORAVE</title>
+  <style>
+    @page { size: A4 portrait; margin: 10mm 12mm 10mm 12mm; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Times New Roman', Times, serif; background: #334155; margin: 0; padding: 20px 0; color: #000; }
+    
+    .btn-bar {
+      width: 210mm; margin: 0 auto 15px; display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 20px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: sans-serif;
+    }
+    .btn-bar span { color: #fff; font-weight: bold; font-size: 14px; }
+    .print-btn { background: #16a34a; color: #fff; border: none; padding: 8px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; }
+    
+    .sheet-a4 {
+      position: relative; width: 210mm; min-height: 297mm; background: #ffffff; padding: 14mm 16mm 12mm 16mm; margin: 0 auto; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.35); color: #000000; font-size: 9.5pt; line-height: 1.25; overflow: hidden;
+    }
+
+    /* FILIGRANE CENTRAL : Vrai blason détouré gris au coeur de la page */
+    .watermark-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.15;
+    }
+    .watermark-img {
+      width: 420px;
+      height: auto;
+      display: block;
+      filter: grayscale(100%);
+    }
+
+    /* DEVISE FILIGRANÉE EN BAS (Modèle officiel UNILU Page 4) */
+    .watermark-arc {
+      position: absolute;
+      bottom: 75px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.16;
+      font-style: italic;
+      font-size: 26pt;
+      color: #333333;
+      white-space: nowrap;
+      letter-spacing: 0.06em;
+      font-family: 'Times New Roman', serif;
+    }
+
+    .hdr-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; position: relative; z-index: 1; }
+    .hdr-rep  { font-size: 11.5pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; }
+    .hdr-univ { font-size: 12pt;   font-weight: bold; text-transform: uppercase; margin: 2px 0; }
+    .hdr-fac  { font-size: 10.5pt; font-weight: bold; text-transform: uppercase; }
+    .hdr-sub  { font-size: 9.5pt;  font-weight: bold; margin-top: 2px; }
+
+    .doc-title { text-align: center; margin: 12px 0 10px; font-size: 13.5pt; font-weight: bold; letter-spacing: 0.05em; text-transform: uppercase; position: relative; z-index: 1; }
+    .intro-txt { font-size: 9.5pt; text-align: justify; margin: 0 0 12px; line-height: 1.45; position: relative; z-index: 1; }
+
+    .cotes-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1.2pt solid #000; margin-bottom: 10px; background: transparent; position: relative; z-index: 1; }
+    .cotes-table th { border: 0.8pt solid #000; padding: 4px 2px; font-weight: bold; text-align: center; font-size: 8pt; text-transform: uppercase; background: transparent; }
+    .cotes-table td { border: 0.6pt solid #000; padding: 3.5px 5px; vertical-align: middle; }
+
+    .delib-block { margin: 12px 0 10px 50px; font-size: 9.5pt; position: relative; z-index: 1; }
+    .delib-lbl { width: 240px; white-space: nowrap; padding: 2px 0; }
+    .delib-dots { color: #000; padding: 0 4px; }
+    .delib-val { padding-left: 6px; white-space: nowrap; }
+
+    .date-line { text-align: center; font-size: 9.5pt; margin: 16px 0 10px; position: relative; z-index: 1; }
+    
+    .sig-table { width: 100%; border-collapse: collapse; position: relative; z-index: 1; margin-top: 4px; }
+    .sig-cell { width: 50%; text-align: center; vertical-align: top; padding: 0 8px; }
+    .sig-title { font-size: 9.5pt; margin-bottom: 4px; }
+    .sig-space { height: 50px; }
+    .seal-circle { width: 80px; height: 80px; border: 1.5pt dashed #b0b0b0; border-radius: 50%; margin: 4px auto 6px; display: block; }
+    .sig-name { font-weight: bold; font-size: 9.5pt; }
+    .sig-grade { font-size: 8.5pt; margin-top: 2px; }
+
+    .footer-block { margin-top: 22px; border-top: 0.5pt solid #9ca3af; paddingTop: 5px; position: relative; z-index: 1; }
+    .footer-legend { font-size: 6.8pt; color: #374151; font-style: italic; margin-bottom: 4px; line-height: 1.35; }
+
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .sheet-a4 { box-shadow: none !important; margin: 0 !important; width: 100% !important; padding: 14mm 16mm 12mm 16mm !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print btn-bar">
+    <span>Relevé Officiel des Cotes — IUM-MORAVE (Master 2 ISI)</span>
+    <button onclick="window.print()" class="print-btn">🖨️ Imprimer / Exporter PDF</button>
+  </div>
+
+  <div class="sheet-a4">
+
+    <!-- FILIGRANE CENTRAL : Vrai blason institutionnel en niveau de gris sans fond photo -->
+    <div class="watermark-bg">
+      <img src="apps/web/public/images/logo-crest.jpg" alt="" class="watermark-img" />
+    </div>
+
+    <!-- Devise filigranée en arc de cercle en bas (modèle officiel UNILU Page 4) -->
+    <div class="watermark-arc">Scientia splendet et conscientia</div>
+
+    <!-- 1. EN-TÊTE OFFICIEL -->
+    <table class="hdr-table">
+      <tbody>
+        <tr>
+          <td style="width: 18%; text-align: left; vertical-align: middle;">
+            <!-- Vrai Blason Institutionnel IUM-MORAVE -->
+            <img src="apps/web/public/images/logo-crest.jpg" alt="Blason IUM-MORAVE" style="width: 76px; height: auto; display: block;" />
+          </td>
+          <td style="width: 82%; text-align: center; vertical-align: top;">
+            <div class="hdr-rep">REPUBLIQUE DEMOCRATIQUE DU CONGO</div>
+            <div class="hdr-univ">INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</div>
+            <div class="hdr-fac">FACULTE DES SCIENCES ET TECHNOLOGIES</div>
+            <div class="hdr-sub">B.P. 126 — MWENE-DITU</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2. TITRE DU DOCUMENT -->
+    <div class="doc-title">RELEVÉ DES COTES N° <u>&nbsp;IUM-2027-M2-ISI-088/2026&nbsp;</u></div>
+
+    <!-- 3. PARAGRAPHE INTRODUCTIF OFFICIEL (Modèle Page 4 UNILU) -->
+    <p class="intro-txt">
+      Monsieur/Mademoiselle <strong>MUKENDI KALONJI ADOLPHE</strong>, né(e) à <em>Mwene-Ditu</em>, le <em>18 juillet 1992</em>, a obtenu, à l'issue de la <strong>Première session</strong> de l'année académique <strong>2027-2028</strong> aux examens portant sur les matières prévues au programme de <strong>Deuxième Master en Ingénierie Sécurité Informatique</strong> à la <strong>Faculté des Sciences et Technologies</strong>, les cotes ci-dessous :
+    </p>
+
+    <!-- 4. TABLEAU OFFICIEL DES COTES (Strictement conforme Page 4 UNILU) -->
+    <table class="cotes-table">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width: 4%">N°</th>
+          <th rowspan="2" style="width: 50%">MATIERES SUIVIES</th>
+          <th colspan="2" style="width: 28%">VOLUME HORAIRE</th>
+          <th rowspan="2" style="width: 8%">CREDITS</th>
+          <th rowspan="2" style="width: 10%">COTES<br>OBTENUES<br>.../20</th>
+        </tr>
+        <tr>
+          <th style="width: 12%">COURS</th>
+          <th style="width: 16%">T.D. + T.P. + T.P.E.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="text-align:center">1.</td><td>Développement de logiciels cryptographiques</td><td style="text-align:center">40</td><td style="text-align:center">15+25+70</td><td style="text-align:center">4</td><td style="text-align:center; font-weight:bold">16</td></tr>
+        <tr><td style="text-align:center">2.</td><td>Cryptologie avancée</td><td style="text-align:center">50</td><td style="text-align:center">20+30+100</td><td style="text-align:center">6</td><td style="text-align:center; font-weight:bold">17</td></tr>
+        <tr><td style="text-align:center">3.</td><td>Programmation réseaux</td><td style="text-align:center">50</td><td style="text-align:center">20+30+100</td><td style="text-align:center">6</td><td style="text-align:center; font-weight:bold">15</td></tr>
+        <tr><td style="text-align:center">4.</td><td>Méthodes et techniques de rédaction scientifique</td><td style="text-align:center">40</td><td style="text-align:center">15+25+70</td><td style="text-align:center">4</td><td style="text-align:center; font-weight:bold">16</td></tr>
+        <tr><td style="text-align:center">5.</td><td>Détection des intrusions et réponses aux incidents</td><td style="text-align:center">45</td><td style="text-align:center">20+20+85</td><td style="text-align:center">5</td><td style="text-align:center; font-weight:bold">17</td></tr>
+        <tr><td style="text-align:center">6.</td><td>Interconnexion et routage dynamique</td><td style="text-align:center">45</td><td style="text-align:center">20+20+85</td><td style="text-align:center">5</td><td style="text-align:center; font-weight:bold">15</td></tr>
+        <tr><td style="text-align:center">7.</td><td>Contrôle d'accès et extraction d'information</td><td style="text-align:center">30</td><td style="text-align:center">10+15+50</td><td style="text-align:center">3</td><td style="text-align:center; font-weight:bold">16</td></tr>
+        <tr><td style="text-align:center">8.</td><td>Audit et plan de la sécurité informatique</td><td style="text-align:center">20</td><td style="text-align:center">10+10+30</td><td style="text-align:center">2</td><td style="text-align:center; font-weight:bold">17</td></tr>
+        <tr><td style="text-align:center">9.</td><td>Sécurité des services en ligne</td><td style="text-align:center">30</td><td style="text-align:center">10+15+50</td><td style="text-align:center">3</td><td style="text-align:center; font-weight:bold">15</td></tr>
+        <tr><td style="text-align:center">10.</td><td>Entrepreneuriat-2</td><td style="text-align:center">20</td><td style="text-align:center">10+10+30</td><td style="text-align:center">2</td><td style="text-align:center; font-weight:bold">16</td></tr>
+        <tr><td style="text-align:center">11.</td><td>Stage académique en entreprise / laboratoire</td><td style="text-align:center">0</td><td style="text-align:center">00+150+100</td><td style="text-align:center">10</td><td style="text-align:center; font-weight:bold">18</td></tr>
+        <tr><td style="text-align:center">12.</td><td>Projet tutoré & Soutenance du Mémoire de Master</td><td style="text-align:center">0</td><td style="text-align:center">00+150+100</td><td style="text-align:center">10</td><td style="text-align:center; font-weight:bold">18</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 5. SYNTHÈSE & DÉLIBÉRATION -->
+    <div class="delib-block">
+      <table style="border-collapse: collapse;">
+        <tbody>
+          <tr>
+            <td class="delib-lbl">Pourcentage pondéré</td>
+            <td class="delib-dots">...............................................................................</td>
+            <td class="delib-val"><strong>83,25 %</strong></td>
+          </tr>
+          <tr>
+            <td class="delib-lbl">Crédits validés</td>
+            <td class="delib-dots">...............................................................................</td>
+            <td class="delib-val"><strong>60 / 60</strong></td>
+          </tr>
+          <tr>
+            <td class="delib-lbl">Décision du jury</td>
+            <td class="delib-dots">...............................................................................</td>
+            <td class="delib-val"><strong>TRÈS BIEN (GRANDE DISTINCTION)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. DATE ET SIGNATURES -->
+    <div class="date-line">Fait à Mwene-Ditu, le 27 août 2026</div>
+
+    <table class="sig-table">
+      <tbody>
+        <tr>
+          <td class="sig-cell">
+            <div class="sig-title">Le Secrétaire Académique de la Faculté</div>
+            <div class="sig-space"></div>
+            <div class="seal-circle"></div>
+            <div class="sig-name"><u>Ir. Mbuyi Kizito Justin</u></div>
+            <div class="sig-grade">Chef de Travaux — Secrétaire Académique</div>
+          </td>
+          <td class="sig-cell">
+            <div class="sig-title">Le Doyen de la Faculté</div>
+            <div class="sig-space"></div>
+            <div class="seal-circle"></div>
+            <div class="sig-name"><u>Prof. Dr. Doyen de la Faculté</u></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 7. PIED DE PAGE (Texte légal conforme Page 4 UNILU) -->
+    <div class="footer-block">
+      <div class="footer-legend">
+        * Ce document n'a aucune valeur administrative ; il est strictement réservé à un usage interne, EX : Excellent, TB : Très Bien, D : Distinction, S : Satisfaction, AJ : Ajourné(e).
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 0.5pt dashed #d1d5db; padding-top: 4px; margin-top: 2px;">
+        <div style="font-size: 6.5pt; color: #4b5563; line-height: 1.35;">
+          <div>Agrément Ministériel N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 — Institut Universitaire Morave Willsamal — B.P. 126, Mwene-Ditu</div>
+          <div style="font-size: 6pt; color: #6b7280; margin-top: 1px;">
+            Réf : <code>IUM-2027-M2-ISI-088/2026</code> | SHA-256 : <code style="font-size: 5.5pt;">6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba</code>
+          </div>
+        </div>
+        <div>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://iumorave-ac.org/verify?code=IUM-2027-M2-ISI-088/2026" alt="" style="width: 32px; height: 32px; display: block; opacity: 0.85;" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

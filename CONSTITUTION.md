@@ -13,19 +13,33 @@ IUM-MORAVE est une plateforme critique de gestion universitaire et d'enseignemen
 ### Article 2 : Intégrité Académique & Zéro Perte
 Toute opération touchant aux notes, crédits LMD (Licence, Master, Doctorat), réinscriptions, diplômes ou transactions financières doit être atomique, auditée et sécurisée. Aucune suppression destructive de données financières ou académiques n'est autorisée (principe d'immutabilité et d'archivage).
 
+### Article 2.1 : Primauté des Maquettes Pédagogiques & Sécurité Académique Obligatoire
+Toute évolution du système touchant aux cours, crédits ECTS, calculs de moyenne, relevés des côtes ou diplômes doit STRICTEMENT se conformer aux documents de référence fondamentaux du dépôt :
+1. 🏛️ **[Témoin Officiel : Relevé des Cotes UNILU Page 4](file:///home/adolphe/IUM-MORAVE/docs/references/modele_releve_unilu_page4_temoin.md)** : Échantillon témoin national de référence pour la mise en page, les rubriques horaires, la délibération et les signatures.
+2. 📘 **[Maquette Nationale ESU — Master ISI LMD](file:///home/adolphe/IUM-MORAVE/docs/curriculum-master-isi-lmd.md)**
+3. 🔒 **[Sécurité & Validation des Relevés](file:///home/adolphe/IUM-MORAVE/docs/TRANSCRIPT_SECURITY.md)**
+4. 🗃️ **[Modèle de Données LMD](file:///home/adolphe/IUM-MORAVE/docs/MODELE_DE_DONNEES_LMD.md)**
+
+Aucune modification de la logique d'évaluation, du barème des mentions ou de la mise en page officielle des relevés ne peut être effectuée sans consulter et maintenir à jour ces documents de cadrage.
+
 ---
 
 ## 🏗️ TITRE II : ARCHITECTURE & STRUCTURE DU DÉPÔT
 ### Article 3 : Règle du Dépôt Unique (Monorepo)
-Afin d'éviter tout éparpillement et perte de contexte, l'intégralité de la plateforme réside dans le dépôt unique `IUM-MORAVE`. La structure est strictement sectorisée comme suit :
+Afin d'éviter tout éparpillement et perte de contexte, l'intégralité de la plateforme réside dans le dépôt unique `IUM-MORAVE`. La structure est strictly sectorisée comme suit :
 ```
 IUM-MORAVE/
 ├── CONSTITUTION.md          # La présente loi fondamentale
 ├── TODO.md                  # Tracker master & feuille de route active
 ├── README.md                # Vue d'ensemble du système
-├── docs/                    # Spécifications, schémas DB & workflows
+├── .gemini/rules/           # Consignes permanentes IA & gouvernance
+├── docs/                    # Spécifications, maquettes ESU, schémas DB
+│   ├── references/          # Documents témoins & échantillons officiels (UNILU Page 4)
+│   ├── curriculum-master-isi-lmd.md # Maquette pédagogique Master ISI LMD
+│   ├── TRANSCRIPT_SECURITY.md       # Sécurité & validation des relevés
+│   └── MODELE_DE_DONNEES_LMD.md     # Schéma relationnel LMD
 ├── apps/                    # Applications & Interfaces Utilisateur (Portail, Espaces)
-│   ├── web-portal/          # Portail vitrine & public
+│   ├── web/                 # Portail vitrine & public
 │   ├── student-space/       # Espace Étudiants (Notes, Inscriptions, EDT)
 │   ├── teacher-space/       # Espace Enseignants (Saisie des notes, Cours)
 │   └── admin-dashboard/     # Espace Direction, Scolarité & RH
@@ -56,11 +70,12 @@ Un étudiant ne peut **jamais** accéder aux données d'un autre étudiant. Les 
 ---
 
 ## 🎨 TITRE IV : ESTHÉTIQUE & EXPÉRIENCE UTILISATEUR (UX/UI)
-### Article 7 : Exigence d'Esthétique Supérieure
+### Article 7 : Exigence d'Esthétique Supérieure & Documents Officiels
 Conformément aux directives de design du projet :
 - L'interface doit offrir un visuel **haut de gamme, moderne et dynamique** (thèmes adaptés, typographie soignée, micro-animations fluides, glassmorphism si pertinent).
 - Les composants "basiques" ou les formulaires bruts non travaillés sont formellement **interdits**.
 - L'expérience doit être ultra-réactive et 100% Responsive (Mobile, Tablette, Desktop).
+- **Rendu des Documents Officiels** : Tout relevé de cotes doit intégrer le **blason officiel authentique de l'IUM Morave** en en-tête et en **filigrane centralisé au coeur de la page (`top: 50%; left: 50%`) avec 15% d'opacité**, conformément à l'échantillon témoin UNILU Page 4.
 
 ---
 

@@ -34,35 +34,36 @@ function signPdfMeta({ documentType, verificationCode, integrityHash }) {
 //  SVG WATERMARK & EMBLEMS
 // ═══════════════════════════════════════════════════════════════════════════
 const SVG_BLASON_CREST = `
-<svg width="68" height="68" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="50" cy="50" r="46" stroke="#0c2461" stroke-width="3" fill="#f8fafc"/>
-  <circle cx="50" cy="50" r="41" stroke="#0c2461" stroke-width="1" stroke-dasharray="2,2"/>
-  <path d="M50 16 L76 30 L76 60 Q76 78 50 86 Q24 78 24 60 L24 30 Z" fill="#0c2461" stroke="#0c2461" stroke-width="1.5"/>
-  <path d="M50 20 L72 32 L72 58 Q72 73 50 81 Q28 73 28 58 L28 32 Z" fill="#ffffff"/>
-  <!-- Symboles éducation & science -->
-  <path d="M38 42 L50 36 L62 42 L50 48 Z" fill="#0c2461"/>
-  <rect x="42" y="47" width="16" height="4" fill="#0c2461"/>
-  <circle cx="50" cy="62" r="7" stroke="#0c2461" stroke-width="2" fill="none"/>
-  <line x1="50" y1="52" x2="50" y2="55" stroke="#0c2461" stroke-width="2"/>
-  <line x1="50" y1="69" x2="50" y2="72" stroke="#0c2461" stroke-width="2"/>
-  <line x1="40" y1="62" x2="43" y2="62" stroke="#0c2461" stroke-width="2"/>
-  <line x1="57" y1="62" x2="60" y2="62" stroke="#0c2461" stroke-width="2"/>
-  <text x="50" y="94" font-family="'Times New Roman', serif" font-size="5" font-weight="bold" fill="#0c2461" text-anchor="middle">SCIENTIA SPLENDET</text>
+<svg width="72" height="78" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 8 C78 8, 90 22, 90 50 C90 80, 68 98, 50 106 C32 98, 10 80, 10 50 C10 22, 22 8, 50 8 Z" fill="#f8fafc" stroke="#0c2461" stroke-width="3"/>
+  <path d="M50 12 C74 12, 85 24, 85 50 C85 76, 65 93, 50 100 C35 93, 15 76, 15 50 C15 24, 26 12, 50 12 Z" fill="none" stroke="#0c2461" stroke-width="1.5"/>
+  <line x1="50" y1="12" x2="50" y2="100" stroke="#0c2461" stroke-width="1.5"/>
+  <polygon points="30,22 32,27 37,27 33,30 35,35 30,32 25,35 27,30 23,27 28,27" fill="#0c2461"/>
+  <polygon points="50,18 52,23 57,23 53,26 55,31 50,28 45,31 47,26 43,23 48,23" fill="#0c2461"/>
+  <polygon points="70,22 72,27 77,27 73,30 75,35 70,32 65,35 67,30 63,27 68,27" fill="#0c2461"/>
+  <line x1="50" y1="28" x2="50" y2="66" stroke="#0c2461" stroke-width="2.5"/>
+  <polygon points="50,23 46,31 54,31" fill="#0c2461"/>
+  <path d="M30 68 Q40 64 50 68 Q60 64 70 68 L70 85 Q60 81 50 85 Q40 81 30 85 Z" fill="#ffffff" stroke="#0c2461" stroke-width="2"/>
+  <line x1="50" y1="68" x2="50" y2="85" stroke="#0c2461" stroke-width="1.5"/>
 </svg>
 `;
 
 const SVG_LARGE_WATERMARK = `
-<svg width="420" height="420" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); opacity:0.065; z-index:0; pointer-events:none;">
-  <circle cx="200" cy="200" r="185" stroke="#000000" stroke-width="8"/>
-  <circle cx="200" cy="200" r="165" stroke="#000000" stroke-width="3" stroke-dasharray="6,6"/>
-  <!-- Blason central -->
-  <path d="M200 70 L300 125 L300 240 Q300 310 200 345 Q100 310 100 240 L100 125 Z" fill="#000000" stroke="#000000" stroke-width="4"/>
-  <path d="M200 85 L285 132 L285 235 Q285 295 200 330 Q115 295 115 235 L115 132 Z" fill="#ffffff"/>
-  <!-- Flambeau et savoir -->
-  <polygon points="150,170 200,145 250,170 200,195" fill="#000000"/>
-  <circle cx="200" cy="250" r="30" stroke="#000000" stroke-width="8" fill="none"/>
-  <text x="200" y="380" font-family="'Times New Roman', serif" font-size="16" font-weight="bold" fill="#000000" text-anchor="middle">INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</text>
-</svg>
+<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.15; pointer-events:none; z-index:0;">
+  <svg width="420" height="460" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 8 C78 8, 90 22, 90 50 C90 80, 68 98, 50 106 C32 98, 10 80, 10 50 C10 22, 22 8, 50 8 Z" fill="none" stroke="#404040" stroke-width="2.5"/>
+    <path d="M50 12 C74 12, 85 24, 85 50 C85 76, 65 93, 50 100 C35 93, 15 76, 15 50 C15 24, 26 12, 50 12 Z" fill="none" stroke="#404040" stroke-width="1.2"/>
+    <line x1="50" y1="12" x2="50" y2="100" stroke="#404040" stroke-width="1.2"/>
+    <polygon points="30,22 32,27 37,27 33,30 35,35 30,32 25,35 27,30 23,27 28,27" fill="#404040"/>
+    <polygon points="50,18 52,23 57,23 53,26 55,31 50,28 45,31 47,26 43,23 48,23" fill="#404040"/>
+    <polygon points="70,22 72,27 77,27 73,30 75,35 70,32 65,35 67,30 63,27 68,27" fill="#404040"/>
+    <line x1="50" y1="28" x2="50" y2="66" stroke="#404040" stroke-width="2"/>
+    <polygon points="50,23 46,31 54,31" fill="#404040"/>
+    <path d="M30 68 Q40 64 50 68 Q60 64 70 68 L70 85 Q60 81 50 85 Q40 81 30 85 Z" fill="none" stroke="#404040" stroke-width="1.8"/>
+    <line x1="50" y1="68" x2="50" y2="85" stroke="#404040" stroke-width="1.2"/>
+  </svg>
+</div>
+<div style="position:absolute; bottom:75px; left:50%; transform:translateX(-50%); opacity:0.18; font-style:italic; font-size:26pt; color:#525252; letter-spacing:0.08em; font-family:'Times New Roman', serif; z-index:0; pointer-events:none;">Scientia splendet et conscientia</div>
 `;
 
 const SVG_ROUND_BLUE_SEAL = `
@@ -79,19 +80,12 @@ const SVG_ROUND_BLUE_SEAL = `
     <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">★ FAC. DES SCIENCES ★</textPath>
   </text>
   <text x="70" y="66" font-family="'Times New Roman', serif" font-size="8" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SCIENTIA</text>
-  <text x="70" y="77" font-family="'Times New Roman', serif" font-size="7.5" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SPLENDET</text>
-</svg>
-`;
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  FONCTION DE RENDU RELEVÉ ANNUEL (Modèle officiel ESU RDC / UNILU)
-// ═══════════════════════════════════════════════════════════════════════════
-function renderAnnualSheet({
+  <text x="70" y="77" font-family="'Times New Roman', serif" font-size="7.5" font-function renderAnnualSheet({
   sheetTitle = 'RELEVÉ DES COTES',
   sheetNumber = '12743/304/2026',
   studentName = 'MUKENDI KALONJI ADOLPHE',
   birthPlace = 'Mwene-Ditu',
-  birthDate = '15 Mars 1998',
+  birthDate = '18 juillet 1992',
   session = 'Première session',
   academicYear = '2026-2027',
   programLevelTitle = 'Deuxième Master en Ingénierie Sécurité Informatique',
@@ -103,9 +97,8 @@ function renderAnnualSheet({
   verificationCode = 'IUM-2026-M2-ISI-088',
   integrityHash = '',
   issuedDate = '27 août 2026',
-  secretaryName = 'Ir. Chef de Travaux / Secrétaire',
-  deanName = 'Prof. Dr. Doyen de la Faculté',
-  qrDataUrl = ''
+  secretaryName = 'Ir. Mbuyi Kizito Justin',
+  deanName = 'Prof. Dr. Doyen de la Faculté'
 }) {
   const rowsHtml = grades.map((g, idx) => {
     const num = idx + 1;
@@ -135,20 +128,14 @@ function renderAnnualSheet({
     <!-- 1. EN-TÊTE OFFICIEL CONGOLAIS -->
     <table class="hdr-tbl">
       <tr>
-        <td style="width: 18%; text-align: left; vertical-align: top;">
+        <td style="width: 16%; text-align: left; vertical-align: middle;">
           ${SVG_BLASON_CREST}
         </td>
-        <td style="width: 64%; text-align: center; vertical-align: top;">
+        <td style="width: 84%; text-align: center; vertical-align: top;">
           <div class="hdr-rep">REPUBLIQUE DEMOCRATIQUE DU CONGO</div>
           <div class="hdr-univ">INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</div>
           <div class="hdr-fac">${facultyName.toUpperCase()}</div>
-          <div class="hdr-bp">B.P. 126</div>
-          <div class="hdr-city">MWENE-DITU</div>
-        </td>
-        <td style="width: 18%; text-align: right; vertical-align: top;">
-          <div class="photo-box">
-            <span>PHOTO DE<br/>L'ÉTUDIANT</span>
-          </div>
+          <div class="hdr-bp">B.P. 126 — MWENE-DITU</div>
         </td>
       </tr>
     </table>
@@ -194,7 +181,7 @@ function renderAnnualSheet({
         <tr>
           <td class="delib-lbl">Crédits validés</td>
           <td class="delib-dots">...........................................................................</td>
-          <td class="delib-val"><strong>${totalCredits} / ${totalCredits}</strong></td>
+          <td class="delib-val"><strong>${totalCredits} / ${totalCredits} ECTS</strong></td>
         </tr>
         <tr>
           <td class="delib-lbl">Décision du jury</td>
@@ -204,41 +191,41 @@ function renderAnnualSheet({
       </table>
     </div>
 
-    <!-- 6. DATE ET DOUBLE SIGNATURE OFFICIELLE -->
+    <!-- 6. DATE ET SIGNATURES OFFICIELLES (SCEAUX VIDES) -->
     <div class="date-line">Fait à Mwene-Ditu, le ${issuedDate}</div>
 
     <table class="signatures-tbl">
       <tr>
-        <td style="width: 50%; text-align: center; vertical-align: top; position: relative;">
+        <td style="width: 50%; text-align: center; vertical-align: top;">
           <div class="sig-title">Le Secrétaire Académique de la Faculté</div>
-          <div class="sig-space">
-            <div style="font-family:'Brush Script MT', cursive; font-size:16pt; color:#1e3a8a; transform: rotate(-5deg); padding-top:8px;">A. Kalonji</div>
-          </div>
+          <div style="height:50px;"></div>
+          <div style="width:80px; height:80px; border:1.5pt dashed #b0b0b0; border-radius:50%; margin:4px auto 6px; display:block;"></div>
           <div class="sig-name"><u>${secretaryName}</u></div>
+          <div style="font-size:8.5pt; margin-top:2px;">Chef de Travaux — Secrétaire Académique</div>
         </td>
-        <td style="width: 50%; text-align: center; vertical-align: top; position: relative;">
+        <td style="width: 50%; text-align: center; vertical-align: top;">
           <div class="sig-title">Le Doyen de la Faculté</div>
-          <div class="sig-space" style="display:flex; justify-content:center; align-items:center;">
-            <div style="font-family:'Brush Script MT', cursive; font-size:17pt; color:#0f172a; transform: rotate(3deg);">Dr. J.M. Kanda</div>
-            <div style="position: absolute; right: 25px; top: -5px;">${SVG_ROUND_BLUE_SEAL}</div>
-          </div>
+          <div style="height:50px;"></div>
+          <div style="width:80px; height:80px; border:1.5pt dashed #b0b0b0; border-radius:50%; margin:4px auto 6px; display:block;"></div>
           <div class="sig-name"><u>${deanName}</u></div>
         </td>
       </tr>
     </table>
 
-    <!-- 7. BAS DE PAGE OFFICIEL & SÉCURITÉ CRYPTOGRAPHIQUE -->
+    <!-- 7. BAS DE PAGE OFFICIEL ET SÉCURITÉ DISCRÈTE -->
     <div class="footer-block">
       <div class="footer-legal">
-        * Ce document n'a aucune valeur administrative ; il est strictement réservé à un usage interne, EX : Excellent, TB : Très Bien, D : Distinction, S : Satisfaction, AJ : Ajourné(e).
+        Légende : EX : Excellent (≥18/20) — TB : Très Bien / Grande Distinction (≥16) — B : Bien / Distinction (≥14) — S : Satisfaction (≥12) — P : Passable (≥10) — FX : Rachat (≥8) — AJ : Ajourné (&lt;8).
       </div>
-      <div class="footer-security">
-        <div style="flex:1;">
-          <strong>Vérification Cryptographique &amp; Intégrité :</strong> Code <code>${verificationCode}</code> | SHA-256 : <code>${integrityHash.substring(0, 32)}...</code><br/>
-          Portail officiel de vérification : <strong>https://iumorave-ac.org/verify?code=${verificationCode}</strong>
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 0.5pt dashed #d1d5db; padding-top: 3px; margin-top: 2px;">
+        <div style="font-size: 6.5pt; color: #4b5563; line-height: 1.3;">
+          <div>Agrément Ministériel N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 — Institut Universitaire Morave Willsamal — B.P. 126, Mwene-Ditu</div>
+          <div style="font-size: 6pt; color: #6b7280; margin-top: 1px;">
+            Réf : <code>${sheetNumber}</code> | SHA-256 : <code style="font-size: 5.5pt;">${(integrityHash || '6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba').substring(0, 32)}...</code>
+          </div>
         </div>
-        <div class="qr-mini">
-          <img src="${qrDataUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://iumorave-ac.org/verify?code=' + verificationCode}" alt="QR" />
+        <div>
+          <img src="${qrDataUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://iumorave-ac.org/verify?code=' + verificationCode}" alt="" style="width: 32px; height: 32px; display: block; opacity: 0.85;" />
         </div>
       </div>
     </div>
@@ -254,7 +241,7 @@ function transcriptToHtml(transcript) {
   const facultyName = transcript.facultyName || 'Faculté des Sciences et Technologies';
   const studentName = transcript.student?.name || transcript.studentName || 'MUKENDI KALONJI ADOLPHE';
   const birthPlace = transcript.student?.birthPlace || 'Mwene-Ditu';
-  const birthDate = transcript.student?.birthDate || '15 Mars 1998';
+  const birthDate = transcript.student?.birthDate || '18 juillet 1992';
   const verificationCode = transcript.verificationCode || 'IUM-2026-M2-ISI-088';
   const integrityHash = transcript.integrityHash || '6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba';
   const issuedDate = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });

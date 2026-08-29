@@ -8,26 +8,26 @@ export default function ReleveOfficielPage() {
   const student = {
     name: 'MUKENDI KALONJI ADOLPHE',
     birthPlace: 'Mwene-Ditu',
-    birthDate: '15 Mars 1998',
+    birthDate: '18 juillet 1992',
     faculty: 'Faculté des Sciences et Technologies',
     date: '27 août 2026'
   };
 
   const m1Grades = [
-    { n: 1, title: 'Recherche opérationnelle pour ingénieur informaticien', c: 40, td: '15+25+70', cr: 4, sc: 15 },
-    { n: 2, title: 'Théories de probabilités pour ingénieur informaticien', c: 40, td: '15+25+70', cr: 4, sc: 14 },
-    { n: 3, title: 'Anglais technique-1', c: 30, td: '15+15+45', cr: 3, sc: 16 },
-    { n: 4, title: 'Langage formel et compilation', c: 45, td: '20+20+85', cr: 5, sc: 14 },
-    { n: 5, title: 'Langage système', c: 45, td: '20+20+85', cr: 5, sc: 15 },
-    { n: 6, title: 'Algorithmes et structures de données avancées', c: 45, td: '20+20+85', cr: 5, sc: 17 },
-    { n: 7, title: 'Système d\'objets répartis', c: 40, td: '15+25+70', cr: 4, sc: 14 },
-    { n: 8, title: 'Théorie du codage', c: 40, td: '15+25+70', cr: 4, sc: 16 },
-    { n: 9, title: 'Sécurité des systèmes d\'exploitation', c: 40, td: '15+25+70', cr: 4, sc: 15 },
-    { n: 10, title: 'Cryptologie', c: 40, td: '15+25+70', cr: 4, sc: 17 },
-    { n: 11, title: 'Méthodes de sécurisation des données', c: 40, td: '15+25+70', cr: 4, sc: 15 },
-    { n: 12, title: 'Sécurité des applications et des réseaux', c: 40, td: '15+25+70', cr: 4, sc: 16 },
-    { n: 13, title: 'Programmation parallèle', c: 40, td: '15+25+70', cr: 4, sc: 15 },
-    { n: 14, title: 'Projet-4 & Application pratique', c: 20, td: '00+40+90', cr: 6, sc: 17 }
+    { n: 1, title: 'Recherche opérationnelle pour ingénieur informaticien', c: 40, td: '15+25+70', cr: 4, sc: 13 },
+    { n: 2, title: 'Théories de probabilités pour ingénieur informaticien', c: 40, td: '15+25+70', cr: 4, sc: 12 },
+    { n: 3, title: 'Anglais technique-1', c: 30, td: '15+15+45', cr: 3, sc: 15 },
+    { n: 4, title: 'Langage formel et compilation', c: 45, td: '20+20+85', cr: 5, sc: 13 },
+    { n: 5, title: 'Langage système', c: 45, td: '20+20+85', cr: 5, sc: 14 },
+    { n: 6, title: 'Algorithmes et structures des données avancées', c: 45, td: '20+20+85', cr: 5, sc: 16 },
+    { n: 7, title: 'Système d\'objets répartis', c: 40, td: '15+25+70', cr: 4, sc: 13 },
+    { n: 8, title: 'Théorie du codage', c: 40, td: '15+25+70', cr: 4, sc: 15 },
+    { n: 9, title: 'Sécurité des systèmes d\'exploitation', c: 40, td: '15+25+70', cr: 4, sc: 14 },
+    { n: 10, title: 'Cryptologie', c: 40, td: '15+25+70', cr: 4, sc: 16 },
+    { n: 11, title: 'Méthodes de sécurisation des données', c: 40, td: '15+25+70', cr: 4, sc: 13 },
+    { n: 12, title: 'Sécurité des applications et des réseaux', c: 40, td: '15+25+70', cr: 4, sc: 15 },
+    { n: 13, title: 'Programmation parallèle', c: 40, td: '15+25+70', cr: 4, sc: 13 },
+    { n: 14, title: 'Projet-4 & Application pratique', c: 20, td: '00+40+90', cr: 6, sc: 16 }
   ];
 
   const m2Grades = [
@@ -35,67 +35,44 @@ export default function ReleveOfficielPage() {
     { n: 2, title: 'Cryptologie avancée', c: 50, td: '20+30+100', cr: 6, sc: 17 },
     { n: 3, title: 'Programmation réseaux', c: 50, td: '20+30+100', cr: 6, sc: 15 },
     { n: 4, title: 'Méthodes et techniques de rédaction scientifique', c: 40, td: '15+25+70', cr: 4, sc: 16 },
-    { n: 5, title: 'Détection des intrusions et réponses aux incidents', c: 45, td: '20+20+85', cr: 5, sc: 17 },
+    { n: 5, title: 'Détection des intrusions et réponses aux incidents', c: 45, td: '20+20+85', cr: 5, sc: 16 },
     { n: 6, title: 'Interconnexion et routage dynamique', c: 45, td: '20+20+85', cr: 5, sc: 15 },
     { n: 7, title: 'Contrôle d\'accès et extraction d\'information', c: 30, td: '10+15+50', cr: 3, sc: 16 },
     { n: 8, title: 'Audit et plan de la sécurité informatique', c: 20, td: '10+10+30', cr: 2, sc: 17 },
     { n: 9, title: 'Sécurité des services en ligne', c: 30, td: '10+15+50', cr: 3, sc: 15 },
-    { n: 10, title: 'Entrepreneuriat-2', c: 20, td: '10+10+30', cr: 2, sc: 16 },
-    { n: 11, title: 'Stage académique en entreprise / laboratoire', c: 0, td: '00+150+100', cr: 10, sc: 18 },
-    { n: 12, title: 'Projet tutoré & Soutenance du Mémoire de Master', c: 0, td: '00+150+100', cr: 10, sc: 18 }
+    { n: 10, title: 'Entrepreneuriat-2', c: 20, td: '10+10+30', cr: 2, sc: 17 },
+    { n: 11, title: 'Stage académique en entreprise / laboratoire', c: 0, td: '00+150+100', cr: 10, sc: 15 },
+    { n: 12, title: 'Projet tutoré & Soutenance du Mémoire de Master', c: 0, td: '00+150+100', cr: 10, sc: 15 }
   ];
 
   const renderSheet = (isM1: boolean) => {
     const list = isM1 ? m1Grades : m2Grades;
     const titleLevel = isM1 ? 'Premier Master en Ingénierie Sécurité Informatique' : 'Deuxième Master en Ingénierie Sécurité Informatique';
-    const year = isM1 ? '2026-2027' : '2027-2028';
-    const code = isM1 ? 'IUM-2026-M1-ISI-088' : 'IUM-2027-M2-ISI-088';
-    const num = isM1 ? 'IUM-2026-M1-ISI-088/2026' : 'IUM-2027-M2-ISI-088/2026';
-    const pct = isM1 ? '77,35 %  (15.47 / 20)' : '83,25 %  (16.65 / 20)';
-    const dec = isM1 ? 'DISTINCTION' : 'TRÈS BIEN (GRANDE DISTINCTION)';
+    const year = isM1 ? '2022-2023' : '2023-2024';
+    const num = isM1 ? 'IUM-2023-M1-ISI-088/2023' : 'IUM-2024-M2-ISI-088/2024';
+    const pct = isM1 ? '71,00 %  (14.20 / 20)' : '78,00 %  (15.60 / 20)';
+    const dec = 'DISTINCTION';
+    const dateDoc = isM1 ? '15 juillet 2023' : '28 août 2024';
 
     return (
       <div className="sheet-a4">
-        {/* Filigrane en arrière-plan */}
+        {/* Filigrane central officiel transparent */}
         <div className="watermark-bg">
-          <svg width="400" height="400" viewBox="0 0 400 400" fill="none">
-            <circle cx="200" cy="200" r="185" stroke="#000000" strokeWidth="8"/>
-            <circle cx="200" cy="200" r="165" stroke="#000000" strokeWidth="3" strokeDasharray="6,6"/>
-            <path d="M200 70 L300 125 L300 240 Q300 310 200 345 Q100 310 100 240 L100 125 Z" fill="#000000" stroke="#000000" strokeWidth="4"/>
-            <path d="M200 85 L285 132 L285 235 Q285 295 200 330 Q115 295 115 235 L115 132 Z" fill="#ffffff"/>
-            <polygon points="150,170 200,145 250,170 200,195" fill="#000000"/>
-            <circle cx="200" cy="250" r="30" stroke="#000000" strokeWidth="8" fill="none"/>
-            <text x="200" y="380" fontFamily="'Times New Roman', serif" fontSize="16" fontWeight="bold" fill="#000000" textAnchor="middle">
-              INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL
-            </text>
-          </svg>
+          <img src="/images/blason-transparent.png" alt="" className="watermark-img" />
         </div>
 
         {/* 1. En-tête officiel */}
         <table className="hdr-table">
           <tbody>
             <tr>
-              <td style={{ width: '18%', textAlign: 'left', verticalAlign: 'top' }}>
-                <svg width="68" height="68" viewBox="0 0 100 100" fill="none">
-                  <circle cx="50" cy="50" r="46" stroke="#0c2461" strokeWidth="3" fill="#f8fafc"/>
-                  <path d="M50 16 L76 30 L76 60 Q76 78 50 86 Q24 78 24 60 L24 30 Z" fill="#0c2461"/>
-                  <path d="M50 20 L72 32 L72 58 Q72 73 50 81 Q28 73 28 58 L28 32 Z" fill="#ffffff"/>
-                  <path d="M38 42 L50 36 L62 42 L50 48 Z" fill="#0c2461"/>
-                  <circle cx="50" cy="62" r="7" stroke="#0c2461" strokeWidth="2" fill="none"/>
-                  <text x="50" y="94" fontFamily="'Times New Roman', serif" fontSize="5" fontWeight="bold" fill="#0c2461" textAnchor="middle">SCIENTIA SPLENDET</text>
-                </svg>
+              <td style={{ width: '15%', textAlign: 'left', verticalAlign: 'middle' }}>
+                <img src="/images/blason-transparent.png" alt="Blason IUM-MORAVE" style={{ width: '68px', height: 'auto', display: 'block' }} />
               </td>
-              <td style={{ width: '64%', textAlign: 'center', verticalAlign: 'top' }}>
+              <td style={{ width: '85%', textAlign: 'center', verticalAlign: 'top' }}>
                 <div style={{ fontSize: '11pt', fontWeight: 'bold' }}>REPUBLIQUE DEMOCRATIQUE DU CONGO</div>
                 <div style={{ fontSize: '11.5pt', fontWeight: 'bold', margin: '1px 0' }}>INSTITUT UNIVERSITAIRE MORAVE WILLSAMAL</div>
                 <div style={{ fontSize: '10pt', fontWeight: 'bold' }}>{student.faculty.toUpperCase()}</div>
-                <div style={{ fontSize: '9pt', fontWeight: 'bold' }}>B.P. 126</div>
-                <div style={{ fontSize: '9.5pt', fontWeight: 'bold' }}>MWENE-DITU</div>
-              </td>
-              <td style={{ width: '18%', textAlign: 'right', verticalAlign: 'top' }}>
-                <div className="photo-frame">
-                  PHOTO DE<br/>L'ÉTUDIANT
-                </div>
+                <div style={{ fontSize: '9pt', fontWeight: 'bold' }}>B.P. 126 — MWENE-DITU</div>
               </td>
             </tr>
           </tbody>
@@ -108,7 +85,7 @@ export default function ReleveOfficielPage() {
 
         {/* 3. Paragraphe introductif officiel */}
         <p className="intro-txt">
-          Monsieur/Mademoiselle <strong>{student.name}</strong>, né(e) à <em>{student.birthPlace}</em>, le <em>{student.birthDate}</em>, a obtenu, à l'issue de la <strong>Première session</strong> de l'année académique <strong>{year}</strong> aux examens portant sur les matières prévues au programme de <strong>{titleLevel}</strong> à la <strong>{student.faculty}</strong>, les cotes ci-dessous :
+          Monsieur <strong>{student.name}</strong>, né à <em>{student.birthPlace}</em>, le <em>{student.birthDate}</em>, a obtenu, à l'issue de la <strong>Première session</strong> de l'année académique <strong>{year}</strong> aux examens portant sur les matières prévues au programme de <strong>{titleLevel}</strong> à la <strong>{student.faculty}</strong>, les cotes ci-dessous :
         </p>
 
         {/* 4. Tableau officiel */}
@@ -116,14 +93,14 @@ export default function ReleveOfficielPage() {
           <thead>
             <tr>
               <th rowSpan={2} style={{ width: '4%' }}>N°</th>
-              <th rowSpan={2} style={{ width: '50%' }}>MATIERES SUIVIES</th>
-              <th colSpan={2} style={{ width: '28%' }}>VOLUME HORAIRE</th>
+              <th rowSpan={2} style={{ width: '52%' }}>MATIERES SUIVIES</th>
+              <th colSpan={2} style={{ width: '26%' }}>VOLUME HORAIRE</th>
               <th rowSpan={2} style={{ width: '8%' }}>CREDITS</th>
               <th rowSpan={2} style={{ width: '10%' }}>COTES<br/>OBTENUES<br/>.../20</th>
             </tr>
             <tr>
-              <th style={{ width: '12%' }}>COURS</th>
-              <th style={{ width: '16%' }}>T.D. + T.P. + T.P.E.</th>
+              <th style={{ width: '11%' }}>COURS</th>
+              <th style={{ width: '15%' }}>T.D. + T.P. + T.P.E.</th>
             </tr>
           </thead>
           <tbody>
@@ -140,77 +117,76 @@ export default function ReleveOfficielPage() {
           </tbody>
         </table>
 
-        {/* 5. Délibération */}
-        <div style={{ margin: '8px 0 6px 100px', fontSize: '9.5pt' }}>
+        {/* 5. Délibération (Strictement conforme Page 4 UNILU) */}
+        <div style={{ margin: '10px 0 8px 40px', fontSize: '9.2pt', position: 'relative', zIndex: 1 }}>
           <table style={{ borderCollapse: 'collapse' }}>
             <tbody>
               <tr>
-                <td style={{ width: '230px' }}>Pourcentage pondéré / Moyenne</td>
-                <td>...........................................................................</td>
+                <td style={{ width: '220px' }}>Pourcentage pondéré</td>
+                <td>...............................................................................</td>
                 <td style={{ paddingLeft: '6px' }}><strong>{pct}</strong></td>
               </tr>
               <tr>
                 <td>Crédits validés</td>
-                <td>...........................................................................</td>
-                <td style={{ paddingLeft: '6px' }}><strong>60 / 60</strong></td>
+                <td>...............................................................................</td>
+                <td style={{ paddingLeft: '6px' }}><strong>60 / 60 ECTS</strong></td>
               </tr>
               <tr>
                 <td>Décision du jury</td>
-                <td>...........................................................................</td>
+                <td>...............................................................................</td>
                 <td style={{ paddingLeft: '6px' }}><strong>{dec}</strong></td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        {/* 6. Date & Signatures */}
-        <div style={{ textAlign: 'center', fontSize: '9.5pt', margin: '10px 0 6px 0' }}>
-          Fait à Mwene-Ditu, le {student.date}
+        {/* Mentions solennelles de Master 2 */}
+        {!isM1 && (
+          <div style={{ margin: '6px 0 6px 0', padding: '4px 10px', fontSize: '8.8pt', borderLeft: '2pt solid #000', background: 'rgba(0,0,0,0.02)', lineHeight: 1.35, position: 'relative', zIndex: 1 }}>
+            <div>• <strong>Mémoire de Master</strong> soutenu et défendu publiquement en date du 24 août 2024 avec la mention : <strong>DISTINCTION (15/20)</strong>.</div>
+            <div style={{ marginTop: '2px' }}>• <strong>Diplôme de Master</strong> en Sciences et Technologie — Mention <em>Ingénierie Sécurité Informatique</em> décerné à l'impétrant en date du 28 août 2024.</div>
+          </div>
+        )}
+
+        {/* 6. Date & Signatures — Espaces épurés et vierges */}
+        <div style={{ textAlign: 'center', fontSize: '9.2pt', margin: '12px 0 6px 0', position: 'relative', zIndex: 1 }}>
+          Fait à Mwene-Ditu, le {dateDoc}
         </div>
 
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '4px', fontSize: '9pt' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '4px', fontSize: '9pt', position: 'relative', zIndex: 1 }}>
           <tbody>
             <tr>
-              <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', position: 'relative' }}>
-                <div>Le Secrétaire Académique de la Faculté</div>
-                <div style={{ height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontFamily: 'cursive', fontSize: '16pt', color: '#1e3a8a', transform: 'rotate(-5deg)' }}>A. Kalonji</span>
-                </div>
-                <div style={{ fontWeight: 'bold', fontSize: '9.5pt' }}><u>Ir. Chef de Travaux / Secrétaire</u></div>
+              <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', padding: '0 10px' }}>
+                <div style={{ marginBottom: '2px' }}>Le Secrétaire Académique de la Faculté</div>
+                <div style={{ height: '60px' }}></div>
+                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>Ir. Mbuyi Kizito Justin</u></div>
+                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Chef de Travaux — Secrétaire Académique</div>
               </td>
-              <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', position: 'relative' }}>
-                <div>Le Doyen de la Faculté</div>
-                <div style={{ height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontFamily: 'cursive', fontSize: '17pt', color: '#0f172a', transform: 'rotate(3deg)' }}>Dr. J.M. Kanda</span>
-                  <div style={{ position: 'absolute', right: '30px', top: '-5px', opacity: 0.85 }}>
-                    <svg width="90" height="90" viewBox="0 0 140 140" fill="none">
-                      <circle cx="70" cy="70" r="64" stroke="#1d4ed8" strokeWidth="3" strokeDasharray="5,2"/>
-                      <circle cx="70" cy="70" r="58" stroke="#1d4ed8" strokeWidth="1.5"/>
-                      <text fontFamily="'Times New Roman', serif" fontSize="8" fontWeight="bold" fill="#1d4ed8" textAnchor="middle" x="70" y="32">INSTITUT UNIV. MORAVE</text>
-                      <text fontFamily="'Times New Roman', serif" fontSize="7" fontWeight="bold" fill="#1d4ed8" textAnchor="middle" x="70" y="118">★ FAC. DES SCIENCES ★</text>
-                      <text x="70" y="66" fontFamily="'Times New Roman', serif" fontSize="8" fontWeight="bold" fill="#1d4ed8" textAnchor="middle">SCIENTIA</text>
-                      <text x="70" y="77" fontFamily="'Times New Roman', serif" fontSize="7.5" fontWeight="bold" fill="#1d4ed8" textAnchor="middle">SPLENDET</text>
-                    </svg>
-                  </div>
-                </div>
-                <div style={{ fontWeight: 'bold', fontSize: '9.5pt' }}><u>Prof. Dr. Doyen de la Faculté</u></div>
+              <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', padding: '0 10px' }}>
+                <div style={{ marginBottom: '2px' }}>Le Doyen de la Faculté</div>
+                <div style={{ height: '60px' }}></div>
+                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>Prof. Dr. Doyen de la Faculté</u></div>
+                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Professeur — Doyen de la Faculté</div>
               </td>
             </tr>
           </tbody>
         </table>
 
-        {/* 7. Pied de page légal & Cryptographique */}
-        <div style={{ marginTop: '14px', borderTop: '0.5pt solid #9ca3af', paddingTop: '4px' }}>
-          <div style={{ fontSize: '6.8pt', color: '#374151', fontStyle: 'italic', marginBottom: '3px' }}>
-            * Ce document n'a aucune valeur administrative ; il est strictement réservé à un usage interne, EX : Excellent, TB : Très Bien, D : Distinction, S : Satisfaction, AJ : Ajourné(e).
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '6.5pt', color: '#4b5563', borderTop: '0.5pt dashed #d1d5db', paddingTop: '3px' }}>
-            <div>
-              <strong>Vérification Cryptographique &amp; Intégrité :</strong> Code <code>{code}</code><br/>
-              Portail officiel de vérification : <strong>https://iumorave-ac.org/verify?code={code}</strong>
+        {/* 7. Pied de page institutionnel & Sécurité discrète */}
+        <div style={{ marginTop: '16px', borderTop: '0.5pt solid #9ca3af', paddingTop: '4px', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{ fontSize: '6.5pt', color: '#4b5563', lineHeight: 1.35 }}>
+              <div>Agrément Ministériel N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 — Institut Universitaire Morave Willsamal — B.P. 126, Mwene-Ditu</div>
+              <div style={{ fontSize: '6pt', color: '#6b7280', marginTop: '1px' }}>
+                Réf : <code>{num}</code> | SHA-256 : <code style={{ fontSize: '5.4pt' }}>{isM1 ? '8a9b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b' : '6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba'}</code>
+              </div>
             </div>
             <div>
-              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://iumorave-ac.org/verify?code=${code}`} alt="QR" style={{ width: '38px', height: '38px', border: '0.5pt solid #ccc' }} />
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=https://iumorave-ac.org/verify?code=${num}`}
+                alt=""
+                style={{ width: '28px', height: '28px', display: 'block', opacity: 0.85 }}
+              />
             </div>
           </div>
         </div>
@@ -299,39 +275,34 @@ export default function ReleveOfficielPage() {
           width: 210mm;
           min-height: 297mm;
           background: #ffffff;
-          padding: 12mm 15mm 10mm 15mm;
+          padding: 12mm 16mm 10mm 16mm;
           box-sizing: border-box;
           box-shadow: 0 10px 25px rgba(0,0,0,0.3);
           color: #000000;
           font-size: 9.5pt;
-          line-height: 1.25;
+          line-height: 1.24;
         }
 
         .watermark-bg {
           position: absolute;
-          top: 50%;
+          top: 155px;
           left: 50%;
-          transform: translate(-50%, -50%);
-          opacity: 0.06;
+          transform: translateX(-50%);
+          opacity: 0.15;
           pointer-events: none;
           z-index: 0;
+          text-align: center;
+        }
+
+        .watermark-img {
+          width: 360px;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+          filter: grayscale(100%);
         }
 
         .hdr-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; position: relative; z-index: 1; }
-        .photo-frame {
-          width: 25mm;
-          height: 30mm;
-          border: 1pt solid #374151;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          font-size: 6.5pt;
-          color: #6b7280;
-          margin-left: auto;
-          background: #f9fafb;
-          font-family: sans-serif;
-        }
 
         .intro-txt {
           font-size: 9pt;

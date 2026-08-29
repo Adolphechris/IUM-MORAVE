@@ -7,6 +7,11 @@
 
 ## 📚 DOCUMENTS DE GOUVERNANCE & SUIVI
 - 📜 **[Constitution du Projet (`CONSTITUTION.md`)](file:///home/adolphe/IUM-MORAVE/CONSTITUTION.md)** : Loi fondamentale régissant l'architecture, la sécurité, l'UI/UX et la qualité du code.
+- 🏛️ **[Témoin Officiel : Relevé des Cotes UNILU Page 4 (`docs/references/modele_releve_unilu_page4_temoin.md`)](file:///home/adolphe/IUM-MORAVE/docs/references/modele_releve_unilu_page4_temoin.md)** : **[OBLIGATOIRE]** Échantillon national de référence (rubriques horaires Cours/TD+TP+TPE, crédits, délibération et signatures).
+- 🛡️ **[Blason Officiel IUM-MORAVE (`docs/references/blason-ium-morave-original.jpg`)](file:///home/adolphe/IUM-MORAVE/docs/references/blason-ium-morave-original.jpg)** : Armoiries officielles et filigrane central à 15% d'opacité.
+- 🎓 **[Maquette Nationale ESU — Master ISI LMD (`docs/curriculum-master-isi-lmd.md`)](file:///home/adolphe/IUM-MORAVE/docs/curriculum-master-isi-lmd.md)** : **[OBLIGATOIRE]** Référentiel des 120 ECTS, volumes horaires, découpage S1-S4 et barème des mentions LMD.
+- 🔒 **[Sécurité & Validation des Relevés (`docs/TRANSCRIPT_SECURITY.md`)](file:///home/adolphe/IUM-MORAVE/docs/TRANSCRIPT_SECURITY.md)** : **[OBLIGATOIRE]** Exigences de signature cryptographique HMAC-SHA-256, traçabilité et conformité avec le modèle visuel UNILU Page 4.
+- 🗃️ **[Modèle de Données LMD (`docs/MODELE_DE_DONNEES_LMD.md`)](file:///home/adolphe/IUM-MORAVE/docs/MODELE_DE_DONNEES_LMD.md)** : Architecture relationnelle des facultés, cours et attestations.
 - 📋 **[Tracker Master & TODO (`TODO.md`)](file:///home/adolphe/IUM-MORAVE/TODO.md)** : Tableau de bord complet et feuille de route dynamique du chantier.
 
 ---
