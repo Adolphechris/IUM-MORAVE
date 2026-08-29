@@ -80,7 +80,11 @@ const SVG_ROUND_BLUE_SEAL = `
     <textPath href="#curveBottom" startOffset="50%" text-anchor="middle">★ FAC. DES SCIENCES ★</textPath>
   </text>
   <text x="70" y="66" font-family="'Times New Roman', serif" font-size="8" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SCIENTIA</text>
-  <text x="70" y="77" font-family="'Times New Roman', serif" font-size="7.5" font-function renderAnnualSheet({
+  <text x="70" y="77" font-family="'Times New Roman', serif" font-size="7.5" font-weight="bold" fill="#1d4ed8" text-anchor="middle">SPLENDET</text>
+</svg>
+`;
+
+function renderAnnualSheet({
   sheetTitle = 'RELEVÉ DES COTES',
   sheetNumber = '12743/304/2026',
   studentName = 'MUKENDI KALONJI ADOLPHE',
@@ -98,7 +102,8 @@ const SVG_ROUND_BLUE_SEAL = `
   integrityHash = '',
   issuedDate = '27 août 2026',
   secretaryName = 'Ir. Mbuyi Kizito Justin',
-  deanName = 'Prof. Dr. Doyen de la Faculté'
+  deanName = 'Prof. Dr. Doyen de la Faculté',
+  qrDataUrl = ''
 }) {
   const rowsHtml = grades.map((g, idx) => {
     const num = idx + 1;
