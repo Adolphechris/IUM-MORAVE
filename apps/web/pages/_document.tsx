@@ -29,9 +29,11 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/images/logo-crest.jpg" />
 
-        {/* ── OPEN GRAPH (partage Facebook, WhatsApp, LinkedIn) ─── */}
+        {/* ── OPEN GRAPH & NOM DU SITE POUR GOOGLE ─── */}
+        <meta name="application-name" content="Institut Universitaire Morave Willsamal" />
+        <meta name="apple-mobile-web-app-title" content="IUM-MORAVE" />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Institut Universitaire Morave (IUM-MORAVE)" />
+        <meta property="og:site_name" content="Institut Universitaire Morave Willsamal" />
         <meta property="og:title" content="Institut Universitaire Morave de Mwene-Ditu | IUM-MORAVE" />
         <meta property="og:description" content="Établissement d'enseignement supérieur agréé par l'ESU — Agrément N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018. Programmes LMD en Droit, Sciences, Médecine, Économie, Théologie. Mwene-Ditu, RDC." />
         <meta property="og:url" content="https://iumorave-ac.org" />

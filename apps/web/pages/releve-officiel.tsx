@@ -158,27 +158,27 @@ export default function ReleveOfficielPage() {
             <tr>
               <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', padding: '0 10px' }}>
                 <div style={{ marginBottom: '2px' }}>Le Secrétaire Académique de la Faculté</div>
-                <div style={{ height: '60px' }}></div>
-                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>Ir. Mbuyi Kizito Justin</u></div>
-                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Chef de Travaux — Secrétaire Académique</div>
+                <div style={{ height: '55px' }}></div>
+                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>= Ir. Mbuyi Kizito Justin =</u></div>
+                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Chef de Travaux</div>
               </td>
               <td style={{ width: '50%', textAlign: 'center', verticalAlign: 'top', padding: '0 10px' }}>
                 <div style={{ marginBottom: '2px' }}>Le Doyen de la Faculté</div>
-                <div style={{ height: '60px' }}></div>
-                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>Prof. Dr. Doyen de la Faculté</u></div>
-                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Professeur — Doyen de la Faculté</div>
+                <div style={{ height: '55px' }}></div>
+                <div style={{ fontWeight: 'bold', fontSize: '9.2pt' }}><u>Dr. Ir. Jean-Marie KANDA NTUMBA</u></div>
+                <div style={{ fontSize: '8.2pt', marginTop: '1px', color: '#1f2937' }}>Professeur</div>
               </td>
             </tr>
           </tbody>
         </table>
 
         {/* 7. Pied de page institutionnel & Sécurité discrète */}
-        <div style={{ marginTop: '16px', borderTop: '0.5pt solid #9ca3af', paddingTop: '4px', position: 'relative', zIndex: 1 }}>
+        <div style={{ marginTop: '14px', borderTop: '0.5pt solid #9ca3af', paddingTop: '4px', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
             <div style={{ fontSize: '6.5pt', color: '#4b5563', lineHeight: 1.35 }}>
               <div>Agrément Ministériel N°83/MINESU/CAB.MIN/SMM/JPK/LMM/2018 du 09 Avril 2018 — Institut Universitaire Morave Willsamal — B.P. 126, Mwene-Ditu</div>
-              <div style={{ fontSize: '6pt', color: '#6b7280', marginTop: '1px' }}>
-                Réf : <code>{num}</code> | SHA-256 : <code style={{ fontSize: '5.4pt' }}>{isM1 ? '8a9b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b' : '6e94616c4251b2d400886bf3efc1c2042964fa04b3d03addcaf375835d3fbeba'}</code>
+              <div style={{ fontSize: '6.2pt', color: '#374151', marginTop: '1px', fontWeight: 'bold' }}>
+                Réf. Enregistrement : <code>{num}</code>
               </div>
             </div>
             <div>
