@@ -9,7 +9,9 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx . || true"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/nodemailer": "^8.0.1",
+    "bcryptjs": "^3.0.3",
     "firebase": "^12.17.1",
     "firebase-admin": "^14.2.0",
     "next": "^16.2.12",
