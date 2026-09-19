@@ -170,7 +170,7 @@ export default function Home() {
             <span /><span /><span />
           </button>
           <nav className={`nav-links${menuOpen ? ' open' : ''}`}>
-            <a href="#formations">Formations</a>
+            <a href="/formations">Formations</a>
             <a href="/admissions">Admissions</a>
             <a href="/diplomes-reussite">Diplômes</a>
             <a href="/gouvernance">Gouvernance</a>
@@ -208,8 +208,8 @@ export default function Home() {
               et l&apos;épanouissement de la jeunesse en République Démocratique du Congo.
             </p>
             <div className="hero-actions">
-              <a className="btn btn-primary" href="#formations">Explorer nos programmes LMD</a>
-              <a className="btn btn-ghost" href="#campus">Découvrir le campus en photos</a>
+              <a className="btn btn-primary" href="/formations">Explorer nos programmes LMD</a>
+              <a className="btn btn-ghost" href="/campus-vie">Découvrir le campus en photos</a>
             </div>
           </div>
 
@@ -307,7 +307,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <a className="btn btn-primary btn-grad" href="/contact">Rejoindre la prochaine promotion →</a>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <a className="btn btn-primary btn-grad" href="/diplomes-reussite">Voir la réussite &amp; diplômes →</a>
+                <a className="btn btn-ghost" style={{ border: '1.5px solid var(--gold)', color: '#fff' }} href="/admissions">Postuler pour la prochaine promotion</a>
+              </div>
             </div>
           </div>
         </div>
@@ -528,6 +531,14 @@ export default function Home() {
               </p>
             </div>
           </div>
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <a href="/gouvernance" className="btn btn-primary" style={{ marginRight: '1rem' }}>
+              Découvrir la gouvernance &amp; le mot du Recteur →
+            </a>
+            <a href="/partenaires" className="btn btn-ghost" style={{ border: '1.5px solid #38bdf8', color: '#fff' }}>
+              Consulter nos partenariats &amp; l&apos;ISTM
+            </a>
+          </div>
         </div>
       </section>
 
@@ -567,6 +578,11 @@ export default function Home() {
               <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: '0.75rem 0 0.5rem 0' }}>Collation de Grades (88 Lauréats)</h3>
               <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>Cérémonie solennelle de remise de diplômes pour 88 gradués et licenciés en sciences universitaires et médicales.</p>
             </article>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <a href="/actualites-recherche" className="btn btn-primary">
+              Consulter toutes les actualités &amp; travaux de recherche →
+            </a>
           </div>
         </div>
       </section>

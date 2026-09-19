@@ -31,6 +31,7 @@ export default function Navbar({ currentPath }: NavbarProps) {
 
           <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
             <a href="/" className={currentPath === '/' ? 'active' : ''}>Accueil</a>
+            <a href="/formations" className={currentPath === '/formations' ? 'active' : ''}>Formations</a>
             <a href="/admissions" className={currentPath === '/admissions' ? 'active' : ''}>Admissions</a>
             <a href="/diplomes-reussite" className={currentPath === '/diplomes-reussite' ? 'active' : ''}>Diplômes</a>
             <a href="/gouvernance" className={currentPath === '/gouvernance' ? 'active' : ''}>Gouvernance</a>
