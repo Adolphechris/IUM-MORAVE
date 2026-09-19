@@ -48,27 +48,7 @@ export default function Document() {
         <meta name="twitter:description" content="Université agréée ESU en RDC — Formations LMD, excellence académique, Province de Lomami." />
         <meta name="twitter:image" content="https://iumorave-ac.org/images/logo-crest.jpg" />
 
-        {/* ── WEBSITE SCHEMA — requis par Google pour afficher le nom du site ── */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Institut Universitaire Morave Willsamal",
-              "alternateName": "IUM-MORAVE",
-              "url": "https://iumorave-ac.org",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                  "@type": "EntryPoint",
-                  "urlTemplate": "https://iumorave-ac.org/?q={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
-              }
-            })
-          }}
-        />
+        {/* Note: WebSite schema is canonically declared on index.tsx to satisfy Google Site Names guidelines */}
 
         {/* ── DONNÉES STRUCTURÉES JSON-LD (Google Knowledge Panel) */}
         <script
