@@ -171,9 +171,12 @@ export default function Home() {
           </button>
           <nav className={`nav-links${menuOpen ? ' open' : ''}`}>
             <a href="#formations">Formations</a>
-            <a href="#campus">Campus en Images</a>
-            <a href="#diplomes">Diplômes &amp; Réussite</a>
-            <a href="#armoiries">Armoiries</a>
+            <a href="/admissions">Admissions</a>
+            <a href="/diplomes-reussite">Diplômes</a>
+            <a href="/gouvernance">Gouvernance</a>
+            <a href="/campus-vie">Campus</a>
+            <a href="/partenaires">Partenaires</a>
+            <a href="/actualites-recherche">Recherche</a>
             <a href="/contact">Contact</a>
             <a href="/espace" className="nav-cta">Espace numérique →</a>
           </nav>
@@ -614,17 +617,24 @@ export default function Home() {
           </div>
           <div className="footer-links">
             <div>
-              <strong>Académique</strong>
-              <a href="#formations">Formations LMD</a>
-              <a href="#direction">Direction &amp; Recteur</a>
-              <a href="#actualites">Actualités &amp; Recherche</a>
-              <a href="#campus">Campus en Images</a>
+              <strong>Académique &amp; Campus</strong>
+              <a href="/admissions">Admissions &amp; Inscriptions</a>
+              <a href="/diplomes-reussite">Diplômes &amp; Réussite</a>
+              <a href="/campus-vie">Campus &amp; Infrastructures</a>
+              <a href="#formations">8 Facultés LMD</a>
             </div>
             <div>
-              <strong>Institution</strong>
-              <a href="/contact">Contact &amp; Admissions</a>
-              <a href="/espace">Portail Numérique</a>
-              <a href="/verify">Vérification de Diplômes</a>
+              <strong>Institution &amp; Partenaires</strong>
+              <a href="/gouvernance">Direction &amp; Rectorat</a>
+              <a href="/partenaires">Partenariats &amp; ISTM</a>
+              <a href="/actualites-recherche">Recherche Scientifique</a>
+              <a href="/contact">Contact officiel</a>
+            </div>
+            <div>
+              <strong>Espaces &amp; Services</strong>
+              <a href="/espace">Portail Étudiant &amp; Enseignant</a>
+              <a href="/verify">🛡️ Vérification QR Code</a>
+              <a href="/releve-officiel">📜 Relevé de Notes ESU</a>
             </div>
             <div>
               <strong>Coordonnées du Campus</strong>
