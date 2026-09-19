@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await transporter.sendMail({
         from: `"Portail Web IUM-MORAVE" <${process.env.ZOHO_SMTP_USER || 'secretariat@iumorave-ac.org'}>`,
-        to: 'secretariat@iumorave-ac.org, contact@iumorave-ac.org, admissions@iumorave-ac.org',
+        to: 'secretariat@iumorave-ac.org, contact@iumorave-ac.org',
         replyTo: email,
         subject: `[Formulaire Web] ${subject}`,
         text: `Nouveau message reçu depuis le site officiel iumorave-ac.org:\n\nExpéditeur : ${name} <${email}>\nObjet : ${subject}\n\nMessage :\n${message}\n\nDate : ${new Date().toLocaleString('fr-FR')}`
