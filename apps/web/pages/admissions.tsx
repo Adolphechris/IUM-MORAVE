@@ -200,8 +200,7 @@ export default function AdmissionsPage() {
                 <div className="contact-bullet">
                   <strong>Secrétariat Général Académique</strong>
                   <span>📍 Campus IUM-MORAVE, Avenue Aérodrome, Mwene-Ditu</span>
-                  <span>✉️ admissions@iumorave-ac.org</span>
-                  <span>📞 +243 (0) 81 000 00 00</span>
+                  <span>✉️ secretariat@iumorave-ac.org</span>
                 </div>
               </div>
 
